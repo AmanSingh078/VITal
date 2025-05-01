@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Healthcare</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0faff, #d0e7ff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            border-radius: 0 0 20px 20px;
+            animation: slideDown 0.8s ease-in-out;
+        }
+        header h1 {
+            margin: 0.3rem 0;
+            font-size: 2.8rem;
+            animation: popUp 0.6s ease;
+        }
+        .contact-container {
+            max-width: 600px;
+            width: 90%;
+            margin: 2rem auto;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            transform: scale(0.95);
+            animation: bounceIn 0.6s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes popUp {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        label {
+            font-weight: bold;
+            margin: 0.5rem 0;
+            display: block;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        input:hover, textarea:hover {
+            border-color: #007bff;
+            background-color: #f0f8ff;
+        }
+        input:focus, textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+            outline: none;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.2rem;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            animation: fadeIn 0.6s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .thank-you {
+            display: none;
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #555;
+        }
+    </style>
+    <script>
+        function showThankYouMessage(event) {
+            event.preventDefault();
+            document.querySelector('.contact-container').style.display = 'none';
+            document.querySelector('.thank-you').style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Contact Us</h1>
+        <p>We are here to assist you with your healthcare needs. Reach out to us anytime.</p>
+    </header>
+    <div class="contact-container">
+        <form onsubmit="showThankYouMessage(event)">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Your email" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Your phone number">
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Your message" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+    <div class="thank-you">
+        <p>Thank you for your feedback! We will contact you soon.</p>
+    </div>
+    <footer>
+        <p>&copy; 2025 VITal life. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+

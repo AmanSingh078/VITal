@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Eisenhower Matrix</title>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right top, #d1c4e9, #bbdefb);
+      margin: 0;
+      padding: 20px;
+      color: #1a237e;
+      transition: background 0.4s;
+    }
+    body.dark-mode {
+      background: #121212;
+      color: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.8rem;
+      color: #1a237e;
+      text-shadow: 1px 1px 2px #c5cae9;
+    }
+    body.dark-mode h1 {
+      color: #f0f0f0;
+      text-shadow: 1px 1px 2px #333;
+    }
+    .matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .box {
+      border-radius: 16px;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    body.dark-mode .box {
+      background: #1f1f1f;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+    }
+    .task {
+      background-color: #e8eaf6;
+      margin: 10px 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    body.dark-mode .task {
+      background-color: #2a2a2a;
+    }
+    .remove-btn, .complete-checkbox, .deadline, .priority {
+      font-size: 0.8rem;
+    }
+    .remove-btn {
+      background: #ef5350;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    .complete-checkbox {
+      margin-right: 8px;
+    }
+    .priority-high { color: red; font-weight: bold; }
+    .priority-medium { color: orange; }
+    .priority-low { color: green; }
+    .overdue { background-color: #ffcdd2 !important; color: #b71c1c; }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 40px;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    body.dark-mode form {
+      background: #1e1e1e;
+    }
+    input, select, button {
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    #toggleDarkMode {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    .countdown {
+      font-size: 0.75rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <button id="toggleDarkMode">Toggle Dark Mode</button>
+  <h1>✨ Advanced Eisenhower Matrix</h1>
+  <form id="taskForm">
+    <input type="text" id="task" placeholder="Enter your task" required />
+    <input type="datetime-local" id="deadline" />
+    <select id="priority">
+      <option value="high">High Priority</option>
+      <option value="medium">Medium Priority</option>
+      <option value="low">Low Priority</option>
+    </select>
+    <select id="category">
+      <option value="urgent-important">🔥 Urgent & Important</option>
+      <option value="not-urgent-important">🌱 Not Urgent but Important</option>
+      <option value="urgent-not-important">⚡ Urgent but Not Important</option>
+      <option value="not-urgent-not-important">🌀 Not Urgent & Not Important</option>
+    </select>
+    <button type="submit">Add Task</button>
+  </form>
+  <div class="matrix">
+    <div class="box" id="urgent-important">
+      <h3>🔥 Urgent & Important</h3>
+    </div>
+    <div class="box" id="not-urgent-important">
+      <h3>🌱 Not Urgent but Important</h3>
+    </div>
+    <div class="box" id="urgent-not-important">
+      <h3>⚡ Urgent but Not Important</h3>
+    </div>
+    <div class="box" id="not-urgent-not-important">
+      <h3>🌀 Not Urgent & Not Important</h3>
+    </div>
+  </div>
+  <script>
+    const categories = [
+      'urgent-important',
+      'not-urgent-important',
+      'urgent-not-important',
+      'not-urgent-not-important'
+    ];
+
+    document.getElementById('taskForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const text = document.getElementById('task').value.trim();
+      const deadline = document.getElementById('deadline').value;
+      const priority = document.getElementById('priority').value;
+      const category = document.getElementById('category').value;
+
+      if (!text) return;
+
+      const taskElement = createTaskElement({text, deadline, priority, completed: false});
+      document.getElementById(category).appendChild(taskElement);
+      sortTasksByDeadline(category);
+      this.reset();
+      saveTasks();
+    });
+
+    function updateCountdown(deadline, element, taskElement) {
+      if (!deadline) return;
+      const interval = setInterval(() => {
+        const now = new Date();
+        const end = new Date(deadline);
+        const diff = end - now;
+        if (diff <= 0) {
+          element.innerText = '⏰ Overdue!';
+          taskElement.classList.add('overdue');
+          clearInterval(interval);
+        } else {
+          const hours = Math.floor(diff / 3600000);
+          const minutes = Math.floor((diff % 3600000) / 60000);
+          element.innerText = `⏳ ${hours}h ${minutes}m left`;
+        }
+      }, 60000);
+    }
+
+    function createTaskElement({text, deadline, priority, completed}) {
+      const taskElement = document.createElement('div');
+      taskElement.className = 'task';
+      const label = document.createElement('label');
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'complete-checkbox';
+      checkbox.checked = completed;
+
+      const span = document.createElement('span');
+      span.innerHTML = text;
+      if (completed) span.style.textDecoration = 'line-through';
+      checkbox.addEventListener('change', () => {
+        span.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+        saveTasks();
+      });
+
+      const deadlineSpan = document.createElement('span');
+      deadlineSpan.className = 'deadline';
+      const countdownSpan = document.createElement('span');
+      countdownSpan.className = 'countdown';
+
+      if (deadline) {
+        const deadlineDate = new Date(deadline);
+        deadlineSpan.innerText = `⏰ ${deadlineDate.toLocaleString()}`;
+        updateCountdown(deadline, countdownSpan, taskElement);
+        if (new Date() > deadlineDate) {
+          taskElement.classList.add('overdue');
+        }
+      }
+
+      const prioritySpan = document.createElement('span');
+      prioritySpan.className = `priority priority-${priority}`;
+      prioritySpan.innerText = priority.charAt(0).toUpperCase() + priority.slice(1);
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Remove';
+      btn.className = 'remove-btn';
+      btn.onclick = () => {
+        taskElement.remove();
+        saveTasks();
+      };
+
+      label.appendChild(checkbox);
+      label.appendChild(span);
+      taskElement.appendChild(label);
+      taskElement.appendChild(deadlineSpan);
+      taskElement.appendChild(countdownSpan);
+      taskElement.appendChild(prioritySpan);
+      taskElement.appendChild(btn);
+      return taskElement;
+    }
+
+    function sortTasksByDeadline(categoryId) {
+      const box = document.getElementById(categoryId);
+      const tasks = Array.from(box.querySelectorAll('.task'));
+      tasks.sort((a, b) => {
+        const aTime = new Date(a.querySelector('.deadline').innerText.replace('⏰ ', ''));
+        const bTime = new Date(b.querySelector('.deadline').innerText.replace('⏰ ', ''));
+        return aTime - bTime;
+      });
+      const heading = box.querySelector('h3');
+      box.innerHTML = '';
+      box.appendChild(heading);
+      tasks.forEach(task => box.appendChild(task));
+    }
+
+    function saveTasks() {
+      const data = {};
+      categories.forEach(id => {
+        const tasks = Array.from(document.getElementById(id).getElementsByClassName('task'));
+        data[id] = tasks.map(task => {
+          const text = task.querySelector('label span').innerHTML;
+          const checkbox = task.querySelector('input[type="checkbox"]').checked;
+          const deadlineElement = task.querySelector('.deadline');
+          const deadlineText = deadlineElement ? deadlineElement.innerText.replace('⏰ ', '') : '';
+          const deadline = deadlineText ? new Date(deadlineText).toISOString() : '';
+          const priority = task.querySelector('.priority').innerText.toLowerCase();
+          return {
+            text,
+            deadline,
+            priority,
+            completed: checkbox
+          };
+        });
+      });
+      localStorage.setItem('matrixTasks', JSON.stringify(data));
+    }
+
+    function loadTasks() {
+      const data = JSON.parse(localStorage.getItem('matrixTasks')) || {};
+      categories.forEach(id => {
+        const box = document.getElementById(id);
+        const heading = box.querySelector('h3');
+        box.innerHTML = '';
+        box.appendChild(heading);
+        (data[id] || []).forEach(task => {
+          const el = createTaskElement(task);
+          box.appendChild(el);
+        });
+        sortTasksByDeadline(id);
+      });
+    }
+
+    categories.forEach(id => {
+      new Sortable(document.getElementById(id), {
+        group: 'shared',
+        animation: 200,
+        onEnd: saveTasks
+      });
+    });
+
+    document.getElementById('toggleDarkMode').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    });
+
+    window.addEventListener('load', () => {
+      loadTasks();
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+    });
+  </script>
+</body>
+</html>
+
+
