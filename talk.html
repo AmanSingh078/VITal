@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Community</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f9f9f9; }
+    .student { background: #fff; padding: 10px; border: 1px solid #ccc; margin-bottom: 10px; }
+    .connected { background: #dfffd8; }
+  </style>
+</head>
+<body>
+
+<h2>Register Student</h2>
+<div>
+  <input id="name" placeholder="Name" />
+  <input id="branch" placeholder="Branch" />
+  <input id="batch" placeholder="Batch" />
+  <textarea id="bio" placeholder="Bio"></textarea>
+  <button onclick="registerStudent()">Register</button>
+</div>
+
+<h2>Filter</h2>
+<input id="filterBranch" placeholder="Branch" />
+<input id="filterBatch" placeholder="Batch" />
+<button onclick="loadStudents()">Filter</button>
+
+<h2>Student Directory</h2>
+<div id="studentList"></div>
+
+<script>
+  let currentStudentId = null;
+
+  async function registerStudent() {
+    const student = {
+      name: document.getElementById('name').value,
+      branch: document.getElementById('branch').value,
+      batch: document.getElementById('batch').value,
+      bio: document.getElementById('bio').value
+    };
+    const res = await fetch('http://localhost:3000/api/students', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(student)
+    });
+    const data = await res.json();
+    currentStudentId = data._id;
+    loadStudents();
+  }
+
+  async function loadStudents() {
+    const branch = document.getElementById('filterBranch').value;
+    const batch = document.getElementById('filterBatch').value;
+    let url = `http://localhost:3000/api/students`;
+    const params = [];
+    if (branch) params.push(`branch=${branch}`);
+    if (batch) params.push(`batch=${batch}`);
+    if (params.length) url += '?' + params.join('&');
+
+    const res = await fetch(url);
+    const students = await res.json();
+    displayStudents(students);
+  }
+
+  async function connect(toId) {
+    await fetch('http://localhost:3000/api/connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fromId: currentStudentId, toId })
+    });
+    loadStudents();
+  }
+
+  function displayStudents(students) {
+    const container = document.getElementById('studentList');
+    container.innerHTML = '';
+    students.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'student';
+      if (s.connections.includes(currentStudentId)) div.classList.add('connected');
+      div.innerHTML = `
+        <b>${s.name}</b> (${s.branch}, ${s.batch})<br/>
+        Bio: ${s.bio}<br/>
+        <button onclick="connect('${s._id}')">Connect</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🔍 Research & Analysis Tools</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #dbeafe, #ffffff);
+    }
+    .card-icon {
+      transition: transform 0.4s ease, color 0.3s ease;
+    }
+    .card:hover .card-icon {
+      transform: scale(1.4);
+      color: #2563eb;
+    }
+    .card {
+      background: linear-gradient(135deg, #fdfbfb, #ebedee);
+      border: 1px solid #dbeafe;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 20px 30px rgba(59, 130, 246, 0.3);
+      background: #f0f9ff;
+    }
+    .badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #facc15;
+      color: #1f2937;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 9999px;
+    }
+    .button {
+      background: linear-gradient(to right, #4f46e5, #3b82f6);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+    .button:hover {
+      background: linear-gradient(to right, #3b82f6, #4f46e5);
+    }
+    .token-badge {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      background: #10b981;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: bold;
+      z-index: 50;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+  </style>
+</head>
+<body class="gradient-bg text-gray-800">
+  <div class="token-badge" id="tokenDisplay">💰 Tokens: <span id="tokens">100</span></div>
+
+  <div class="max-w-7xl mx-auto px-6 py-20">
+    <h2 class="text-6xl font-extrabold text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text mb-16 tracking-tight">🔍 Top Research & Analysis Tools</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10" id="toolContainer"></div>
+  </div>
+
+  <script>
+    const tools = [
+      { title: 'Scholar GPT', icon: 'fa-graduation-cap', desc: 'AI-powered research assistant for scholars.', visit: 'https://chatgpt.com/g/g-kZ0eYXlJe-scholar-gpt', badge: '🔥 Popular' },
+      { title: 'Consensus', icon: 'fa-comments', desc: 'Collaborative research and analysis platform.', visit: 'https://chatgpt.com/g/g-bo0FiWLY7-consensus', badge: '✨ New' },
+      { title: 'SciSpace', icon: 'fa-flask', desc: 'Research collaboration and management tool.', visit: 'https://chatgpt.com/g/g-NgAcklHd8-scispace', badge: '🔧 Tool' },
+      { title: 'Scholar AI', icon: 'fa-user-graduate', desc: 'AI for academic research and insights.', visit: 'https://chatgpt.com/g/g-L2HknCZTC-scholar-ai', badge: '🔥 Pro' },
+      { title: 'Wolfram', icon: 'fa-calculator', desc: 'Computational intelligence for research.', visit: 'https://chatgpt.com/g/g-0S5FXLyFN-wolfram', badge: '💼 Premium' },
+      { title: 'MARKETTING', icon: 'fa-chart-line', desc: 'Market research and analysis tool.', visit: 'https://chatgpt.com/g/g-DtjWjSDiv-marketing', badge: '📝 Marketing' },
+      { title: 'Accounting GPT', icon: 'fa-calculator', desc: 'AI for accounting and financial analysis.', visit: 'https://chatgpt.com/g/g-7RJghLmOO-accounting-gpt', badge: '🔧 Tool' },
+      { title: 'PDF Reader', icon: 'fa-file-pdf', desc: 'Read and analyze PDF documents easily.', visit: 'https://chatgpt.com/g/g-QSh6KHL3S-pdf-reader', badge: '📄 Reader' },
+      { title: 'GPT 4.5', icon: 'fa-robot', desc: 'Latest version of GPT for advanced research.', visit: 'https://chatgpt.com/g/g-oYwnGsgub-gpt-4-5', badge: '🔥 Pro' },
+      { title: 'Power BI Wizard', icon: 'fa-chart-bar', desc: 'Data visualization and analysis tool.', visit: 'https://www.yeschat.ai/gpts-2OToEgihGg-Power-BI-Wizard', badge: '📊 Analysis' },
+    ];
+
+    let tokens = 100;
+    const tokenDisplay = document.getElementById("tokens");
+
+    function updateTokens(amount) {
+      tokens += amount;
+      tokenDisplay.textContent = tokens;
+    }
+
+    function createToolCard(tool, index) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="badge">${tool.badge}</div>
+        <h3 class="text-2xl font-semibold text-blue-600 mb-2 flex items-center">
+          <i class="fas ${tool.icon} mr-2 text-indigo-500 card-icon" style="font-size: 1.5rem;"></i>${tool.title}
+        </h3>
+        <p class="text-gray-700 mb-4">${tool.desc}</p>
+        <button class="button mt-2 visit-btn">Visit Tool</button>
+        <a href="subscribe.html" class="button mt-4 hidden subscribe-btn">Subscribe</a>
+      `;
+
+      const visitBtn = card.querySelector(".visit-btn");
+      const subscribeBtn = card.querySelector(".subscribe-btn");
+
+      visitBtn.addEventListener("click", () => {
+        if (tokens >= 5) {
+          updateTokens(-5);
+          window.open(tool.visit, "_blank");
+        } else {
+          subscribeBtn.classList.remove("hidden");
+          visitBtn.disabled = true;
+          visitBtn.classList.add("opacity-50", "cursor-not-allowed");
+          visitBtn.textContent = "Not enough tokens";
+        }
+      });
+
+      return card;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("toolContainer");
+      tools.forEach((tool, i) => {
+        container.appendChild(createToolCard(tool, i));
+      });
+    });
+  </script>
+</body>
+</html>\

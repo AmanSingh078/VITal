@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIVault – Token Plans</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .modal-bg {
+            background: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 text-white min-h-screen">
+    <section class="py-16 px-6 max-w-7xl mx-auto text-center">
+        <h1 class="text-5xl font-extrabold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+            AIVault Subscription Plans
+        </h1>
+        <p class="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">
+            Activate powerful AI features using tokens. Choose the plan that matches your creativity.
+        </p>
+
+        <div class="mb-12 text-lg text-purple-300 font-semibold bg-purple-800/20 inline-block px-6 py-2 rounded-full shadow-lg">
+            🔮 Your Token Balance: <span id="token-balance">0</span>
+        </div>
+
+        <button onclick="googleSignIn()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl mb-4">
+            Sign in with Google
+        </button>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
+            <div class="plan-card bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 shadow-xl" data-plan="Free">
+                <h2 class="text-3xl font-semibold text-white mb-2">🌱 Free</h2>
+                <p class="text-xl text-green-400 font-bold mb-4">0 Tokens</p>
+                <p class="text-gray-300 mb-6">Get started with the essentials</p>
+                <ul class="text-sm text-left space-y-3 mb-8">
+                    <li>✅ Access to writing tools</li>
+                    <li>✅ 3 AI generations/day</li>
+                    <li>✅ Community support</li>
+                </ul>
+                <button onclick="activatePlan('Free', 0)" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-xl">
+                    Activate Free Plan
+                </button>
+            </div>
+
+            <div class="plan-card bg-gradient-to-tr from-purple-800 via-purple-700 to-indigo-800 border border-purple-500 rounded-3xl p-8 shadow-2xl" data-plan="Pro">
+                <h2 class="text-3xl font-semibold text-white mb-2">🚀 Pro</h2>
+                <p class="text-xl text-yellow-300 font-bold mb-4">120 Tokens / month</p>
+                <p class="text-purple-100 mb-6">For creators who want more power</p>
+                <ul class="text-sm text-left space-y-3 mb-8">
+                    <li>✅ Unlimited AI generations</li>
+                    <li>✅ Export to PDF/Word</li>
+                    <li>✅ Priority support</li>
+                </ul>
+                <button onclick="openPaymentModal(120)" class="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded-xl">
+                    Activate with Tokens
+                </button>
+            </div>
+
+            <div class="plan-card bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 shadow-xl" data-plan="Team">
+                <h2 class="text-3xl font-semibold text-white mb-2">👥 Team</h2>
+                <p class="text-xl text-blue-300 font-bold mb-4">250 Tokens / month</p>
+                <p class="text-gray-300 mb-6">Collaborate with your crew</p>
+                <ul class="text-sm text-left space-y-3 mb-8">
+                    <li>✅ Up to 5 users</li>
+                    <li>✅ Shared projects</li>
+                    <li>✅ Team dashboard</li>
+                </ul>
+                <button onclick="openPaymentModal(250)" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl">
+                    Activate with Tokens
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-16">
+            <p class="text-gray-400 mb-4">Running low on tokens?</p>
+            <button onclick="openBuyModal()" class="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg">
+                💎 Buy More Tokens
+            </button>
+        </div>
+    </section>
+
+    <!-- Activation Modal -->
+    <div id="modal" class="fixed inset-0 hidden items-center justify-center z-50 modal-bg">
+        <div class="bg-white text-black rounded-2xl p-8 shadow-2xl w-11/12 max-w-md text-center">
+            <h3 class="text-2xl font-bold mb-4" id="modal-title">Plan Activated!</h3>
+            <p class="mb-6" id="modal-message">You have successfully activated the plan.</p>
+            <button onclick="closeModal()" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-lg font-semibold">Close</button>
+        </div>
+    </div>
+
+    <!-- Buy Tokens Modal -->
+    <div id="buy-modal" class="fixed inset-0 hidden items-center justify-center z-50 modal-bg">
+        <div class="bg-white text-black rounded-2xl p-8 shadow-2xl w-11/12 max-w-sm text-center">
+            <h3 class="text-2xl font-bold mb-4">Buy Tokens</h3>
+            <p class="mb-2">How many tokens would you like to buy?</p>
+            <input type="number" id="buy-amount" class="w-full border px-4 py-2 rounded mb-4" placeholder="e.g. 100" />
+            <button onclick="openPaymentModal()" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-lg font-semibold">Buy</button>
+            <button onclick="closeBuyModal()" class="mt-4 block text-sm text-gray-500">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 hidden items-center justify-center z-50 modal-bg">
+        <div class="bg-white text-black rounded-2xl p-8 shadow-2xl w-11/12 max-w-md text-center">
+            <h3 class="text-2xl font-bold mb-4">Payment</h3>
+            <p class="mb-2">Enter your payment details to buy tokens.</p>
+            <form id="payment-form">
+                <div id="card-element" class="mb-4"></div>
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white py-2 px-6 rounded-lg font-semibold">Pay</button>
+            </form>
+            <button onclick="closePaymentModal()" class="mt-4 block text-sm text-gray-500">Cancel</button>
+        </div>
+    </div>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAv7YE_Hy-DO7wOY195Dtz_P0MlEfB3E28",
+            authDomain: "aivault-5d1c6.firebaseapp.com",
+            projectId: "aivault-5d1c6",
+            storageBucket: "aivault-5d1c6.appspot.com",
+            messagingSenderId: "643461577192",
+            appId: "1:643461577192:web:a2317b40c8edefa59a8c5d",
+            measurementId: "G-PNN9VLHS8C"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Initialize Stripe
+        const stripe = Stripe('pk_test_51RAZmtQMV2s7xmL25KlkY5dhfzXfN2T7fQFlPs44x4LdiIm4nTxQbhddtdTdMHomUgfXBX8hdqN5NK0PAonRE7ko00S9lDaes5'); // Replace with your public key
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+                    document.getElementById("token-balance").textContent = data.tokens || 0;
+                    showActivePlan(data.activePlan || null);
+                }
+            } else {
+                alert("Please log in to view plans.");
+            }
+        });
+
+        window.googleSignIn = async function () {
+            const provider = new GoogleAuthProvider();
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                console.log("User  signed in: ", user);
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) {
+                    await updateDoc(userRef, { tokens: 0, activePlan: null });
+                }
+            } catch (error) {
+                console.error("Error signing in: ", error);
+                alert(error.message);
+            }
+        };
+
+        window.activatePlan = async function (name, cost) {
+            const user = auth.currentUser ;
+            if (!user) return alert("You must be logged in.");
+
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+            const data = userSnap.data();
+            const currentTokens = data.tokens || 0;
+
+            if (currentTokens >= cost) {
+                await updateDoc(userRef, {
+                    tokens: currentTokens - cost,
+                    activePlan: name
+                });
+                document.getElementById("token-balance").textContent = currentTokens - cost;
+                showActivePlan(name);
+                showModal(`${name} Plan Activated!`, `You used ${cost} tokens to activate ${name}.`);
+            } else {
+                showModal("Not Enough Tokens", `You need ${cost} tokens to activate ${name}.`);
+            }
+        };
+
+        function showActivePlan(name) {
+            const plans = document.querySelectorAll(".plan-card");
+            plans.forEach(card => {
+                card.classList.remove("ring-4", "ring-green-400");
+                if (card.getAttribute("data-plan") === name) {
+                    card.classList.add("ring-4", "ring-green-400");
+                }
+            });
+        }
+
+        window.openPaymentModal = function (cost) {
+            document.getElementById('payment-modal').classList.remove('hidden');
+            document.getElementById('payment-modal').classList.add('flex');
+            document.getElementById('payment-form').setAttribute('data-cost', cost);
+        };
+
+        document.getElementById('payment-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const cost = parseInt(document.getElementById('payment-form').getAttribute('data-cost'));
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardElement,
+            });
+
+            if (error) {
+                alert(error.message);
+            } else {
+                await processPayment(paymentMethod.id, cost);
+            }
+        });
+
+        async function processPayment(paymentMethodId, cost) {
+            const user = auth.currentUser ;
+            if (!user) return alert("Please login.");
+
+            const response = await fetch('/create-payment-intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ paymentMethodId, amount: cost * 100 }), // Amount in cents
+            });
+
+            const paymentResult = await response.json();
+
+            if (paymentResult.error) {
+                alert(paymentResult.error);
+            } else {
+                await updateUserTokens(user.uid, cost);
+                closePaymentModal();
+                showModal("Success 🎉", `You've purchased ${cost} tokens!`);
+            }
+        }
+
+        async function updateUserTokens(userId, tokens) {
+            const userRef = doc(db, "users", userId);
+            const userSnap = await getDoc(userRef);
+            const current = userSnap.data().tokens || 0;
+
+            await updateDoc(userRef, { tokens: current + tokens });
+        }
+
+        window.showModal = function (title, message) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        };
+
+        window.closeModal = function () {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('modal').classList.remove('flex');
+        };
+
+        window.openBuyModal = function () {
+            document.getElementById('buy-modal').classList.remove('hidden');
+            document.getElementById('buy-modal').classList.add('flex');
+        };
+
+        window.closeBuyModal = function () {
+            document.getElementById('buy-modal').classList.add('hidden');
+            document.getElementById('buy-modal').classList.remove('flex');
+        };
+
+        window.closePaymentModal = function () {
+            document.getElementById('payment-modal').classList.add('hidden');
+            document.getElementById('payment-modal').classList.remove('flex');
+        };
+    </script>
+</body>
+</html>

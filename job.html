@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Career Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(to right, #00c6ff, #0072ff);
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --glass-blur: blur(14px);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f2027;
+      background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 20px;
+      backdrop-filter: var(--glass-blur);
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+    }
+
+    .left {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .left h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .left p {
+      font-size: 15px;
+      color: #ccc;
+      text-align: center;
+    }
+
+    .animation {
+      max-width: 250px;
+      margin-bottom: 20px;
+    }
+
+    .right {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      backdrop-filter: blur(5px);
+      font-size: 16px;
+    }
+
+    select option {
+      color: #000;
+    }
+
+    button {
+      margin-top: 15px;
+      background: var(--primary-gradient);
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,114,255,0.4);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .right {
+        padding: 30px 20px;
+      }
+      .left {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="left">
+    <div class="animation">
+      <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_jcikwtux.json" background="transparent" speed="1" loop autoplay></lottie-player>
+    </div>
+    <h1>Explore Careers</h1>
+    <p>Internships & Jobs personalized for your growth</p>
+  </div>
+
+  <div class="right">
+    <div class="form-group">
+      <label for="interest">🎓 Major / Interest</label>
+      <select id="interest">
+        <option value="computer science">Computer Science</option>
+        <option value="marketing">Marketing</option>
+        <option value="finance">Finance</option>
+        <option value="design">Design</option>
+        <option value="psychology">Psychology</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="type">💼 Job Type</label>
+      <select id="type">
+        <option value="internship">Internship</option>
+        <option value="entry level">Entry Level</option>
+        <option value="remote">Remote</option>
+        <option value="summer internship">Summer Internship</option>
+      </select>
+    </div>
+
+    <button onclick="searchJobs()">🔍 Find Opportunities</button>
+  </div>
+</div>
+
+<!-- Lottie Player -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+<script>
+  function searchJobs() {
+    const interest = document.getElementById('interest').value;
+    const type = document.getElementById('type').value;
+    const query = encodeURIComponent(`${interest} ${type}`);
+    const url = `https://www.linkedin.com/jobs/search/?keywords=${query}`;
+    window.open(url, '_blank');
+  }
+</script>
+
+</body>
+</html>

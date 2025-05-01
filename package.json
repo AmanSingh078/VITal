@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2",
+    "qrcode": "^1.5.4",
+    "stripe": "^18.0.0",
+    "xlsx": "^0.18.5"
+  }
+}

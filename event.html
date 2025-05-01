@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Countdown Board</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    .modal-content {
+      background-color: #1f2937;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 90%;
+      max-width: 500px;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-tr from-gray-900 via-black to-gray-900 text-white min-h-screen p-6">
+
+  <div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-5xl font-extrabold bg-gradient-to-r from-fuchsia-500 to-cyan-400 bg-clip-text text-transparent">
+        🚀 Upcoming Events
+      </h1>
+      <button id="addEventButton"
+        class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-2 px-6 rounded-xl transition duration-300 shadow-lg">
+        + Add Event
+      </button>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="flex gap-3 mb-6 flex-wrap">
+      <button data-tag="All" class="filter-btn px-4 py-2 bg-white/10 border border-white/20 rounded-full hover:bg-white/20 transition">All</button>
+      <button data-tag="Webinar" class="filter-btn px-4 py-2 bg-purple-600/60 hover:bg-purple-700 rounded-full">Webinar</button>
+      <button data-tag="Workshop" class="filter-btn px-4 py-2 bg-pink-600/60 hover:bg-pink-700 rounded-full">Workshop</button>
+      <button data-tag="Hackathon" class="filter-btn px-4 py-2 bg-green-600/60 hover:bg-green-700 rounded-full">Hackathon</button>
+    </div>
+
+    <!-- Event Cards -->
+    <div id="eventGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Cards injected here -->
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="addEventModal" class="modal flex items-center justify-center">
+    <div class="modal-content">
+      <h2 class="text-2xl font-bold mb-4">🎯 Add New Event</h2>
+      <form id="eventForm" class="space-y-4">
+        <input id="eventTitle" type="text" placeholder="Event Title" required class="w-full p-3 bg-gray-800 text-white rounded-xl border border-gray-700" />
+        <input id="eventDate" type="datetime-local" required class="w-full p-3 bg-gray-800 text-white rounded-xl border border-gray-700" />
+        <input id="eventLocation" type="text" placeholder="Location" required class="w-full p-3 bg-gray-800 text-white rounded-xl border border-gray-700" />
+        <textarea id="eventDescription" placeholder="Description" required class="w-full p-3 bg-gray-800 text-white rounded-xl border border-gray-700"></textarea>
+        <input id="eventLink" type="url" placeholder="Event Link (https://...)" required class="w-full p-3 bg-gray-800 text-white rounded-xl border border-gray-700" />
+        <select id="eventTag" required class="w-full p-3 bg-gray-800 text-white rounded-xl border border-gray-700">
+          <option value="">Select Tag</option>
+          <option value="Webinar">Webinar</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Hackathon">Hackathon</option>
+        </select>
+        <div class="flex justify-end gap-4">
+          <button type="button" id="closeModalButton" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl">Cancel</button>
+          <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 px-4 py-2 rounded-xl">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const eventGrid = document.getElementById("eventGrid");
+    const colorThemes = [
+      "from-purple-600 to-blue-600",
+      "from-pink-500 to-yellow-500",
+      "from-green-400 to-blue-500",
+      "from-yellow-400 to-red-500",
+      "from-cyan-500 to-indigo-600",
+    ];
+
+    function updateCountdowns() {
+      const now = new Date().getTime();
+      document.querySelectorAll(".event-card").forEach(card => {
+        const date = new Date(card.dataset.date).getTime();
+        const countdownElem = card.querySelector(".countdown");
+        if (date - now <= 0) {
+          countdownElem.innerText = "✅ Event Over";
+          localStorage.setItem(card.dataset.id, "past");
+          card.style.display = "none";
+        } else {
+          const diff = date - now;
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+          countdownElem.innerText = `⏳ ${d}d ${h}h ${m}m ${s}s`;
+        }
+      });
+    }
+
+    function renderEventCard(event) {
+      if (localStorage.getItem(event.id) === "past") return;
+      const theme = colorThemes[Math.floor(Math.random() * colorThemes.length)];
+      const card = document.createElement("div");
+      card.className = `event-card bg-gradient-to-br ${theme} p-6 rounded-3xl shadow-xl backdrop-blur-sm bg-opacity-30 hover:scale-105 transform transition duration-300`;
+      card.dataset.id = event.id;
+      card.dataset.date = event.date;
+      card.dataset.tag = event.tag;
+      card.innerHTML = `
+        <div class="flex flex-col h-full justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="text-2xl font-bold">${event.title}</h3>
+              <span class="bg-white/20 text-xs font-semibold px-2 py-1 rounded-xl">${event.tag}</span>
+            </div>
+            <p class="text-sm">🗓️ ${new Date(event.date).toLocaleString()}</p>
+            <p class="text-sm">📍 ${event.location}</p>
+            <p class="mt-2 text-sm">${event.description}</p>
+            <p class="mt-2 countdown text-lg font-mono">⏳</p>
+          </div>
+          <a href="${event.link}" target="_blank"
+             class="mt-4 text-center bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition">
+            🔗 Join Event
+          </a>
+        </div>
+      `;
+      eventGrid.appendChild(card);
+    }
+
+    function loadEvents() {
+      const events = JSON.parse(localStorage.getItem("events") || "[]");
+      const futureEvents = events.filter(e => new Date(e.date).getTime() > Date.now())
+                                 .sort((a, b) => new Date(a.date) - new Date(b.date));
+      futureEvents.forEach(renderEventCard);
+      updateCountdowns();
+    }
+
+    // Modal
+    document.getElementById("addEventButton").onclick = () => {
+      document.getElementById("addEventModal").style.display = "flex";
+    };
+    document.getElementById("closeModalButton").onclick = () => {
+      document.getElementById("addEventModal").style.display = "none";
+    };
+    window.onclick = e => {
+      if (e.target === document.getElementById("addEventModal")) {
+        document.getElementById("addEventModal").style.display = "none";
+      }
+    };
+
+    document.getElementById("eventForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const event = {
+        id: "event-" + Date.now(),
+        title: document.getElementById("eventTitle").value,
+        date: document.getElementById("eventDate").value,
+        location: document.getElementById("eventLocation").value,
+        description: document.getElementById("eventDescription").value,
+        link: document.getElementById("eventLink").value,
+        tag: document.getElementById("eventTag").value
+      };
+      const events = JSON.parse(localStorage.getItem("events") || "[]");
+      events.push(event);
+      localStorage.setItem("events", JSON.stringify(events));
+      renderEventCard(event);
+      updateCountdowns();
+      this.reset();
+      document.getElementById("addEventModal").style.display = "none";
+    });
+
+    // Filtering
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.onclick = () => {
+        const tag = btn.dataset.tag;
+        document.querySelectorAll(".event-card").forEach(card => {
+          card.style.display = tag === "All" || card.dataset.tag === tag ? "block" : "none";
+        });
+      };
+    });
+
+    loadEvents();
+    setInterval(updateCountdowns, 1000);
+  </script>
+</body>
+</html>
+

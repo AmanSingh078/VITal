@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Join the Club</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+    }
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 90%;
+      max-width: 500px;
+      transition: transform 0.3s ease-in-out;
+    }
+    .club-card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .club-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .join-btn:hover {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-gray-900 to-gray-800 text-white min-h-screen p-6 font-sans">
+
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-10">
+      <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 mb-4 md:mb-0">✨ Join Our Clubs</h1>
+      <div class="flex gap-3">
+        <select id="clubFilter" class="bg-gray-800 border border-purple-500 text-white p-2 rounded-md">
+          <option value="All">All</option>
+          <option value="Tech">Tech</option>
+          <option value="Cultural">Cultural</option>
+          <option value="Sports">Sports</option>
+        </select>
+        <button id="addClubButton"
+          class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-pink-600 hover:to-purple-600 text-white font-bold py-2 px-5 rounded-lg shadow-md transition transform hover:scale-105">+ Add Club</button>
+      </div>
+    </div>
+
+    <div id="clubGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-0 animate-fade-in">
+      <!-- Club cards go here -->
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="addClubModal" class="modal flex items-center justify-center">
+    <div class="modal-content">
+      <h2 class="text-xl font-bold mb-4 text-gray-900">Add New Club</h2>
+      <form id="clubForm" class="space-y-4">
+        <input id="clubName" type="text" placeholder="Club Name" required class="w-full p-2 border rounded" />
+        <input id="clubType" type="text" placeholder="Type (Tech, Cultural...)" required class="w-full p-2 border rounded" />
+        <input id="clubLead" type="text" placeholder="Club Lead" required class="w-full p-2 border rounded" />
+        <textarea id="clubDescription" placeholder="Description" required class="w-full p-2 border rounded"></textarea>
+        <input id="clubLink" type="url" placeholder="Join Link (https://...)" required class="w-full p-2 border rounded" />
+        <div class="flex justify-end space-x-2">
+          <button type="button" id="closeClubModalButton" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+          <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-500 text-white px-4 py-2 rounded font-semibold">Add Club</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const clubGrid = document.getElementById("clubGrid");
+    const clubFilter = document.getElementById("clubFilter");
+
+    const bgClasses = [
+      "from-pink-500 to-red-500",
+      "from-blue-500 to-cyan-500",
+      "from-green-500 to-lime-500",
+      "from-purple-500 to-indigo-500",
+      "from-yellow-500 to-orange-500"
+    ];
+
+    const tagIcons = {
+      "Tech": "💻",
+      "Cultural": "🎭",
+      "Sports": "⚽"
+    };
+
+    function renderClubCard(club, index = 0) {
+      const card = document.createElement("div");
+      const bgClass = bgClasses[index % bgClasses.length];
+
+      card.className = `club-card bg-gradient-to-br ${bgClass} p-6 rounded-2xl shadow-xl flex flex-col justify-between transform hover:scale-[1.02] transition-transform duration-300`;
+
+      card.dataset.id = club.id;
+      card.dataset.type = club.type;
+
+      card.innerHTML = `
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-2xl font-bold text-white">${club.name}</h3>
+            <span class="bg-black text-white text-xs px-3 py-1 rounded-full uppercase tracking-wide">${tagIcons[club.type]} ${club.type}</span>
+          </div>
+          <p class="text-sm text-white/90 mb-1">👤 Lead: ${club.lead}</p>
+          <p class="text-sm text-white/80 mb-3">${club.description}</p>
+        </div>
+        <a href="${club.link}" target="_blank"
+           class="join-btn mt-4 text-center font-bold text-white bg-gradient-to-r from-fuchsia-400 to-rose-500
+                  hover:from-rose-500 hover:to-fuchsia-400 px-4 py-2 rounded-xl
+                  transition-all duration-300 transform hover:scale-105 shadow-lg">
+          🚀 Join the Club
+        </a>
+      `;
+      clubGrid.appendChild(card);
+    }
+
+    function loadClubs(filterType = "All") {
+      clubGrid.innerHTML = "";
+      const stored = localStorage.getItem("clubs");
+      const clubs = stored ? JSON.parse(stored) : [];
+      const visibleClubs = clubs.filter(club => filterType === "All" || club.type === filterType);
+      visibleClubs.forEach((club, i) => renderClubCard(club, i));
+    }
+
+    loadClubs();
+
+    const addClubButton = document.getElementById("addClubButton");
+    const addClubModal = document.getElementById("addClubModal");
+    const closeClubModalButton = document.getElementById("closeClubModalButton");
+
+    addClubButton.addEventListener("click", () => addClubModal.style.display = "flex");
+    closeClubModalButton.addEventListener("click", () => addClubModal.style.display = "none");
+    window.addEventListener("click", e => { if (e.target === addClubModal) addClubModal.style.display = "none" });
+
+    document.getElementById("clubForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("clubName").value;
+      const type = document.getElementById("clubType").value;
+      const lead = document.getElementById("clubLead").value;
+      const description = document.getElementById("clubDescription").value;
+      const link = document.getElementById("clubLink").value;
+      const clubId = `club-${Date.now()}`;
+      const newClub = { id: clubId, name, type, lead, description, link };
+
+      const stored = localStorage.getItem("clubs");
+      const clubs = stored ? JSON.parse(stored) : [];
+      clubs.push(newClub);
+      localStorage.setItem("clubs", JSON.stringify(clubs));
+
+      addClubModal.style.display = "none";
+      this.reset();
+      loadClubs(clubFilter.value);
+    });
+
+    clubFilter.addEventListener("change", () => loadClubs(clubFilter.value));
+  </script>
+</body>
+</html>

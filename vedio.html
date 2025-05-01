@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic YouTube Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .highlight {
+      background-color: yellow;
+      color: black;
+    }
+    .thumbnail {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center min-h-screen text-center transition-colors duration-300">
+  <h1 class="mt-8 text-4xl font-bold">Dynamic YouTube Player</h1>
+
+  <button class="theme-toggle mt-4 py-2 px-6 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full font-semibold transition-colors duration-300 hover:from-orange-600 hover:to-red-600">
+    Switch to Dark Theme
+  </button>
+
+  <div class="search-container mt-6 w-11/12 max-w-lg flex items-center relative">
+    <input type="text" id="searchBox" class="search-input w-full py-3 px-5 text-lg border-2 border-gray-400 rounded-full bg-gray-800 text-white outline-none transition-all duration-300 focus:border-orange-600" placeholder="Search by title">
+    <button onclick="filterVideos()" class="absolute right-0 top-0 bottom-0 py-3 px-5 bg-orange-600 text-white rounded-full font-semibold transition-colors duration-300 hover:bg-orange-700 flex items-center justify-center">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
+
+  <iframe id="player" class="w-11/12 max-w-4xl h-64 mt-6 rounded-lg shadow-lg hidden" allowfullscreen></iframe>
+
+  <div id="videoContainer" class="flex flex-wrap justify-center gap-6 p-6"></div>
+
+  <footer class="mt-auto py-6 text-sm text-gray-400 border-t border-gray-700 w-full text-center">
+    Powered by <a href="https://youtube.com/" target="_blank" class="text-orange-600">YouTube</a> &middot; Designed with ❤️
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const themeToggleButton = document.querySelector('.theme-toggle');
+      const player = document.getElementById('player');
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = 'Close Player';
+      closeBtn.className = 'close-btn absolute top-5 right-5 bg-red-600 text-white rounded-full py-2 px-4 font-semibold z-10 hidden';
+      document.body.appendChild(closeBtn);
+
+      themeToggleButton.addEventListener('click', () => {
+        document.body.classList.toggle('bg-gray-900');
+        document.body.classList.toggle('bg-gray-100');
+        document.body.classList.toggle('text-white');
+        document.body.classList.toggle('text-gray-900');
+        themeToggleButton.textContent = document.body.classList.contains('bg-gray-100') ? 'Switch to Dark Theme' : 'Switch to Light Theme';
+      });
+
+      const videos = [
+  { title: "How to Code in Java", link: "https://www.youtube.com/live/o0bHo3AI8wM?si=XzSDsuRemxc5bj5T", additionalInfo: "Learn Java Basics" },
+  
+  { title: "Python Full Course", link: "https://www.youtube.com/watch?v=_uQrJ0TkZlc", additionalInfo: "Learn Python from scratch" },
+  { title: "C++ in One Video", link: "https://www.youtube.com/watch?v=8jLOx1hD3_o", additionalInfo: "Complete C++ Tutorial" },
+  { title: "Learn React JS", link: "https://www.youtube.com/watch?v=bMknfKXIFA8", additionalInfo: "React Beginner Tutorial" },
+  { title: "Node.js Crash Course", link: "https://www.youtube.com/watch?v=fBNz5xF-Kx4", additionalInfo: "Node.js for Beginners" },
+  { title: "Django Web Development", link: "https://www.youtube.com/watch?v=F5mRW0jo-U4", additionalInfo: "Build websites using Django" },
+  { title: "HTML Full Course", link: "https://www.youtube.com/watch?v=pQN-pnXPaVg", additionalInfo: "Learn HTML in one video" },
+  { title: "Tailwind CSS Tutorial", link: "https://www.youtube.com/watch?v=dFgzHOX84xQ", additionalInfo: "Modern CSS framework" },
+  { title: "MongoDB Tutorial", link: "https://www.youtube.com/watch?v=-56x56UppqQ", additionalInfo: "Database for Developers" },
+  { title: "PostgreSQL Full Course", link: "https://www.youtube.com/watch?v=qw--VYLpxG4", additionalInfo: "PostgreSQL for Beginners" },
+  { title: "Express.js Crash Course", link: "https://www.youtube.com/watch?v=L72fhGm1tfE", additionalInfo: "Backend with Express.js" },
+  { title: "Git & GitHub Tutorial", link: "https://www.youtube.com/watch?v=RGOj5yH7evk", additionalInfo: "Version control basics" },
+  { title: "Machine Learning Crash Course", link: "https://www.youtube.com/watch?v=Gv9_4yMHFhI", additionalInfo: "ML for Beginners" },
+  { title: "C Programming Full Course", link: "https://www.youtube.com/watch?v=KJgsSFOSQv0", additionalInfo: "Learn C from scratch" },
+  { title: "Kotlin for Android", link: "https://www.youtube.com/watch?v=F9UC9DY-vIU", additionalInfo: "Android Dev with Kotlin" },
+  { title: "Swift Programming Tutorial", link: "https://www.youtube.com/watch?v=comQ1-x2a1Q", additionalInfo: "iOS Development Basics" },
+  { title: "Flutter Full Course", link: "https://www.youtube.com/watch?v=VPvVD8t02U8", additionalInfo: "Build Apps with Flutter" },
+  { title: "TypeScript Tutorial", link: "https://www.youtube.com/watch?v=BwuLxPH8IDs", additionalInfo: "Typed JavaScript" },
+  { title: "Angular Full Course", link: "https://www.youtube.com/watch?v=2OHbjep_WjQ", additionalInfo: "Angular from Basics" },
+  { title: "Vue.js Crash Course", link: "https://www.youtube.com/watch?v=Wy9q22isx3U", additionalInfo: "Frontend with Vue.js" },
+  { title: "Linux Command Line Basics", link: "https://www.youtube.com/watch?v=ZtqBQ68cfJc", additionalInfo: "Terminal Essentials" },
+  { title: "Bootstrap 5 Tutorial", link: "https://www.youtube.com/watch?v=4sosXZsdy-s", additionalInfo: "UI Framework Basics" },
+  { title: "PHP Full Course", link: "https://www.youtube.com/watch?v=OK_JCtrrv-c", additionalInfo: "PHP Web Development" },
+  { title: "Rust Programming Crash Course", link: "https://www.youtube.com/watch?v=zF34dRivLOw", additionalInfo: "Intro to Rust" },
+  { title: "Go Programming Full Course", link: "https://www.youtube.com/watch?v=yyUHQIec83I", additionalInfo: "Learn GoLang" },
+  { title: "Cyber Security Basics", link: "https://www.youtube.com/watch?v=inWWhr5tnEA", additionalInfo: "Introduction to Cyber Security" },
+  { title: "SQL Full Course", link: "https://www.youtube.com/watch?v=HXV3zeQKqGY", additionalInfo: "Database Query Language" },
+  { title: "Firebase Full Course", link: "https://www.youtube.com/watch?v=9kRgVxULbag", additionalInfo: "Build Apps with Firebase" },
+  { title: "Docker Tutorial", link: "https://www.youtube.com/watch?v=fqMOX6JJhGo", additionalInfo: "Containerization Basics" },
+  { title: "Kubernetes Crash Course", link: "https://www.youtube.com/watch?v=s_o8dwzRlu4", additionalInfo: "Deploy with K8s" },
+  { title: "Java Full Course", link: "https://www.youtube.com/watch?v=xk4_1vDrzzo", additionalInfo: "Java for Beginners" },
+  { title: "Web Development Bootcamp", link: "https://www.youtube.com/watch?v=zJSY8tbf_ys", additionalInfo: "Frontend + Backend" },
+  { title: "Blockchain Explained", link: "https://www.youtube.com/watch?v=SSo_EIwHSd4", additionalInfo: "How Blockchain Works" },
+  { title: "Ethical Hacking Full Course", link: "https://www.youtube.com/watch?v=3Kq1MIfTWCE", additionalInfo: "Learn Hacking Ethically" },
+  { title: "Data Structures & Algorithms", link: "https://www.youtube.com/watch?v=8hly31xKli0", additionalInfo: "DSA for Interviews" },
+  { title: "Software Engineering Crash Course", link: "https://www.youtube.com/watch?v=UVe5XyzWcV0", additionalInfo: "Intro to SE" },
+  { title: "Artificial Intelligence Full Course", link: "https://www.youtube.com/watch?v=JMUxmLyrhSk", additionalInfo: "AI from Basics" },
+  { title: "Cloud Computing Basics", link: "https://www.youtube.com/watch?v=2LaAJq1lB1Q", additionalInfo: "Cloud 101" },
+  { title: "APIs for Beginners", link: "https://www.youtube.com/watch?v=GZvSYJDk-us", additionalInfo: "Learn RESTful APIs" },
+  { title: "Selenium Testing Tutorial", link: "https://www.youtube.com/watch?v=FRn5J31eAMw", additionalInfo: "Automate with Selenium" },
+  { title: "Unity Game Development", link: "https://www.youtube.com/watch?v=IlKaB1etrik", additionalInfo: "Make Games with Unity" },
+  { title: "Unreal Engine for Beginners", link: "https://www.youtube.com/watch?v=1kC1KpNx3Fs", additionalInfo: "Game Dev with Unreal" },
+  { title: "Next.js Full Course", link: "https://www.youtube.com/watch?v=wm5gMKuwSYk", additionalInfo: "React Framework" },
+  { title: "Jest Testing Tutorial", link: "https://www.youtube.com/watch?v=7r4xVDI2vho", additionalInfo: "Test React Apps" },
+  { title: "OpenAI API Tutorial", link: "https://www.youtube.com/watch?v=FgpbzXgQnJk", additionalInfo: "Use GPT in Apps" },
+  { title: "Numpy & Pandas Tutorial", link: "https://www.youtube.com/watch?v=vmEHCJofslg", additionalInfo: "Python for Data Science" },
+  { title: "ChatGPT for Developers", link: "https://www.youtube.com/watch?v=cd_GjB5bGmo", additionalInfo: "Build with ChatGPT" },
+];
+
+
+      const videoContainer = document.getElementById('videoContainer');
+      videoContainer.innerHTML = '';
+
+      videos.forEach(video => {
+        const videoId = getYouTubeID(video.link);
+        if (!videoId) return;
+
+        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+        const videoItem = document.createElement('div');
+        videoItem.className = 'videoItem bg-gray-800 p-4 rounded-lg shadow-lg w-72';
+        videoItem.setAttribute('data-title', video.title);
+
+        const videoThumbnail = document.createElement('img');
+        videoThumbnail.src = thumbnailUrl;
+        videoThumbnail.alt = `${video.title} Thumbnail`;
+        videoThumbnail.className = 'thumbnail mb-2 cursor-pointer';
+
+        const videoTitle = document.createElement('h2');
+        videoTitle.className = 'title text-xl font-semibold';
+        videoTitle.textContent = video.title;
+
+        const videoLink = document.createElement('a');
+        videoLink.href = video.link;
+        videoLink.target = '_blank';
+        videoLink.className = 'text-blue-400 hover:underline';
+        videoLink.textContent = 'Watch Video';
+
+        videoItem.appendChild(videoThumbnail);
+        videoItem.appendChild(videoTitle);
+        videoItem.appendChild(videoLink);
+        videoContainer.appendChild(videoItem);
+
+        videoThumbnail.addEventListener('click', () => {
+          if (videoId) {
+            player.src = `https://www.youtube.com/embed/${videoId}`;
+            player.classList.remove('hidden');
+            closeBtn.classList.remove('hidden');
+          }
+        });
+      });
+
+      closeBtn.addEventListener('click', () => {
+        player.src = '';
+        player.classList.add('hidden');
+        closeBtn.classList.add('hidden');
+      });
+    });
+
+    function getYouTubeID(url) {
+      try {
+        const urlObj = new URL(url);
+        const hostname = urlObj.hostname;
+        const pathname = urlObj.pathname;
+
+        if (hostname.includes("youtube.com")) {
+          if (urlObj.searchParams.get("v")) {
+            return urlObj.searchParams.get("v");
+          } else if (pathname.startsWith("/live/")) {
+            return pathname.split("/live/")[1].split("?")[0];
+          } else if (pathname.startsWith("/embed/") || pathname.startsWith("/v/")) {
+            return pathname.split("/")[2];
+          }
+        } else if (hostname === "youtu.be") {
+          return pathname.slice(1);
+        }
+        return null;
+      } catch (err) {
+        console.error("Invalid URL:", url);
+        return null;
+      }
+    }
+
+    function filterVideos() {
+      const query = document.getElementById('searchBox').value.toLowerCase();
+      const videoItems = document.querySelectorAll('.videoItem');
+
+      videoItems.forEach(item => {
+        const title = item.getAttribute('data-title').toLowerCase();
+        const videoTitleElement = item.querySelector('.title');
+
+        const matchesQuery = title.includes(query);
+
+        if (matchesQuery) {
+          item.classList.remove('hidden');
+          const regex = new RegExp(query, 'gi');
+          const highlightedText = item.getAttribute('data-title').replace(
+            regex,
+            match => `<span class="highlight">${match}</span>`
+          );
+          videoTitleElement.innerHTML = highlightedText;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

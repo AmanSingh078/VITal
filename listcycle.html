@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>List Your Cycle - CampusCycle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(to right, #e8f5e9, #f1f8e9); color: #333; }
+    header { background: linear-gradient(to right, #2e7d32, #388e3c); padding: 30px 20px; text-align: center; color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    header h1 { font-size: 2.8em; margin-bottom: 10px; }
+    nav { background-color: white; text-align: center; padding: 15px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    nav a { margin: 0 20px; color: #2e7d32; font-weight: 600; text-decoration: none; transition: color 0.3s; }
+    nav a:hover { color: #1b5e20; }
+    .form-container { max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .form-container h2 { margin-bottom: 20px; color: #2e7d32; text-align: center; }
+    .form-container label { display: block; margin-bottom: 10px; font-weight: bold; }
+    .form-container input, .form-container textarea, .form-container select { width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; }
+    .form-container button { background-color: #2e7d32; color: white; padding: 15px; border: none; border-radius: 30px; font-size: 1em; font-weight: bold; cursor: pointer; width: 100%; }
+    .form-container button:hover { background-color: #1b5e20; }
+    footer { text-align: center; padding: 25px; background: #2e7d32; color: white; font-size: 0.9em; margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CampusCycle</h1>
+    <p>List your cycle for rent and help others commute on campus sustainably!</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="listcycle.html">List Your Cycle</a>
+    <a href="findcycle.html">Find a Cycle</a>
+  
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <section class="form-container">
+    <h2>List Your Cycle</h2>
+    <form id="cycle-form">
+      <label for="cycle-name">Cycle Name</label>
+      <input type="text" id="cycle-name" name="cycle-name" placeholder="Enter cycle name" required>
+
+      <label for="cycle-description">Cycle Description</label>
+      <textarea id="cycle-description" name="cycle-description" placeholder="Enter cycle description" required></textarea>
+
+      <label for="cycle-condition">Cycle Condition</label>
+      <select id="cycle-condition" name="cycle-condition" required>
+        <option value="new">New</option>
+        <option value="good">Good</option>
+        <option value="used">Used</option>
+      </select>
+
+      <label for="rental-price">Rental Price (per hour)</label>
+      <input type="number" id="rental-price" name="rental-price" placeholder="Enter rental price" min="1" required>
+
+      <label for="cycle-image">Cycle Image</label>
+      <input type="file" id="cycle-image" name="cycle-image" accept="image/*" required>
+
+      <button type="submit">List Your Cycle</button>
+    </form>
+  </section>
+
+  <footer>
+    &copy; 2025 CampusCycle | Built for smart, sustainable campuses 🚲🌱
+  </footer>
+
+  <script>
+    document.getElementById('cycle-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('cycle-name').value);
+      formData.append('description', document.getElementById('cycle-description').value);
+      formData.append('condition', document.getElementById('cycle-condition').value);
+      formData.append('rentalPrice', document.getElementById('rental-price').value);
+
+      // Handle the file upload (convert to base64 to store in localStorage)
+      const fileInput = document.getElementById('cycle-image');
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = function() {
+        const cycle = {
+          name: document.getElementById('cycle-name').value,
+          description: document.getElementById('cycle-description').value,
+          condition: document.getElementById('cycle-condition').value,
+          rentalPrice: document.getElementById('rental-price').value,
+          image: reader.result
+        };
+
+        // Retrieve cycles from localStorage and add the new cycle
+        let cycles = JSON.parse(localStorage.getItem('cycles')) || [];
+        cycles.push(cycle);
+        localStorage.setItem('cycles', JSON.stringify(cycles));
+
+        alert('Cycle listed successfully!');
+        window.location.href = 'findcycle.html'; // Redirect to Find a Cycle page
+      }
+
+      reader.readAsDataURL(file); // Read the file as base64
+    });
+  </script>
+
+</body>
+</html>

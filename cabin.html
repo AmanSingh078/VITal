@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Cabin Directory - VIT Bhopal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4F46E5',
+            secondary: '#6B7280',
+            accent: '#A78BFA'
+          },
+          fontFamily: {
+            fancy: ['"Poppins"', 'sans-serif']
+          },
+          animation: {
+            fadeIn: 'fadeIn 1s ease-in-out forwards',
+            bounceIn: 'bounceIn 1s ease-out forwards',
+            pulseSlow: 'pulse 3s ease-in-out infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            bounceIn: {
+              '0%': { transform: 'scale(0.9)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-tr from-indigo-200 via-purple-100 to-pink-200 text-gray-900 min-h-screen font-fancy animate-fadeIn">
+  <div class="max-w-7xl mx-auto p-6">
+    <h1 class="text-5xl font-extrabold mb-8 text-center text-primary drop-shadow-xl animate-bounceIn">📍 Faculty Cabin Directory</h1>
+
+    <div class="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 animate-fadeIn">
+      <input type="text" id="searchInput" placeholder="🔍 Search by name, cabin number, or phone..." class="flex-1 px-5 py-3 rounded-xl border border-gray-300 shadow-lg focus:outline-none focus:ring-4 focus:ring-primary bg-white text-gray-800">
+      <button onclick="resetSearch()" class="mt-2 sm:mt-0 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl shadow-lg hover:scale-105 hover:from-purple-500 hover:to-indigo-600 transition-transform duration-300">Reset</button>
+    </div>
+
+    <div class="overflow-x-auto rounded-xl shadow-2xl border border-primary animate-fadeIn">
+      <table class="w-full text-sm text-left text-gray-700 bg-white">
+        <thead class="text-xs text-white uppercase bg-primary">
+          <tr>
+            <th class="px-6 py-4">S.No</th>
+            <th class="px-6 py-4">Cabin No.</th>
+            <th class="px-6 py-4">Name</th>
+            <th class="px-6 py-4">Mobile No.</th>
+            <th class="px-6 py-4">Status</th>
+            <th class="px-6 py-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="facultyBody">
+          <!-- Dynamic rows will be populated here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal -->
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+      <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 animate-fadeIn relative">
+        <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-xl">&times;</button>
+        <h2 class="text-xl font-bold mb-2 text-primary" id="modalName"></h2>
+        <p><strong>Cabin:</strong> <span id="modalCabin"></span></p>
+        <p><strong>Mobile:</strong> <a id="modalPhone" href="#" class="text-blue-600 hover:underline"></a></p>
+        <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+      </div>
+    </div>
+
+    <script>
+   const facultyMembers = [
+  { id: 1, cabin: 'G-01', name: 'Dr. BASEERA A', phone: '9698960667', status: 'Occupied' },
+  { id: 2, cabin: 'G-02', name: 'Dr. Vinod Bhatt', phone: '9826143220', status: 'Occupied' },
+  { id: 3, cabin: 'G-03', name: 'Dr. G. Vishnuvarthanan', phone: '9360654171', status: 'Occupied' },
+  { id: 4, cabin: 'G-04', name: 'Dr. Manisha Jain', phone: '9039826104', status: 'Occupied' },
+  { id: 5, cabin: 'G-05', name: 'Dr. Ribu Methew', phone: '9003397713', status: 'Occupied' },
+  { id: 6, cabin: 'G-06', name: 'Dr. Manoj Acharya', phone: '9827206056', status: 'Occupied' },
+  { id: 7, cabin: 'G-07', name: 'Dr. Paras Jain', phone: '', status: 'Occupied' },
+  { id: 8, cabin: 'G-08', name: 'Dr. Lakshmi D.', phone: '8610093319', status: 'Occupied' },
+  { id: 9, cabin: 'G-09', name: 'Dr. Pushpinder Singh Patheja', phone: '9893273243', status: 'Occupied' },
+  { id: 10, cabin: 'G-10', name: 'Dr. Dev Brat Gupta', phone: '9079344563', status: 'Occupied' },
+  { id: 11, cabin: 'G-11', name: 'Dr. Anant Kant Shukla', phone: '8050710905', status: 'Occupied' },
+  { id: 12, cabin: 'G-12', name: 'Dr. Javed Khan Sheikh', phone: '9320017780', status: 'Occupied' },
+  { id: 13, cabin: 'G-13', name: 'Dr. Nikhil Pateria', phone: '7999324362', status: 'Occupied' },
+  { id: 14, cabin: 'G-14', name: 'Dr. G.R. Hemalakshmi', phone: '9500396629', status: 'Occupied' },
+  { id: 15, cabin: 'G-15', name: 'Dr. Venkat Padhy', phone: '8310597038', status: 'Occupied' },
+  { id: 16, cabin: 'G-16', name: 'Nagarajan I', phone: '9131128386', status: 'Occupied' },
+  { id: 17, cabin: 'G-17', name: 'Vijay Kumar Trivedi', phone: '8098999684', status: 'Occupied' },
+  { id: 18, cabin: 'G-18', name: 'Dr. Abha Sharma', phone: '8838270601', status: 'Occupied' },
+  { id: 19, cabin: 'G-19', name: 'Dr. Dileep Kumar', phone: '9926639291', status: 'Occupied' },
+  { id: 20, cabin: 'G-20', name: 'D. Harish Babu', phone: '9455222528', status: 'Occupied' },
+  { id: 21, cabin: 'G-21', name: 'J.P. Shritaranyaa', phone: '9893948272', status: 'Occupied' },
+  { id: 22, cabin: 'G-22', name: 'Dr. Buvaneswari', phone: '9885168010', status: 'Occupied' },
+  { id: 23, cabin: 'A-101', name: 'Dr. Praveen Lalwani', phone: '9826573350', status: 'Occupied' },
+  { id: 24, cabin: 'A-102', name: 'Dr. Sheetal Sharma', phone: '8103555591', status: 'Occupied' },
+  { id: 25, cabin: 'A-103', name: 'I. Jasmine Selvakumari Jeya', phone: '9443381609', status: 'Occupied' },
+  { id: 26, cabin: 'A-104', name: 'Ar. Poonam Upadhyay', phone: '8860125107', status: 'Occupied' },
+  { id: 27, cabin: 'A-105', name: 'Board Room', phone: '', status: 'N/A' },
+  { id: 28, cabin: 'A-106', name: 'Dr. Kumar Abhishek', phone: '9043642001', status: 'Occupied' },
+  { id: 29, cabin: 'A-107', name: 'Dr. Suparna Patowary', phone: '7433819775', status: 'Occupied' },
+  { id: 30, cabin: 'A-108', name: 'Dr. Arun Kumar K.', phone: '', status: 'Occupied' },
+  { id: 31, cabin: 'A-109', name: 'Dr. Hemant Kumar Nashine', phone: '8770771319', status: 'Occupied' },
+  { id: 32, cabin: 'A-110', name: 'Dr. Reena Jain', phone: '8989982847', status: 'Occupied' },
+  { id: 33, cabin: 'A-111', name: 'Dr. Ranju Yadav', phone: '9406834330', status: 'Occupied' },
+  { id: 34, cabin: 'A-112', name: 'Dr. Chandrabhan Seniya', phone: '9755213002', status: 'Occupied' },
+  { id: 35, cabin: 'A-113', name: 'Dr. Faisal Rasheed Lone', phone: '7006910686', status: 'Occupied' },
+  { id: 36, cabin: 'A-114', name: 'Dr. Sajjad Ahmed', phone: '7006483148', status: 'Occupied' },
+  { id: 37, cabin: 'A-115', name: 'Sripriyan', phone: '8754089331', status: 'Occupied' },
+  { id: 38, cabin: 'A-116', name: 'Mr. Abhishek Kumar Shukla', phone: '7470529298', status: 'Occupied' },
+  { id: 39, cabin: 'A-117', name: 'Azra Nazir', phone: '7006543347', status: 'Occupied' },
+  { id: 40, cabin: 'A-118', name: 'Ms. Manorama Chouhan', phone: '7415659511', status: 'Occupied' },
+  { id: 41, cabin: 'A-119', name: 'Arindam Sadhukhan', phone: '8804552592', status: 'Occupied' },
+  { id: 42, cabin: 'A-120', name: 'Ajay Sharma', phone: '9203837010', status: 'Occupied' },
+  { id: 43, cabin: 'A-121', name: 'Bhupendra Panchal', phone: '9770240818', status: 'Occupied' },
+  { id: 44, cabin: 'A-122', name: 'Pranshu Pranjal', phone: '8979609032', status: 'Occupied' },
+  { id: 45, cabin: 'A-201', name: 'Mamta Agarwal', phone: '9425027637', status: 'Occupied' },
+  { id: 46, cabin: 'A-202', name: 'Dr. Pon Harshavardhanan', phone: '9840768153', status: 'Occupied' },
+  { id: 47, cabin: 'A-203', name: 'Navneet Kumar Verma', phone: '9598663322', status: 'Occupied' },
+  { id: 48, cabin: 'A-204', name: 'Shweta Mukherjee', phone: '7354155194/9826215494', status: 'Occupied' },
+  { id: 49, cabin: 'A-205', name: 'Dr. Subash Chandra Bose', phone: '9445842201', status: 'Occupied' },
+  { id: 50, cabin: 'A-206', name: 'Dr. Sasmita Padhy', phone: '9040946658', status: 'Occupied' },
+  { id: 51, cabin: 'A-207', name: 'Dr. Sandip Mal', phone: '7974537024', status: 'Occupied' },
+  { id: 52, cabin: 'A-208', name: 'Dr. Preetam Suman', phone: '7376333523', status: 'Occupied' },
+  { id: 53, cabin: 'A-209', name: 'Karishma Tiwari', phone: '7227881018', status: 'Occupied' },
+  { id: 54, cabin: 'A-210', name: 'Balaguru S', phone: '9444465649', status: 'Occupied' },
+  { id: 55, cabin: 'A-211', name: 'Dr. Vinesh Kumar', phone: '9758648636', status: 'Occupied' },
+  { id: 56, cabin: 'A-212', name: 'Dr. A Usha Ruby', phone: '7708465168', status: 'Occupied' },
+  { id: 57, cabin: 'A-213', name: 'Dr. Ranjeeta Kumar', phone: '', status: 'Occupied' },
+  { id: 58, cabin: 'A-214', name: 'Dr. M. Manimaran', phone: '', status: 'Occupied' },
+  { id: 59, cabin: 'A-215', name: 'Dr. S. Devaraju', phone: '9788445867', status: 'Occupied' },
+  { id: 60, cabin: 'A-216', name: 'Harish Chandra', phone: '7248659909', status: 'Occupied' },
+  { id: 61, cabin: 'A-217', name: 'Dr. Dheresh Soni', phone: '8878743351', status: 'Occupied' },
+  { id: 62, cabin: 'A-218', name: 'Dr. Gopal S Tandel', phone: '9893773358', status: 'Occupied' },
+  { id: 63, cabin: 'A-219', name: 'Jaynthi J.', phone: '9646491907', status: 'Alloted' },
+  { id: 64, cabin: 'A-220', name: 'Ujjwal Kumar Mishra', phone: '9852977391', status: 'Occupied' },
+  { id: 65, cabin: 'A-221', name: 'Mr. Jay Prakash Maurya', phone: '7354549227', status: 'Occupied' },
+  { id: 66, cabin: 'A-222', name: 'Chandrama Swain', phone: '8460934933', status: 'Occupied' },
+  { id: 67, cabin: 'A-223', name: 'Dr. Abdul Rehman', phone: '', status: 'Occupied' },
+  { id: 68, cabin: 'A-224', name: 'Dr. S. Aanjankumar', phone: '9786501012', status: 'Occupied' },
+  { id: 69, cabin: 'A-225', name: 'Karthik Rao M C', phone: '9742739015', status: 'Occupied' },
+  { id: 70, cabin: 'A-226', name: 'Dr. Vijay Kumar Patidar', phone: '', status: 'Occupied' },
+  { id: 71, cabin: 'A-227', name: 'Dr. Rajdeep Ghosh', phone: '9085577988', status: 'Occupied' },
+  { id: 72, cabin: 'A-228', name: 'Dr. Umakanta Meher', phone: '', status: 'Occupied' },
+  { id: 73, cabin: 'A-229', name: 'Abhishek Shrivastava', phone: '8887820195', status: 'Occupied' },
+  { id: 74, cabin: 'A-230', name: 'Mr. Ashish Kumar Kesarwany', phone: '', status: 'Occupied' },
+  { id: 75, cabin: 'A-231', name: 'Vacant', phone: '', status: 'Vacant' },
+  { id: 76, cabin: 'A-232', name: 'Vijay Kumar Patel', phone: '9026050579', status: 'Occupied' },
+  { id: 77, cabin: 'A-233', name: 'Suchismita Patra', phone: '9540610053', status: 'Occupied' },
+  { id: 78, cabin: 'A-234', name: 'Rahul Kumar Chaturvedi', phone: '8858709096/8299748659', status: 'Occupied' },
+  { id: 79, cabin: 'A-235', name: 'Dr. Shahana Gajala Qureshi', phone: '8770762947', status: 'Occupied' },
+  { id: 80, cabin: 'A-236', name: 'Swati Chauhan', phone: '6398505154', status: 'Occupied' },
+  { id: 81, cabin: 'A-237', name: 'Anil Kumar Shukla', phone: '9918094075', status: 'Occupied' },
+  { id: 82, cabin: 'A-238', name: 'Dr. Juhi Yasmeen', phone: '8273788594', status: 'Occupied' },
+  { id: 83, cabin: 'A-239', name: 'Dr. Vivek Parashar', phone: '', status: 'Occupied' },
+  { id: 84, cabin: 'A-240', name: 'Dr. Kiran Pandey', phone: '9179948303', status: 'Allotted' },
+  { id: 85, cabin: 'A-241', name: 'Dr. A Balaji', phone: '9444433518', status: 'Occupied' },
+  { id: 86, cabin: 'A-242', name: 'Dr. Siddharth S Chouhan', phone: '', status: 'Occupied' },
+  { id: 87, cabin: 'A-243', name: 'Dr. Sivasankaran', phone: '9843856991', status: 'Occupied' },
+  { id: 88, cabin: 'A-244', name: 'Dr. Ankur Beohar', phone: '9893383443, 9425704533', status: 'Occupied' },
+  { id: 89, cabin: 'A-245', name: 'Dr. Siddartha Maiti', phone: '', status: 'Occupied' },
+  { id: 90, cabin: 'A-246', name: 'Dr. Soumitra Keshari Nayak', phone: '9321923010', status: 'Occupied' },
+  { id: 91, cabin: 'A-247', name: 'Dr. Swagat Samantray', phone: '7978166023', status: 'Occupied' },
+  { id: 92, cabin: 'A-248', name: 'Dr. Rajeev', phone: '', status: 'Occupied' },
+  { id: 93, cabin: 'A-249', name: 'Dr. Sarvanan D', phone: '9865483413', status: 'Occupied' },
+  { id: 94, cabin: 'A-250', name: 'Dr. Prashant G K', phone: '9910010941', status: 'Occupied' },
+  { id: 95, cabin: 'A-301', name: 'Ajay Kumar Bhurjee', phone: '9178913172', status: 'Occupied' },
+  { id: 96, cabin: 'A-302', name: 'Akshara Makrariya', phone: '7748836973', status: 'Occupied' },
+  { id: 97, cabin: 'A-303', name: 'Prashant Kumar Pandey', phone: '8178376418', status: 'Occupied' },
+  { id: 98, cabin: 'A-304', name: 'Dr. Bhakti Parashar', phone: '9826722177', status: 'Occupied' },
+  { id: 99, cabin: 'A-305', name: 'Pallabi Sarkar', phone: '6294524861', status: 'Occupied' },
+  { id: 100, cabin: 'A-306', name: 'Rajneesh Kumar Patel', phone: '8871235814', status: 'Occupied' },
+  { id: 101, cabin: 'A-307', name: 'Shivmanjree Gopaliya', phone: '9891354291', status: 'Occupied' },
+  { id: 102, cabin: 'A-308', name: 'Dr. Ramu Pashupathi Suganeshwar', phone: '7899036744', status: 'Occupied' },
+  { id: 103, cabin: 'A-309', name: 'Dr. Virendra Singh Kushwah', phone: '7415869616', status: 'Occupied' },
+  { id: 104, cabin: 'A-310', name: 'Susant Kumar Panigrahi', phone: '8249232450', status: 'Occupied' },
+  { id: 105, cabin: 'A-311', name: 'Suchetana Sadhukhan', phone: '9748005527', status: 'Occupied' },
+  { id: 106, cabin: 'A-312', name: 'Dr. Ganeshan R', phone: '8610285129', status: 'Occupied' },
+  { id: 107, cabin: 'A-313', name: 'Avirup Das', phone: '9674927124', status: 'Occupied' },
+  { id: 108, cabin: 'A-314', name: 'Dr. A. Sirajudeen', phone: '9043787298', status: 'Occupied' },
+  { id: 109, cabin: 'A-315', name: 'Anita Yadav', phone: '9977588551', status: 'Occupied' },
+  { id: 110, cabin: 'A-316', name: 'Dr. O P Pahadi', phone: '9583085832', status: 'Occupied' },
+  { id: 111, cabin: 'A-317', name: 'Dr. Pradeep Kumar Mishra', phone: '9926170794', status: 'Occupied' },
+  { id: 112, cabin: 'A-318', name: 'Dr. Bhumika Choksi', phone: '7016527953', status: 'Occupied' },
+  { id: 113, cabin: 'A-319', name: 'Dr. Anjali Mathur', phone: '9928986023', status: 'Occupied' },
+  { id: 114, cabin: 'A-320', name: 'Rohit Sharma', phone: '9131960256', status: 'Occupied' },
+  { id: 115, cabin: 'A-321', name: 'Dr. Suresh Dara', phone: '7353268058', status: 'Occupied' },
+  { id: 116, cabin: 'A-322', name: 'Dr. Anvesh Nella', phone: '9503132874', status: 'Occupied' },
+  { id: 117, cabin: 'A-323', name: 'Dr. Periyanagi', phone: '9994458455', status: 'Occupied' },
+  { id: 118, cabin: 'A-324', name: 'Dr. Vikas Panthi', phone: '9778460751', status: 'Occupied' },
+  { id: 119, cabin: 'A-325', name: 'Dr. Pradeep Kashyap', phone: '7465967251', status: 'Occupied' },
+  { id: 120, cabin: 'A-326', name: 'Dr. Ashok K Patel', phone: '', status: 'Occupied' },
+  { id: 121, cabin: 'B-301', name: 'Dr. Hariharan R', phone: '9791322178', status: 'Occupied' },
+  { id: 122, cabin: 'B-302', name: 'Nilam Venkatakoteswararao', phone: '9177477722', status: 'Occupied' },
+  { id: 123, cabin: 'B-303', name: 'Sheerin Kayenat', phone: '7870955315', status: 'Occupied' },
+  { id: 124, cabin: 'B-304', name: 'Sumit Mittal', phone: '9318325748', status: 'Occupied' },
+  { id: 125, cabin: 'B-305', name: 'Dr. Monika Sankat', phone: '', status: 'Occupied' },
+  { id: 126, cabin: 'B-306', name: 'Harshlata Vishwakarma', phone: '8349780109', status: 'Occupied' },
+  { id: 127, cabin: 'B-307', name: 'Narottam Das Patel', phone: '9450095800', status: 'Occupied' },
+  { id: 128, cabin: 'B-308', name: 'Dr. Nilamadhab Mishra', phone: '7735627711', status: 'Occupied' },
+  { id: 129, cabin: 'B-309', name: 'Dr. C. P. Koushik', phone: '9840403316', status: 'Occupied' },
+  { id: 130, cabin: 'B-310', name: 'Dr. Kanchan Lata Kashyap', phone: '982733258', status: 'Occupied' },
+  { id: 131, cabin: 'B-311', name: 'Dr. H. Azath', phone: '9865164505', status: 'Occupied' },
+  { id: 132, cabin: 'B-312', name: 'Xavier Suresh', phone: '9486915394', status: 'Occupied' },
+  { id: 133, cabin: 'B-313', name: 'Dr. A V R Mayuri', phone: '9441438843', status: 'Occupied' },
+  { id: 134, cabin: 'B-314', name: 'Dr. Chandan Kumar Behera', phone: '9039490306', status: 'Occupied' },
+  { id: 135, cabin: 'B-315', name: 'Dr. Ajeet Singh', phone: '9805075085', status: 'Occupied' },
+  { id: 136, cabin: 'A-401', name: 'Benevatho Jaison A', phone: '9994066779', status: 'Occupied' },
+  { id: 137, cabin: 'A-402', name: 'Dr. Komarasamy G', phone: '9715614081', status: 'Occupied' },
+  { id: 138, cabin: 'A-403', name: 'Dr. K. Murugeswari', phone: '9994276824', status: 'Occupied' },
+  { id: 139, cabin: 'A-404', name: 'Dr. Subhash Chandra Patel', phone: '7905407837', status: 'Occupied' },
+  { id: 140, cabin: 'A-405', name: 'Saravanan J', phone: '9047240141', status: 'Occupied' },
+  { id: 141, cabin: 'A-406', name: 'Abdul Rashid', phone: '8109171886', status: 'Occupied' },
+  { id: 142, cabin: 'A-407', name: 'Hemlata Gangwar', phone: '9766001510', status: 'Occupied' },
+  { id: 143, cabin: 'A-408', name: 'Dr. M. Suresh', phone: '', status: 'Occupied' },
+  { id: 144, cabin: 'A-409', name: 'Shiv Shankar Prasad Shukla', phone: '8349390186', status: 'Occupied' },
+  { id: 145, cabin: 'A-410', name: 'Ajay Kumar Phulre', phone: '8770450967 9009218023', status: 'Occupied' },
+  { id: 146, cabin: 'A-411', name: 'M. Suresh Nirmala', phone: '9962212030', status: 'Occupied' },
+  { id: 147, cabin: 'A-412', name: 'Pushpdant Jain', phone: '9437786562', status: 'Occupied' },
+  { id: 148, cabin: 'A-413', name: 'Jitendra Pratap Singh Mathur', phone: '9893536675', status: 'Occupied' },
+  { id: 149, cabin: 'A-414', name: 'G L Balaji', phone: '9994613458', status: 'Occupied' },
+  { id: 150, cabin: 'A-415', name: 'Dr. Ganeshan G.', phone: '', status: 'Occupied' },
+  { id: 151, cabin: 'A-416', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 152, cabin: 'A-417', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 153, cabin: 'A-418', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 154, cabin: 'A-419', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 155, cabin: 'A-420', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 156, cabin: 'A-421', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 157, cabin: 'A-422', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 158, cabin: 'A-423', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 159, cabin: 'A-424', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 160, cabin: 'A-425', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 161, cabin: 'A-426', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 162, cabin: 'B-401', name: 'Saurabh Bhargava', phone: '8901539669', status: 'Occupied' },
+  { id: 163, cabin: 'B-402', name: 'Dr. Sathish Kumar L.', phone: '9597200240', status: 'Occupied' },
+  { id: 164, cabin: 'B-403', name: 'Dr. S. Kannan', phone: '', status: 'Occupied' },
+  { id: 165, cabin: 'B-404', name: 'Devraj Vishnu', phone: '9475451245', status: 'Occupied' },
+  { id: 166, cabin: 'B-405', name: 'Dr. Ankur Jain', phone: '7415259169', status: 'Occupied' },
+  { id: 167, cabin: 'B-406', name: 'Dr. M. Maragatharajan', phone: '9003613484', status: 'Occupied' },
+  { id: 168, cabin: 'B-407', name: 'Dr. Anand Motwani', phone: '8818965776', status: 'Occupied' },
+  { id: 169, cabin: 'B-408', name: 'Rabia Musheer', phone: '9479967401', status: 'Occupied' },
+  { id: 170, cabin: 'B-409', name: 'Sonali Shrivastava', phone: '9045914940', status: 'Occupied' },
+  { id: 171, cabin: 'B-410', name: 'Neetu Kalra', phone: '9479661282', status: 'Occupied' },
+  { id: 172, cabin: 'B-411', name: 'Dr. Ankush Tharkar', phone: '8087181373', status: 'Occupied' },
+  { id: 173, cabin: 'B-412', name: 'E. Nirmala', phone: '8778539987', status: 'Occupied' },
+  { id: 174, cabin: 'B-413', name: 'Abhay Vidyarthi', phone: '6265754892', status: 'Occupied' },
+  { id: 175, cabin: 'B-414', name: 'Karthick S.', phone: '9514264651/8103981414', status: 'Occupied' },
+  { id: 176, cabin: 'B-415', name: 'Manisha Singh', phone: '9425005177', status: 'Occupied' },
+  { id: 177, cabin: 'C-401', name: 'Dr. Nilesh Kunhare', phone: '9685251246', status: 'Occupied' },
+  { id: 178, cabin: 'C-402', name: 'Joshi Abhishek Dilip', phone: '9421803544', status: 'Occupied' },
+  { id: 179, cabin: 'C-403', name: 'Adarsh Patel', phone: '9399414598', status: 'Occupied' },
+  { id: 180, cabin: 'C-404', name: 'Dr. Gaurav Soni', phone: '9826018671', status: 'Occupied' },
+  { id: 181, cabin: 'A-501', name: 'Dr. Saravanan S', phone: '9944059288', status: 'Occupied' },
+  { id: 182, cabin: 'A-502', name: 'Ankit Pal', phone: '8586875502', status: 'Occupied' },
+  { id: 183, cabin: 'A-503', name: 'Dr. Sandeep Sahu', phone: '9407337972', status: 'Occupied' },
+  { id: 184, cabin: 'A-504', name: 'Dr. Raghavendra Mishra', phone: '8085102581', status: 'Occupied' },
+  { id: 185, cabin: 'A-505', name: 'Arindam Ghosh', phone: '8328808499', status : 'Occupied' },
+  { id: 186, cabin: 'A-506', name: 'B. Mahendran', phone: '7382145827', status: 'Occupied' },
+  { id: 187, cabin: 'A-507', name: 'Dipankar Sutradhar', phone: '7308126760', status: 'Occupied' },
+  { id: 188, cabin: 'A-508', name: 'Dr. Jyoti Chauhan', phone: '8700502598', status: 'Occupied' },
+  { id: 189, cabin: 'A-509', name: 'Humaira Fatima', phone: '7455838246/8307962979', status: 'Occupied' },
+  { id: 190, cabin: 'A-510', name: 'Dr. Anju Shukla', phone: '9111211104', status: 'Occupied' },
+  { id: 191, cabin: 'A-511', name: 'Dr. Manoj Kumar', phone: '8269576451', status: 'Occupied' },
+  { id: 192, cabin: 'A-512', name: 'Dr. Atul Aman', phone: '8420862335', status: 'Occupied' },
+  { id: 193, cabin: 'A-513', name: 'Animesh Bhandari', phone: '8257041061, 9007847469', status: 'Occupied' },
+  { id: 194, cabin: 'A-514', name: 'Dr. Ravi Verma', phone: '8770995536', status: 'Occupied' },
+  { id: 195, cabin: 'A-515', name: 'Ravi Bhatt', phone: '9630400659', status: 'Occupied' },
+  { id: 196, cabin: 'A-516', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 197, cabin: 'A-517', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 198, cabin: 'A-518', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 199, cabin: 'A-519', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 200, cabin: 'A-520', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 201, cabin: 'A-521', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 202, cabin: 'A-522', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 203, cabin: 'A-523', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 204, cabin: 'A-524', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 205, cabin: 'A-525', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 206, cabin: 'A-526', name: 'Handover Pending', phone: '', status: 'Handover Pending' },
+  { id: 207, cabin: 'B-501', name: 'Dr. Rudra Kalyan Nayak', phone: '9861366884', status: 'Occupied' },
+  { id: 208, cabin: 'B-502', name: 'Dr. Dip Mukherjee', phone: '', status: 'Occupied' },
+  { id: 209, cabin: 'B-503', name: 'Mayank Sharma', phone: '9826081038', status: 'Occupied' },
+  { id: 210, cabin: 'B-504', name: 'Jyoti Badge', phone: '9993945259', status: 'Occupied' },
+  { id: 211, cabin: 'B-505', name: 'Dr. Feroz Babu', phone: '', status: 'Occupied' },
+  { id: 212, cabin: 'B-506', name: 'Dr. Shiju. E', phone: '', status: 'Occupied' },
+  { id: 213, cabin: 'B-507', name: 'Ms. Geeta Singh', phone: '7680854848', status: 'Occupied' },
+  { id: 214, cabin: 'B-508', name: 'Dr. S. K. Das', phone: '', status: 'Occupied' },
+  { id: 215, cabin: 'B-509', name: 'Usama Khan', phone: '', status: 'Occupied' },
+  { id: 216, cabin: 'B-510', name: 'Mr. Vipin Jain', phone: '', status: 'Occupied' },
+  { id: 217, cabin: 'B-511', name: 'Sayed Mohammed Zeeshan', phone: '7004465671', status: 'Occupied' },
+  { id: 218, cabin: 'B-512', name: 'Dr. Suneet Joshi', phone: '7748946630', status: 'Alloted' },
+  { id: 219, cabin: 'B-513', name: 'Dr. Shafiul Alom Ahmed', phone: '9706931206', status: 'Occupied' },
+  { id: 220, cabin: 'B-514', name: 'Pavan Kumar', phone: '8179700264', status: 'Occupied' },
+  { id: 221, cabin: 'B-515', name: 'Rajdeep Singh Payal', phone: '9389634514', status: 'Occupied' },
+  { id: 222, cabin: 'C-501', name: 'Dr. Ram Kumar', phone: '9770045634', status: 'Occupied' },
+  { id: 223, cabin: 'C-502', name: 'Amit Kumar Singh', phone: '8840574075', status: 'Occupied' },
+  { id: 224, cabin: 'C-503', name: 'Manickam A', phone: '9789742540', status: 'Occupied' },
+  { id: 225, cabin: 'C-504', name: 'Dr. Sultan Alam', phone: '', status: 'Occupied' },
+  { id: 226, cabin: 'C-505', name: 'Vijendra Singh Bramhe', phone: '8954675017', status: 'Occupied' },
+  { id: 227, cabin: 'C-506', name: 'Saurav Prasad', phone: '9310157546', status: 'Occupied' },
+  { id: 228, cabin: 'C-507', name: 'Soumya Sankar Ghosh', phone: '9748581767', status: 'Occupied' },
+  { id: 229, cabin: 'C-508', name: 'Ms. Nancy Kumari', phone: '7011745833', status: 'Occupied' },
+  { id: 230, cabin: 'C-509', name: 'Dr. Hemraj S.L.', phone: '7387114521', status: 'Occupied' },
+  { id: 231, cabin: 'C-510', name: 'Dr. Vinod Kumar Jatav', phone: '8239074693', status: 'Occupied' },
+  { id: 232, cabin: 'C-511', name: 'Dr. Shweta Saxena', phone: '9893954987', status: 'Occupied' },
+  { id: 233, cabin: 'C-512', name: 'Soma Saha', phone: '8269896171', status: 'Occupied' },
+  { id: 234, cabin: 'C-513', name: 'Santosh Kumar Tripathy', phone: '8658297935', status: 'Occupied' },
+  { id: 235, cabin: 'C-514', name: 'Mr. Sanat Jain', phone: '9893979695', status: 'Occupied' },
+  { id: 236, cabin: 'C-515', name: 'Dr. Divya Haridas', phone: '9930594727', status: 'Alloted' },
+  { id: 237, cabin: 'C-516', name: 'Dr. G. Prabu Kanna', phone: '9791802829', status: 'Occupied' },
+  { id: 238, cabin: 'C-517', name: 'D. Saravanan', phone: '9865483413', status: 'Occupied' },
+  { id: 239, cabin: 'C-518', name: 'Dr. Rizwan ur Rahman', phone: '9893526322', status: 'Occupied' },
+  { id: 240, cabin: 'C-519', name: 'Dr. Vikas Panthi', phone: '9778460751', status: 'Occupied' },
+  { id: 241, cabin: 'C-520', name: 'Pankaj Kumar', phone: '9508237322', status: 'Occupied' },
+  { id:  242, cabin: 'C-521', name: 'Dr. Pradeep Kumar Mishra', phone: '9926177094', status: 'Occupied' },
+  { id: 243, cabin: 'C-522', name: 'Dr. Rajit Nair', phone: '9907694424, 7000760748', status: 'Occupied' },
+  { id: 244, cabin: 'C-523', name: 'Dr. Nitin Kumar Mishra', phone: '9826449051', status: 'Occupied' },
+  { id: 245, cabin: 'C-524', name: 'Deep Chandra Upadhyay', phone: '9119935285', status: 'Occupied' },
+  { id: 246, cabin: 'C-525', name: 'Priyanka Roy', phone: '8296603348', status: 'Occupied' },
+  { id: 247, cabin: 'C-526', name: 'Dr. Trapti Sharma', phone: '9425630895', status: 'Occupied' },
+  { id: 248, cabin: 'C-527', name: 'Dr. Ashish Mohan Yadav', phone: '7999836793', status: 'Occupied' },
+  { id: 249, cabin: 'C-528', name: 'Dr. Kannan S', phone: '7702672411', status: 'Occupied' },
+  { id: 250, cabin: 'C-529', name: 'Dr. S. Periyanayagi', phone: '9994458455', status: 'Occupied' },
+  { id: 251, cabin: 'C-530', name: 'Dr. Abha Trivedi', phone: '7839319383', status: 'Occupied' },
+  { id: 252, cabin: 'C-531', name: 'Ashok Kumar Baral', phone: '9861999643', status: 'Occupied' },
+  { id: 253, cabin: 'C-532', name: 'Dr. Kr. Sivabalan', phone: '9698766754', status: 'Occupied' },
+  { id: 254, cabin: 'C-533', name: 'Ujjal Halder', phone: '8981693828', status: 'Occupied' },
+  { id: 255, cabin: 'C-534', name: 'Garima Jain', phone: '9302920647', status: 'Occupied' },
+  { id: 256, cabin: 'C-535', name: 'Dr. Ashok Patel', phone: '9770890583', status: 'Occupied' },
+  { id: 257, cabin: 'C-536', name: 'Satyam Ravi', phone: '9646937054', status: 'Occupied' },
+  { id: 258, cabin: 'C-537', name: 'Udai Kumar', phone: '7651914458', status: 'Occupied' },
+  { id: 259, cabin: 'C-538', name: 'Shilpa Suman', phone: '9693750319', status: 'Occupied' },
+  { id: 260, cabin: 'C-539', name: 'Pratosh Kumar Pal', phone: '8989806880', status: 'Occupied' },
+  { id: 261, cabin: 'C-540', name: 'Prasad Begde', phone: '8225048609', status: 'Occupied' },
+  { id: 262, cabin: 'AB-011', name: 'Dr. J. George Chellin Chandran', phone: '9384174987', status: 'Occupied' },
+  { id: 263, cabin: 'AB-019 (A)', name: 'Dr. Pradyumna Yadav', phone: '8109961099/7024111639', status: 'Occupied' },
+  { id: 264, cabin: 'AB-019 (B)', name: 'Dr. Debashis Adhikari', phone: '9822347215', status: 'Occupied' },
+  { id: 265, cabin: 'AB-019 (C)', name: 'Dr. Poonkuntran S', phone: '9894432890', status: 'Occupied' },
+  { id: 266, cabin: 'AB-019 (D)', name: 'Vacant', phone: '', status: 'Vacant' },
+  { id: 267, cabin: 'AB-019 (E)', name: 'Vacant', phone: '', status: 'Vacant' },
+  { id: 268, cabin: 'AB-019 (H)', name: 'Vacant', phone: '', status: 'Vacant' },
+  { id : 269, cabin: 'AB-019 (I)', name: 'Vacant', phone: '', status: 'Proposed for Secy. Of DSW' },
+  { id: 270, cabin: 'AB-019 (J)', name: 'Vacant', phone: '', status: 'Proposed for Secy. Of SCSE' },
+  { id: 271, cabin: 'AB-019 (K)', name: 'Vacant', phone: '', status: 'Proposed for Secy. Of SEEE' },
+  { id: 272, cabin: 'AB-019 (L)', name: 'Mr. Anil Mewada', phone: '9131094751', status: 'Occupied' },
+  { id: 273, cabin: 'ADMISSION OFFICE-01', name: 'Dr. Yogesh Shukla', phone: '9479877102', status: 'Occupied' },
+  { id: 274, cabin: 'ADMISSION OFFICE-02', name: 'Dr. Neha Choubey', phone: '9713606045', status: 'Occupied' },
+  { id: 275, cabin: 'ADMISSION OFFICE-03', name: 'Mayank Gupta', phone: '7722993939', status: 'Occupied' },
+  { id: 276, cabin: 'PAT OFFICE-', name: 'Dr. Shriram R', phone: '7358194673', status: 'Occupied' },
+  { id: 277, cabin: 'PAT OFFICE-', name: 'Dr. J Manikandan', phone: '7871174176', status: 'Occupied' },
+  { id: 278, cabin: 'PAT OFFICE-', name: 'Dr. S. Ananthakumaran', phone: '9842221962', status: 'Occupied' },
+  { id: 279, cabin: 'PAT OFFICE-', name: 'R. Sukumar', phone: '9962029293', status: 'Occupied' },
+  { id: 280, cabin: 'PAT OFFICE-', name: 'Dr. Sharad Chandra Tripathi', phone: '7697867027', status: 'Occupied' },
+  { id: 281, cabin: 'PAT OFFICE-', name: 'Dr. Anirban Bhowmick', phone: '9547155428', status: 'Occupied' },
+  { id: 282, cabin: 'PAT OFFICE-', name: 'Dr. Hariharasitaraman. S', phone: '9940295262', status: 'Occupied' },
+  { id: 283, cabin: 'PAT OFFICE-', name: 'Conference Room', phone: 'Conference Room', status: 'Occupied' },
+  { id: 284, cabin: 'PAT OFFICE-', name: 'Rajendra Mahanandia', phone: '9438659192', status: 'Occupied' },
+  { id: 285, cabin: 'AB-110', name: 'Dr. Divya Haridas', phone: '9930594727', status: 'Occupied' },
+  { id: 286, cabin: 'AB-306', name: '(1) Dr. Abha Gupta (2) Dr. Juhi Kesarwani', phone: '', status: 'Occupied' },
+  { id: 287, cabin: 'AB-310', name: 'Mr. Ravi Kumar Singh', phone: '', status: 'Occupied' },
+  { id: 288, cabin: 'AB-406', name: 'Priyanka Mishra', phone: '9140871509', status: 'Occupied' },
+  { id: 289, cabin: 'AB-406', name: 'Dr. S. Vairachilai', phone: '8106813402', status: 'Occupied' },
+  { id: 290, cabin: 'AB-410', name: 'Dr. Kamlesh Chandravanshi', phone: '9009217763', status: 'Occupied' },
+  { id: 291, cabin: 'AB-410', name: 'P. Narendra Babu', phone: '6281571216, 9553773487', status: 'Occupied' },
+  { id: 292, cabin: 'AB-506', name: 'Mr. Vikas Kumar Jain', phone: '9981008680', status: 'Occupied' },
+  { id: 293, cabin: 'AB-506', name: 'Mr. Narendra Kumar', phone: '8968945650', status: 'Occupied' },
+  { id: 294, cabin: 'AB-510', name: 'Dr. Anil Kumar Yadav', phone: '9479499566', status: 'Occupied' },
+  { id: 295, cabin: 'AB-510', name: 'M.R. Thiyagu Pri yadharsan', phone: '9994115629', status: 'Occupied' },
+  { id: 296, cabin: 'AB-206', name: 'Vacant', phone: '', status: 'Proposed for Project Funded' },
+  { id: 297, cabin: 'AB-307', name: 'Vacant', phone: '', status: 'Proposed for Project Funded' },
+  { id: 298, cabin: 'AB-507', name: 'Dr. Shishir Kumar Shandilya', phone: '9009972032', status: 'Occupied' },
+  { id: 299, cabin: 'LIBRARY', name: 'Mr. Santanu Mandal', phone: '9233184705', status: 'Library' },
+  { id: 300, cabin: 'LIBRARY', name: 'Dr. Sumit Som', phone: '', status: 'Library' },
+  { id: 301, cabin: 'LIBRARY', name: 'Dr. Sanjay Pan', phone: '', status: 'Library' },
+  { id: 302, cabin: 'LIBRARY', name: 'Dr. Sanjeev Nayak', phone: '', status: 'Library' },
+  { id: 303, cabin: 'LIBRARY', name: 'Dr. Shweta Singh', phone: '', status: 'Library' },
+  { id: 304, cabin: 'LIBRARY', name: 'Dr. Saurabh Mishra', phone: '7394999590', status: 'Library' },
+  { id: 305, cabin: 'LIBRARY', name: 'Dr. Ravindra Prasad', phone: '', status: 'Library' },
+  { id: 306, cabin: 'LIBRARY', name: 'Dr. Saurabh Kumar Morya', phone: '9532437348', status: 'Library' },
+  { id: 307, cabin: 'LIBRARY', name: 'Dr. P.V.N. Kishor', phone: '9553773590', status: 'Library' },
+  { id: 308, cabin: 'Dr. Kashinath', name: 'Asst. Professor SCSE', phone: '9730951876', status: 'Occupied' },
+  { id: 309, cabin: 'Dr. Santosh Kumar Bahl', name: 'Asst. Prof. SASL Maths', phone: '9373410389', status: 'Occupied' },
+  { id: 310, cabin: 'Dr. Dipanjana Hazra', name: 'Asst. Prof. SASL Physics', phone: '9340355344', status: 'Occupied' },
+  { id: 311, cabin: 'Dr. Kiran Kumar Behra', name: 'Asst. Prof. SASL Maths', phone: '8267808230', status: 'Occupied' },
+  { id: 312, cabin: 'Assistant Professor', name: 'Dr. Gounder Thangamani Jayaram', phone: '8110019705', status: 'Occupied' },
+  { id: 313, cabin: 'Assistant Professor', name: 'Dr. Hemanta Kalita', phone: '8811039996', status: 'Occupied' }
+];
+
+      function populateTable() {
+        const facultyBody = document.getElementById('facultyBody');
+        facultyBody.innerHTML = '';
+        facultyMembers.forEach(member => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="px-6 py-4">${member.id}</td>
+            <td class="px-6 py-4">${member.cabin}</td>
+            <td class="px-6 py-4">${member.name}</td>
+            <td class="px-6 py-4">${member.phone || 'N/A'}</td>
+            <td class="px-6 py-4">${member.status}</td>
+            <td class="px-6 py-4">
+              <button onclick="openModal(${member.id})" class="text-blue-600 hover:underline">View</button>
+            </td>
+          `;
+          facultyBody.appendChild(row);
+        });
+      }
+
+      function openModal(id) {
+        const member = facultyMembers.find(m => m.id === id);
+        document.getElementById('modalName').innerText = member.name;
+        document.getElementById('modalCabin').innerText = member.cabin;
+        document.getElementById('modalPhone').innerText = member.phone || ' N/A';
+        document.getElementById('modalStatus').innerText = member.status;
+        document.getElementById('modalPhone').href = `tel:${member.phone}`;
+        document.getElementById('profileModal').classList.remove('hidden');
+      }
+
+      function closeModal() {
+        document.getElementById('profileModal').classList.add('hidden');
+      }
+
+      function resetSearch() {
+        document.getElementById('searchInput').value = '';
+        populateTable();
+      }
+
+      document.getElementById('searchInput').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const filteredMembers = facultyMembers.filter(member => 
+          member.name.toLowerCase().includes(searchTerm) || 
+          member.cabin.toLowerCase().includes(searchTerm) || 
+          (member.phone && member.phone.includes(searchTerm))
+        );
+        const facultyBody = document.getElementById('facultyBody');
+        facultyBody.innerHTML = '';
+        filteredMembers.forEach(member => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="px-6 py-4">${member.id}</td>
+            <td class="px-6 py-4">${member.cabin}</td>
+            <td class="px-6 py-4">${member.name}</td>
+            <td class="px-6 py-4">${member.phone || 'N/A'}</td>
+            <td class="px-6 py-4">${member.status}</td>
+            <td class="px-6 py-4">
+              <button onclick="openModal(${member.id})" class="text-blue-600 hover:underline">View</button>
+            </td>
+          `;
+          facultyBody.appendChild(row);
+        });
+      });
+
+      window.onload = populateTable;
+    </script>
+  </div>
+</body>
+</html>
+

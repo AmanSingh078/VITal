@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CampusCycle - Smart Bicycle Rentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(to right, #2e7d32, #388e3c);
+      padding: 30px 20px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 2.8em;
+      margin-bottom: 10px;
+    }
+
+    nav {
+      background-color: white;
+      text-align: center;
+      padding: 15px 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    nav a {
+      margin: 0 20px;
+      color: #2e7d32;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s, text-decoration 0.3s;
+    }
+
+    nav a:hover {
+      color: #1b5e20;
+      text-decoration: underline;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(to right, #c8e6c9, #dcedc8);
+    }
+
+    .hero h2 {
+      font-size: 2.5em;
+      color: #1b5e20;
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      margin: 20px auto;
+      max-width: 600px;
+      color: #4e4e4e;
+    }
+
+    .buttons a {
+      display: inline-block;
+      background: #2e7d32;
+      color: white;
+      padding: 12px 25px;
+      margin: 15px 10px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .buttons a:hover {
+      background: #1b5e20;
+      transform: scale(1.05);
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 30px;
+      background-color: #f9fbe7;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px 25px;
+      max-width: 280px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .feature-card h3 {
+      color: #2e7d32;
+      margin-bottom: 15px;
+    }
+
+    .feature-card p {
+      color: #555;
+      font-size: 0.95em;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #2e7d32;
+      color: white;
+      font-size: 0.9em;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h2 {
+        font-size: 2em;
+      }
+
+      nav a {
+        margin: 0 10px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CampusCycle</h1>
+    <p>Smart Peer-to-Peer Bicycle Rentals for Eco-Friendly Campus Travel</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="listcycle.html">List Your Bike</a>
+    <a href="findcycle.html">Find a Bike</a>
+   
+    <a href="#">Contact</a>
+  </nav>
+
+  <section class="hero">
+    <h2>Rent a Ride. Share the Ride. Save the Planet.</h2>
+    <p>Empowering students to connect through bicycle sharing — reduce carbon footprints and ride smart on campus.</p>
+    <div class="buttons">
+      <a href="listcycle.html">List Your cycle</a>
+      <a href="findcycle.html">Find a cycle</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <h3>Eco-Friendly</h3>
+      <p>Every ride saves emissions and promotes a greener campus life.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Student Powered</h3>
+      <p>Students rent and lend bikes directly. Zero middlemen, full trust.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Smart & Simple</h3>
+      <p>Scan, unlock, ride. Technology that makes commuting fun and fast.</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 CampusCycle | Built for smart, sustainable campuses 🚲🌱
+  </footer>
+
+</body>
+</html>

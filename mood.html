@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wellness & Reflection Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Universal Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #A8D8FF, #D2E8FF);
+      color: #333;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px;
+      transition: background 0.5s ease;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      color: #3A8D99;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+      color: #3A8D99;
+      font-weight: 600;
+    }
+
+    /* Forms and Inputs */
+    form {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      margin-bottom: 40px;
+      transition: all 0.3s ease;
+    }
+
+    form:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    label {
+      font-size: 1rem;
+      color: #5B5B5B;
+      margin-bottom: 10px;
+      display: block;
+      margin-top: 20px;
+    }
+
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+      transition: border-color 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"]:focus, textarea:focus, select:focus {
+      border-color: #3A8D99;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      background-color: #3A8D99;
+      color: white;
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2D6A73;
+      transform: translateY(-2px);
+    }
+
+    /* Entry Cards */
+    .entry {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .entry:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .entry .delete-btn {
+      background-color: #E74C3C;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .entry .delete-btn:hover {
+      background-color: #C0392B;
+    }
+
+    .mood-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      gap: 10px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      background: #f2f2f2;
+      border-radius: 12px;
+      margin-top: 20px;
+      padding: 5px;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 20px;
+      border-radius: 12px;
+      background: #3A8D99;
+      text-align: center;
+      color: white;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 40px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+    }
+
+    .entry strong {
+      color: #3A8D99;
+      font-weight: 600;
+    }
+
+    .export-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+    }
+
+    .export-buttons button {
+      width: 48%;
+      padding: 14px 0;
+    }
+
+    .chart-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>🌿 Wellness & Reflection Tracker</h1>
+
+  
+
+  <form id="trackerForm">
+    <h3>Daily Habits</h3>
+    <div class="mood-container">
+      <label><input type="checkbox" name="exercise"> Exercise</label>
+      <label><input type="checkbox" name="waterIntake"> Drank enough water</label>
+      <label><input type="checkbox" name="sleptWell"> Slept well</label>
+    </div>
+
+    <h3>Reflection</h3>
+    <label>Mood</label>
+    <select name="mood">
+      <option value="😄 Happy">😄 Happy</option>
+      <option value="😊 Calm">😊 Calm</option>
+      <option value="😐 Neutral">😐 Neutral</option>
+      <option value="😟 Anxious">😟 Anxious</option>
+      <option value="😢 Sad">😢 Sad</option>
+    </select>
+
+    <label>Gratitude</label>
+    <input type="text" name="gratitude" placeholder="What are you grateful for today?" />
+
+    <label>Notes</label>
+    <textarea name="notes" placeholder="Write your thoughts..."></textarea>
+
+    <button type="submit">Save Entry</button>
+  </form>
+
+  <div class="export-buttons">
+    <button onclick="exportCSV()">📁 Export CSV</button>
+    <button onclick="exportPDF()">📄 Export PDF</button>
+  </div>
+
+  <h2>📖 Your Reflections</h2>
+  <div id="entries"></div>
+
+  <h2>📈 Mood Over Time</h2>
+  <div class="chart-container">
+    <canvas id="moodChart" width="400" height="200"></canvas>
+  </div>
+
+  <script>
+    const form = document.getElementById('trackerForm');
+    const entriesDiv = document.getElementById('entries');
+    const searchInput = document.getElementById('searchInput');
+    const chartCanvas = document.getElementById('moodChart');
+    let chart;
+
+    const moodMap = {
+      "😄 Happy": 5,
+      "😊 Calm": 4,
+      "😐 Neutral": 3,
+      "😟 Anxious": 2,
+      "😢 Sad": 1
+    };
+
+    const entries = JSON.parse(localStorage.getItem('entries')) || [];
+
+    const displayEntries = (filteredEntries = entries) => {
+      entriesDiv.innerHTML = '';
+      filteredEntries.forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `
+          <div>
+            <strong>Date:</strong> ${entry.date}<br/>
+            <strong>Mood:</strong> ${entry.mood}<br/>
+            <strong>Gratitude:</strong> ${entry.gratitude}<br/>
+            <strong>Notes:</strong> ${entry.notes}<br/>
+            <strong>Habits:</strong> ${entry.habits.join(', ')}
+          </div>
+          <button class="delete-btn" onclick="deleteEntry('${entry.date}')">Delete</button>
+        `;
+        entriesDiv.appendChild(div);
+      });
+    };
+
+    const deleteEntry = (date) => {
+      const updatedEntries = entries.filter(entry => entry.date !== date);
+      localStorage.setItem('entries', JSON.stringify(updatedEntries));
+      displayEntries(updatedEntries);
+      drawChart();
+    };
+
+    const drawChart = () => {
+      const labels = entries.map(e => e.date).reverse();
+      const moodValues = entries.map(e => moodMap[e.mood] || 0).reverse();
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Mood (1=Low, 5=High)',
+            data: moodValues,
+            borderColor: '#3A8D99',
+            backgroundColor: '#3A8D9980',
+            fill: true,
+            tension: 0.3,
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              min: 0,
+              max: 5,
+              ticks: { stepSize: 1 }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function(tooltipItem) {
+                  return `Mood: ${tooltipItem.raw}`;
+                }
+              }
+            }
+          }
+        }
+      });
+    };
+
+    displayEntries();
+    drawChart();
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const habits = [];
+      if (data.get('exercise')) habits.push('Exercise');
+      if (data.get('waterIntake')) habits.push('Water Intake');
+      if (data.get('sleptWell')) habits.push('Slept Well');
+
+      const mood = data.get('mood');
+
+      const newEntry = {
+        date: new Date().toLocaleDateString(),
+        mood,
+        gratitude: data.get('gratitude'),
+        notes: data.get('notes'),
+        habits
+      };
+
+      entries.unshift(newEntry);
+      localStorage.setItem('entries', JSON.stringify(entries));
+      displayEntries();
+      drawChart();
+      form.reset();
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filteredEntries = entries.filter(entry =>
+        entry.date.toLowerCase().includes(query) ||
+        entry.mood.toLowerCase().includes(query)
+      );
+      displayEntries(filteredEntries);
+    });
+
+    // 📁 Export to CSV
+    function exportCSV() {
+      let csv = "Date,Mood,Gratitude,Notes,Habits\n";
+      entries.forEach(e => {
+        const row = [
+          e.date,
+          `"${e.mood}"`,
+          `"${e.gratitude}"`,
+          `"${e.notes}"`,
+          `"${e.habits.join('; ')}"`
+        ];
+        csv += row.join(",") + "\n";
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'wellness_reflections.csv';
+      link.click();
+    }
+
+    // 📄 Export to PDF using jsPDF
+    async function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(14);
+      doc.text("Wellness Reflections", 20, 20);
+
+      let y = 30;
+      entries.forEach((e, i) => {
+        doc.setFontSize(10);
+        doc.text(`Date: ${e.date}`, 20, y);
+        doc.text(`Mood: ${e.mood}`, 20, y + 6);
+        doc.text(`Gratitude: ${e.gratitude}`, 20, y + 12);
+        doc.text(`Notes: ${e.notes}`, 20, y + 18);
+        doc.text(`Habits: ${e.habits.join(', ')}`, 20, y + 24);
+        y += 35;
+        if (y > 270) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save("wellness_reflections.pdf");
+    }
+  </script>
+
+</body>
+</html>
+
