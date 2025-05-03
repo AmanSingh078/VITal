@@ -30,6 +30,45 @@
       color: white;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
+    .event-card {
+      background: #1f2937;
+      border-radius: 1rem;
+      padding: 1rem;
+      color: white;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    .event-card:hover {
+      transform: scale(1.05);
+    }
+    .countdown {
+      font-size: 1.2rem;
+      font-family: 'Courier New', Courier, monospace;
+      margin-top: 10px;
+    }
+    /* Mobile Responsiveness */
+    @media (max-width: 640px) {
+      .event-card {
+        padding: 1rem 0.5rem;
+      }
+      .event-card .text-sm {
+        font-size: 0.9rem;
+      }
+      .event-card h3 {
+        font-size: 1.5rem;
+      }
+      .countdown {
+        font-size: 1rem;
+      }
+      .filter-btn {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+      }
+      .modal-content {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
 <body class="bg-gradient-to-tr from-gray-900 via-black to-gray-900 text-white min-h-screen p-6">
@@ -86,15 +125,15 @@
   <script>
     // Initialize Firebase
     const firebaseConfig = {
-  apiKey: "AIzaSyB5IlLZCcUnwsWQ6R360tMIR3pcMO3Cx1A",
-  authDomain: "vital-92722.firebaseapp.com",
-  databaseURL: "https://vital-92722-default-rtdb.firebaseio.com",
-  projectId: "vital-92722",
-  storageBucket: "vital-92722.firebasestorage.app",
-  messagingSenderId: "141384962985",
-  appId: "1:141384962985:web:e18a741ef33058a75c6ab8",
-  measurementId: "G-EJ45EV7DKX"
-};
+      apiKey: "AIzaSyB5IlLZCcUnwsWQ6R360tMIR3pcMO3Cx1A",
+      authDomain: "vital-92722.firebaseapp.com",
+      databaseURL: "https://vital-92722-default-rtdb.firebaseio.com",
+      projectId: "vital-92722",
+      storageBucket: "vital-92722.firebasestorage.app",
+      messagingSenderId: "141384962985",
+      appId: "1:141384962985:web:e18a741ef33058a75c6ab8",
+      measurementId: "G-EJ45EV7DKX"
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const eventRef = db.ref("events");
