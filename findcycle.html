@@ -2,193 +2,210 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Find a Cycle - CampusCycle</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: linear-gradient(to right, #e8f5e9, #f1f8e9); color: #333; }
-    header { background: linear-gradient(to right, #2e7d32, #388e3c); padding: 30px 20px; text-align: center; color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    header h1 { font-size: 2.8em; margin-bottom: 10px; }
-    nav { background-color: white; text-align: center; padding: 15px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    nav a { margin: 0 20px; color: #2e7d32; font-weight: 600; text-decoration: none; transition: color 0.3s; }
-    nav a:hover { color: #1b5e20; }
-    .cycle-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 40px 20px; }
-    .cycle-card { background: white; border-radius: 15px; padding: 20px; width: 250px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
-    .cycle-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-    .cycle-card img { width: 100%; border-radius: 10px; transition: transform 0.3s; }
-    .cycle-card img:hover { transform: scale(1.05); }
-    .cycle-card h3 { color: #2e7d32; }
-    .cycle-card p { color: #555; }
-    footer { text-align: center; padding: 25px; background: #2e7d32; color: white; font-size: 0.9em; margin-top: 40px; }
-    /* Modal Styling */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
-    .modal-content { background: white; padding: 10px; border-radius: 10px; width: 70%; max-width: 300px; }
-    .modal img { width: 100%; border-radius: 10px; }
-    .modal .close { position: absolute; top: 10px; right: 20px; font-size: 30px; color: #2e7d32; cursor: pointer; }
-    .loading-spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2em; color: #2e7d32; display: none; }
-    /* Contact Button Styling */
-    .contact-btn { background-color: #388e3c; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-align: center; display: inline-block; margin-top: 20px; transition: background-color 0.3s; }
-    .contact-btn:hover { background-color: #2e7d32; }
-    .contact-btn:active { transform: scale(0.98); }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f1f8e9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(to right, #2e7d32, #388e3c);
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+
+    nav {
+      background-color: white;
+      text-align: center;
+      padding: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    nav a {
+      margin: 0 20px;
+      color: #2e7d32;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: #1b5e20;
+    }
+
+    .cycle-listings {
+      max-width: 1200px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 0 15px;
+    }
+
+    .cycle-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .cycle-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .cycle-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .cycle-info {
+      padding: 15px;
+    }
+
+    .cycle-info h3 {
+      margin-bottom: 10px;
+      color: #2e7d32;
+    }
+
+    .cycle-info p {
+      margin: 5px 0;
+      font-size: 0.9em;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.2em;
+      color: #388e3c;
+      padding: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #2e7d32;
+      color: white;
+      font-size: 0.9em;
+      margin-top: 40px;
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 600px) {
+      nav a {
+        margin: 0 10px;
+      }
+
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      footer {
+        font-size: 0.8em;
+      }
+
+      .cycle-card img {
+        height: 150px;
+      }
+
+      .cycle-info {
+        padding: 10px;
+      }
+
+      .cycle-info h3 {
+        font-size: 1.2em;
+      }
+
+      .cycle-info p {
+        font-size: 0.85em;
+      }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>CampusCycle</h1>
-    <p>Find a cycle to rent and commute sustainably on campus!</p>
+    <h1>Find a Cycle</h1>
+    <p>Explore all available cycles for rent or sale!</p>
   </header>
 
   <nav>
     <a href="index.html">Home</a>
     <a href="listcycle.html">List Your Cycle</a>
     <a href="findcycle.html">Find a Cycle</a>
-  
     <a href="contact.html">Contact</a>
   </nav>
 
-  <div class="loading-spinner">Loading...</div>
-
-  <section>
-    <input type="text" id="search" placeholder="Search Cycles..." style="padding: 10px; width: 80%; max-width: 500px; margin: 20px auto; display: block; border-radius: 5px;">
-    <select id="sort" style="padding: 10px; width: 80%; max-width: 500px; margin: 20px auto; display: block; border-radius: 5px;">
-      <option value="price-asc">Sort by Price (Low to High)</option>
-      <option value="price-desc">Sort by Price (High to Low)</option>
-      <option value="condition">Sort by Condition</option>
-    </select>
+  <section id="loading" class="loading">
+    Loading cycles... Please wait.
   </section>
 
-  <section class="cycle-list" id="cycle-list"></section>
+  <section class="cycle-listings" id="cycle-listings">
+    <!-- Dynamic cycle listings will be injected here -->
+  </section>
 
   <footer>
-    &copy; 2025 CampusCycle | Built for smart, sustainable campuses 🚲🌱
+    &copy; 2025 CampusCycle | Built for VIT Students 🚲
+    <br>
+    Contact:+91 8957232039
   </footer>
 
-  <!-- Modal -->
-  <div id="cycleModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <img id="modal-image" src="" alt="Cycle Image">
-      <h3 id="modal-name"></h3>
-      <p id="modal-description"></p>
-      <p><strong>Condition:</strong> <span id="modal-condition"></span></p>
-      <p><strong>Price:</strong> ₹<span id="modal-price"></span> per hour</p>
-      <p><strong>Owner's Phone Number:</strong> <span id="modal-phone"></span></p>
-      <button class="contact-btn" id="contactBtn">Contact Owner</button>
-    </div>
-  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  <script>
-    window.onload = function() {
-      const cycles = JSON.parse(localStorage.getItem('cycles')) || [];
-      const cycleList = document.getElementById('cycle-list');
-      const loadingSpinner = document.querySelector('.loading-spinner');
-      const searchInput = document.getElementById('search');
-      const sortSelect = document.getElementById('sort');
-      const modal = document.getElementById('cycleModal');
-      const modalImage = document.getElementById('modal-image');
-      const modalName = document.getElementById('modal-name');
-      const modalDescription = document.getElementById('modal-description');
-      const modalCondition = document.getElementById('modal-condition');
-      const modalPrice = document.getElementById('modal-price');
-      const modalPhone = document.getElementById('modal-phone');
-      const closeModal = document.querySelector('.close');
-      const contactBtn = document.getElementById('contactBtn');
-
-      loadingSpinner.style.display = 'block';
-
-      // Display cycles after a short delay
-      setTimeout(() => {
-        loadingSpinner.style.display = 'none';
-        displayCycles(cycles);
-      }, 1000);
-
-      // Display cycles
-      function displayCycles(cycles) {
-        cycleList.innerHTML = '';
-        cycles.forEach(cycle => {
-          const cycleCard = document.createElement('div');
-          cycleCard.classList.add('cycle-card');
-          
-          cycleCard.innerHTML = `
-            <img src="${cycle.image}" alt="Cycle Image">
-            <h3>${cycle.name}</h3>
-            <p>${cycle.description}</p>
-            <p><strong>Condition:</strong> ${cycle.condition}</p>
-            <p><strong>Price:</strong> ₹${cycle.rentalPrice} per hour</p>
-          `;
-          
-          cycleCard.onclick = () => {
-            modal.style.display = 'flex';
-            modalImage.src = cycle.image;
-            modalName.innerText = cycle.name;
-            modalDescription.innerText = cycle.description;
-            modalCondition.innerText = cycle.condition;
-            modalPrice.innerText = cycle.rentalPrice;
-            modalPhone.innerText = cycle.ownerPhone; // Display phone number
-          };
-
-          cycleList.appendChild(cycleCard);
-        });
-      }
-
-      // Search functionality
-      searchInput.addEventListener('input', function() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const filteredCycles = cycles.filter(cycle =>
-          cycle.name.toLowerCase().includes(searchTerm) ||
-          cycle.description.toLowerCase().includes(searchTerm)
-        );
-        displayCycles(filteredCycles);
-      });
-
-      // Sort functionality
-      sortSelect.addEventListener('change', function() {
-        let sortedCycles;
-        if (sortSelect.value === 'price-asc') {
-          sortedCycles = [...cycles].sort((a, b) => a.rentalPrice - b.rentalPrice);
-        } else if (sortSelect.value === 'price-desc') {
-          sortedCycles = [...cycles].sort((a, b) => b.rentalPrice - a.rentalPrice);
-        } else if (sortSelect.value === 'condition') {
-          sortedCycles = [...cycles].sort((a, b) => a.condition.localeCompare(b.condition));
-        }
-        displayCycles(sortedCycles);
-      });
-
-      // Close the modal
-      closeModal.onclick = function() {
-        modal.style.display = 'none';
-      };
-
-      // Close the modal if clicked outside
-      window.onclick = function(event) {
-        if (event.target === modal) {
-          modal.style.display = 'none';
-        }
-      };
-
-      // Contact Button functionality
-      contactBtn.onclick = function() {
-        alert(`Calling ${modalPhone.innerText}...`);
-      };
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPi_FnHtuIQ9IphI7k5upFTskAyiky3SA",
+      authDomain: "cycle-f9a48.firebaseapp.com",
+      databaseURL: "https://cycle-f9a48-default-rtdb.firebaseio.com",
+      projectId: "cycle-f9a48",
+      storageBucket: "cycle-f9a48.appspot.com",
+      messagingSenderId: "729181379760",
+      appId: "1:729181379760:web:a310aaa58cbec8f8796f75",
+      measurementId: "G-5TL3K304XB"
     };
 
-    // Sample cycle data
-    const cycles = [{ name: 'Mountain Cycle', image: 'image/Screenshot 2025-05-01 133501.png', description: 'Perfect for rugged terrains and off-road adventures.', condition: 'Good', rentalPrice: 50, ownerPhone: '123-456-7890' },
-      { name: 'Road Cycle', image: "image/Screenshot 2025-05-01 133541.png", description: 'Designed for high speed on smooth pavements.', condition: 'Excellent', rentalPrice: 40, ownerPhone: '123-456-7891' },
-      { name: 'Hybrid Cycle', image: 'image/Screenshot 2025-05-01 133551.png', description: 'A mix of road and mountain cycle features.', condition: 'Good', rentalPrice: 45, ownerPhone: '123-456-7892' },
-      { name: 'City Cycle', image: 'image/Screenshot 2025-05-01 133602.png', description: 'Comfortable and perfect for short commutes.', condition: 'Fair', rentalPrice: 30, ownerPhone: '123-456-7893' },
-      { name: 'BMX Cycle', image: 'image/Screenshot 2025-05-01 133750.png', description: 'Ideal for tricks and stunt riding.', condition: 'Excellent', rentalPrice: 35, ownerPhone: '123-456-7894' },
-      { name: 'Electric Cycle', image: 'image/Screenshot 2025-05-01 133801.png', description: 'Pedal-assisted cycle with electric boost.', condition: 'Good', rentalPrice: 70, ownerPhone: '123-456-7895' },
-      { name: 'Cruiser Cycle', image: 'image/Screenshot 2025-05-01 133432.png', description: 'For relaxed, leisurely rides with a retro feel.', condition: 'Good', rentalPrice: 40, ownerPhone: '123-456-7896' },
-      { name: 'Folding Cycle', image: 'image/Screenshot 2025-05-01 133812.png', description: 'Compact, portable, and ideal for urban spaces.', condition: 'Fair', rentalPrice: 25, ownerPhone: '123-456-7897' },
-      { name: 'Touring Cycle', image: 'image/Screenshot 2025-05-01 133828.png', description: 'Long-distance cycle with added comfort for extended rides.', condition: 'Excellent', rentalPrice: 60, ownerPhone: '123-456-7898' },
-      { name: 'Fixie Cycle', image: 'image/smartphone-photo-1024x766.jpeg', description: 'Sleek, single-speed cycle perfect for city commutes.', condition: 'Good', rentalPrice: 30, ownerPhone: '123-456-7899' }
-    ];
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    localStorage.setItem('cycles', JSON.stringify(cycles));
+    const listingsContainer = document.getElementById('cycle-listings');
+    const loadingContainer = document.getElementById('loading');
+
+    // Fetch the cycle listings from the 'cycles' node in Firebase
+    onValue(ref(db, 'cycles'), snapshot => {
+      listingsContainer.innerHTML = ''; // Clear the container before adding new data
+      loadingContainer.style.display = 'none'; // Hide loading message once data is fetched
+      const data = snapshot.val();
+
+      if (!data) {
+        listingsContainer.innerHTML = '<p>No listings found.</p>';
+        return;
+      }
+
+      // Loop through all cycles and add them to the page
+      Object.values(data).forEach(cycle => {
+        const div = document.createElement('div');
+        div.className = 'cycle-card';
+        div.innerHTML = `
+          <img src="${cycle.image}" alt="Cycle Image">
+          <div class="cycle-info">
+            <h3>${cycle.title}</h3>
+            <p><strong>Action:</strong> ${cycle.action}</p>
+            <p><strong>Condition:</strong> ${cycle.condition}</p>
+            <p><strong>Description:</strong> ${cycle.description}</p>
+            <p><strong>Price:</strong> ₹${cycle.price}</p>
+            <p><strong>Contact:</strong> <a href="https://wa.me/${cycle.phone}" target="_blank">WhatsApp: ${cycle.phone}</a></p>
+          </div>
+        `;
+        listingsContainer.appendChild(div);
+      });
+    });
   </script>
+
 </body>
 </html>
-

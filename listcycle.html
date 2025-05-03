@@ -1,108 +1,166 @@
+<!-- listcycle.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>List Your Cycle - CampusCycle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>List Your Cycle | CampusCycle</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background: linear-gradient(to right, #e8f5e9, #f1f8e9); color: #333; }
-    header { background: linear-gradient(to right, #2e7d32, #388e3c); padding: 30px 20px; text-align: center; color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-    header h1 { font-size: 2.8em; margin-bottom: 10px; }
-    nav { background-color: white; text-align: center; padding: 15px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    nav a { margin: 0 20px; color: #2e7d32; font-weight: 600; text-decoration: none; transition: color 0.3s; }
-    nav a:hover { color: #1b5e20; }
-    .form-container { max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .form-container h2 { margin-bottom: 20px; color: #2e7d32; text-align: center; }
-    .form-container label { display: block; margin-bottom: 10px; font-weight: bold; }
-    .form-container input, .form-container textarea, .form-container select { width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 5px; }
-    .form-container button { background-color: #2e7d32; color: white; padding: 15px; border: none; border-radius: 30px; font-size: 1em; font-weight: bold; cursor: pointer; width: 100%; }
-    .form-container button:hover { background-color: #1b5e20; }
-    footer { text-align: center; padding: 25px; background: #2e7d32; color: white; font-size: 0.9em; margin-top: 40px; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #e8f5e9, #e3f2fd);
+    }
+
+    .gradient-header {
+      background: linear-gradient(to right, #2e7d32, #43a047);
+    }
+
+    .cycle-card:hover {
+      transform: translateY(-5px);
+      transition: transform 0.2s ease-in-out;
+    }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-  <header>
-    <h1>CampusCycle</h1>
-    <p>List your cycle for rent and help others commute on campus sustainably!</p>
+  <!-- Header -->
+  <header class="gradient-header text-white text-center py-6 shadow-md">
+    <h1 class="text-4xl font-bold">CampusCycle</h1>
+    <p class="text-lg mt-1">List your cycle for sale or rent in minutes!</p>
   </header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="listcycle.html">List Your Cycle</a>
-    <a href="findcycle.html">Find a Cycle</a>
-  
-    <a href="contact.html">Contact</a>
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md py-3 px-4 text-center text-green-800 font-semibold">
+    <a href="index.html" class="mx-3 hover:text-green-600">Home</a>
+    <a href="listcycle.html" class="mx-3 text-green-600 underline">List Your Cycle</a>
+    <a href="findcycle.html" class="mx-3 hover:text-green-600">Find a Cycle</a>
+    <a href="contact.html" class="mx-3 hover:text-green-600">Contact</a>
   </nav>
 
-  <section class="form-container">
-    <h2>List Your Cycle</h2>
-    <form id="cycle-form">
-      <label for="cycle-name">Cycle Name</label>
-      <input type="text" id="cycle-name" name="cycle-name" placeholder="Enter cycle name" required>
+  <!-- Form Section -->
+  <main class="flex-grow px-4 py-10 flex justify-center">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl p-8">
+      <h2 class="text-3xl font-semibold text-center text-green-700 mb-6">List Your Cycle</h2>
 
-      <label for="cycle-description">Cycle Description</label>
-      <textarea id="cycle-description" name="cycle-description" placeholder="Enter cycle description" required></textarea>
+      <form id="cycleForm" class="space-y-6">
 
-      <label for="cycle-condition">Cycle Condition</label>
-      <select id="cycle-condition" name="cycle-condition" required>
-        <option value="new">New</option>
-        <option value="good">Good</option>
-        <option value="used">Used</option>
-      </select>
+        <input type="text" id="title" placeholder="Cycle Title" required class="w-full p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"/>
 
-      <label for="rental-price">Rental Price (per hour)</label>
-      <input type="number" id="rental-price" name="rental-price" placeholder="Enter rental price" min="1" required>
+        <textarea id="description" placeholder="Description" required rows="3" class="w-full p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"></textarea>
 
-      <label for="cycle-image">Cycle Image</label>
-      <input type="file" id="cycle-image" name="cycle-image" accept="image/*" required>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <select id="condition" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400">
+            <option value="" disabled selected>Select Condition</option>
+            <option value="New">New</option>
+            <option value="Used">Used</option>
+          </select>
 
-      <button type="submit">List Your Cycle</button>
-    </form>
-  </section>
+          <select id="action" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400">
+            <option value="" disabled selected>Sell or Rent</option>
+            <option value="Sell">Sell</option>
+            <option value="Rent">Rent</option>
+          </select>
+        </div>
 
-  <footer>
-    &copy; 2025 CampusCycle | Built for smart, sustainable campuses 🚲🌱
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input type="number" id="price" placeholder="Price (₹)" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"/>
+          <input type="tel" id="phone" placeholder="Phone Number" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"/>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm text-gray-600">Upload Image</label>
+          <input type="file" id="imageFile" accept="image/*" required class="w-full p-2 border-2 border-gray-300 rounded-lg"/>
+          <img id="preview" src="" alt="Preview" class="mt-3 rounded-xl hidden w-full h-48 object-cover shadow-md"/>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transition-all">Submit Listing</button>
+
+        <div id="loading" class="hidden text-center mt-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mx-auto animate-spin text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity=".25" stroke-width="4"></circle>
+            <path d="M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path>
+          </svg>
+          <p class="mt-2 text-green-600">Submitting your listing...</p>
+        </div>
+
+        <p id="message" class="hidden text-center mt-4 text-green-600 font-semibold">Cycle listed successfully!</p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-green-700 text-white text-center py-4">
+    &copy; 2025 CampusCycle | Built for VIT Students 🚴
+    <br>
+    Contact:91+ 8957232039
   </footer>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
   <script>
-    document.getElementById('cycle-form').addEventListener('submit', function (e) {
-      e.preventDefault();
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPi_FnHtuIQ9IphI7k5upFTskAyiky3SA",
+      authDomain: "cycle-f9a48.firebaseapp.com",
+      databaseURL: "https://cycle-f9a48-default-rtdb.firebaseio.com",
+      projectId: "cycle-f9a48",
+      storageBucket: "cycle-f9a48.appspot.com",
+      messagingSenderId: "729181379760",
+      appId: "1:729181379760:web:a310aaa58cbec8f8796f75",
+      measurementId: "G-5TL3K304XB"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-      const formData = new FormData();
-      formData.append('name', document.getElementById('cycle-name').value);
-      formData.append('description', document.getElementById('cycle-description').value);
-      formData.append('condition', document.getElementById('cycle-condition').value);
-      formData.append('rentalPrice', document.getElementById('rental-price').value);
+    const form = document.getElementById('cycleForm');
+    const preview = document.getElementById('preview');
+    const imageFileInput = document.getElementById('imageFile');
+    const message = document.getElementById('message');
+    const loading = document.getElementById('loading');
+    let imageData = '';
 
-      // Handle the file upload (convert to base64 to store in localStorage)
-      const fileInput = document.getElementById('cycle-image');
-      const file = fileInput.files[0];
+    imageFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
       const reader = new FileReader();
+      reader.onload = function(event) {
+        imageData = event.target.result;
+        preview.src = imageData;
+        preview.classList.remove("hidden");
+      };
+      reader.readAsDataURL(file);
+    });
 
-      reader.onloadend = function() {
-        const cycle = {
-          name: document.getElementById('cycle-name').value,
-          description: document.getElementById('cycle-description').value,
-          condition: document.getElementById('cycle-condition').value,
-          rentalPrice: document.getElementById('rental-price').value,
-          image: reader.result
-        };
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!imageData) return alert("Please upload an image.");
 
-        // Retrieve cycles from localStorage and add the new cycle
-        let cycles = JSON.parse(localStorage.getItem('cycles')) || [];
-        cycles.push(cycle);
-        localStorage.setItem('cycles', JSON.stringify(cycles));
+      const cycleData = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        condition: document.getElementById('condition').value,
+        action: document.getElementById('action').value,
+        price: document.getElementById('price').value,
+        phone: document.getElementById('phone').value,
+        image: imageData
+      };
 
-        alert('Cycle listed successfully!');
-        window.location.href = 'findcycle.html'; // Redirect to Find a Cycle page
-      }
+      loading.classList.remove("hidden");
 
-      reader.readAsDataURL(file); // Read the file as base64
+      db.ref("cycles").push(cycleData, (error) => {
+        loading.classList.add("hidden");
+        if (error) {
+          alert("Failed to submit. Try again.");
+        } else {
+          message.classList.remove("hidden");
+          form.reset();
+          preview.src = "";
+          preview.classList.add("hidden");
+        }
+      });
     });
   </script>
-
 </body>
 </html>
