@@ -5,19 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Event Countdown Board</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
+    body { font-family: 'Inter', sans-serif; }
     .modal {
       display: none;
       position: fixed;
       z-index: 50;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
       overflow: auto;
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(4px);
@@ -86,6 +84,21 @@
   </div>
 
   <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+  apiKey: "AIzaSyB5IlLZCcUnwsWQ6R360tMIR3pcMO3Cx1A",
+  authDomain: "vital-92722.firebaseapp.com",
+  databaseURL: "https://vital-92722-default-rtdb.firebaseio.com",
+  projectId: "vital-92722",
+  storageBucket: "vital-92722.firebasestorage.app",
+  messagingSenderId: "141384962985",
+  appId: "1:141384962985:web:e18a741ef33058a75c6ab8",
+  measurementId: "G-EJ45EV7DKX"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const eventRef = db.ref("events");
+
     const eventGrid = document.getElementById("eventGrid");
     const colorThemes = [
       "from-purple-600 to-blue-600",
@@ -102,7 +115,6 @@
         const countdownElem = card.querySelector(".countdown");
         if (date - now <= 0) {
           countdownElem.innerText = "✅ Event Over";
-          localStorage.setItem(card.dataset.id, "past");
           card.style.display = "none";
         } else {
           const diff = date - now;
@@ -116,7 +128,6 @@
     }
 
     function renderEventCard(event) {
-      if (localStorage.getItem(event.id) === "past") return;
       const theme = colorThemes[Math.floor(Math.random() * colorThemes.length)];
       const card = document.createElement("div");
       card.className = `event-card bg-gradient-to-br ${theme} p-6 rounded-3xl shadow-xl backdrop-blur-sm bg-opacity-30 hover:scale-105 transform transition duration-300`;
@@ -145,11 +156,19 @@
     }
 
     function loadEvents() {
-      const events = JSON.parse(localStorage.getItem("events") || "[]");
-      const futureEvents = events.filter(e => new Date(e.date).getTime() > Date.now())
-                                 .sort((a, b) => new Date(a.date) - new Date(b.date));
-      futureEvents.forEach(renderEventCard);
-      updateCountdowns();
+      eventGrid.innerHTML = "";
+      eventRef.once("value", snapshot => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        const events = Object.entries(data).map(([id, event]) => ({ id, ...event }));
+        const futureEvents = events
+          .filter(e => new Date(e.date).getTime() > Date.now())
+          .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        futureEvents.forEach(renderEventCard);
+        updateCountdowns();
+      });
     }
 
     // Modal
@@ -168,7 +187,6 @@
     document.getElementById("eventForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const event = {
-        id: "event-" + Date.now(),
         title: document.getElementById("eventTitle").value,
         date: document.getElementById("eventDate").value,
         location: document.getElementById("eventLocation").value,
@@ -176,13 +194,17 @@
         link: document.getElementById("eventLink").value,
         tag: document.getElementById("eventTag").value
       };
-      const events = JSON.parse(localStorage.getItem("events") || "[]");
-      events.push(event);
-      localStorage.setItem("events", JSON.stringify(events));
-      renderEventCard(event);
-      updateCountdowns();
-      this.reset();
-      document.getElementById("addEventModal").style.display = "none";
+
+      eventRef.push(event, error => {
+        if (error) {
+          alert("❌ Failed to add event.");
+        } else {
+          alert("✅ Event added.");
+          loadEvents();
+          document.getElementById("eventForm").reset();
+          document.getElementById("addEventModal").style.display = "none";
+        }
+      });
     });
 
     // Filtering
@@ -200,4 +222,3 @@
   </script>
 </body>
 </html>
-
