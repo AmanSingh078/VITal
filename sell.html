@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sell Your Product | CampusMarket</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #fffde7, #e8f5e9);
+    }
+    .gradient-header {
+      background: linear-gradient(to right, #ffb300, #fbc02d);
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      transition: transform 0.2s ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="gradient-header text-white text-center py-6 shadow-md">
+    <h1 class="text-4xl font-bold">CampusMarket</h1>
+    <p class="text-lg mt-1">Sell your daily essentials easily!</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md py-3 px-4 text-center text-yellow-800 font-semibold">
+    <a href="index.html" class="mx-3 hover:text-yellow-600">Home</a>
+    <a href="sell.html" class="mx-3 text-yellow-600 underline">Sell Product</a>
+    <a href="buy.html" class="mx-3 hover:text-yellow-600">Buy Product</a>
+    <a href="contact.html" class="mx-3 hover:text-yellow-600">Contact</a>
+  </nav>
+
+  <!-- Form Section -->
+  <main class="flex-grow px-4 py-10 flex justify-center">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl p-8">
+      <h2 class="text-3xl font-semibold text-center text-yellow-700 mb-6">Sell Your Product</h2>
+
+      <form id="productForm" class="space-y-6">
+
+        <input type="text" id="title" placeholder="Product Title" required class="w-full p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-yellow-400"/>
+        <textarea id="description" placeholder="Description" required rows="3" class="w-full p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-yellow-400"></textarea>
+
+        <select id="block" required class="w-full p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-yellow-400">
+          <option value="" disabled selected>Select Your Block</option>
+          <option value="Block 1">Block 1</option>
+          <option value="Block 2">Block 2</option>
+          <option value="Block 3">Block 3</option>
+          <option value="Block 4">Block 4</option>
+          <option value="Block 5">Block 5</option>
+          <option value="Block 6">Block 6</option>
+          <option value="Girls Block 1">Girls Block 1</option>
+          <option value="Girls Block 2">Girls Block 2</option>
+        </select>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input type="number" id="price" placeholder="Price (₹)" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-yellow-400"/>
+          <input type="tel" id="phone" placeholder="Phone Number" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-yellow-400"/>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm text-gray-600">Upload Image</label>
+          <input type="file" id="imageFile" accept="image/*" required class="w-full p-2 border-2 border-gray-300 rounded-lg"/>
+          <img id="preview" src="" alt="Preview" class="mt-3 rounded-xl hidden w-full h-48 object-cover shadow-md"/>
+        </div> 
+
+        <button type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-green-500 text-white p-3 rounded-lg font-semibold hover:from-yellow-600 hover:to-green-600 transition-all">Submit Product</button>
+
+        <div id="loading" class="hidden text-center mt-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mx-auto animate-spin text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity=".25" stroke-width="4"></circle>
+            <path d="M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path>
+          </svg>
+          <p class="mt-2 text-yellow-600">Submitting your product...</p>
+        </div>
+
+        <p id="message" class="hidden text-center mt-4 text-green-600 font-semibold">Product listed successfully!</p>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-yellow-700 text-white text-center py-4">
+    &copy; 2025 CampusMarket | Made for VIT Students 🛒
+    <br> Contact: +91 8957232039
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPi_FnHtuIQ9IphI7k5upFTskAyiky3SA",
+      authDomain: "cycle-f9a48.firebaseapp.com",
+      databaseURL: "https://cycle-f9a48-default-rtdb.firebaseio.com",
+      projectId: "cycle-f9a48",
+      storageBucket: "cycle-f9a48.appspot.com",
+      messagingSenderId: "729181379760",
+      appId: "1:729181379760:web:a310aaa58cbec8f8796f75",
+      measurementId: "G-5TL3K304XB"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const form = document.getElementById('productForm');
+    const preview = document.getElementById('preview');
+    const imageFileInput = document.getElementById('imageFile');
+    const message = document.getElementById('message');
+    const loading = document.getElementById('loading');
+    let imageData = '';
+
+    imageFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        imageData = event.target.result;
+        preview.src = imageData;
+        preview.classList.remove("hidden");
+      };
+      reader.readAsDataURL(file);
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!imageData) return alert("Please upload an image.");
+
+      const productData = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        price: document.getElementById('price').value,
+        phone: document.getElementById('phone').value,
+        block: document.getElementById('block').value,
+        image: imageData,
+        timestamp: Date.now() // Save current timestamp
+      };
+
+      loading.classList.remove("hidden");
+
+      db.ref("products").push(productData, (error) => {
+        loading.classList.add("hidden");
+        if (error) {
+          alert("Failed to submit. Try again.");
+        } else {
+          message.classList.remove("hidden");
+          form.reset();
+          preview.src = "";
+          preview.classList.add("hidden");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buy Products | CampusMarket</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #f1f8e9, #fff3e0);
+    }
+    .product-card {
+      transition: transform 0.3s ease-in-out;
+    }
+    .product-card:hover {
+      transform: scale(1.02);
+    }
+    .loading-spinner {
+      border: 4px solid transparent;
+      border-top: 4px solid #ffb400;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-green-400 to-yellow-400 text-white text-center py-6 shadow-md">
+    <h1 class="text-4xl font-bold">CampusMarket</h1>
+    <p class="text-lg mt-1">Buy Fresh Items from Your Campus Mates</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-white shadow-md py-3 px-4 text-center text-yellow-800 font-semibold">
+    <a href="index.html" class="mx-3 hover:text-yellow-600">Home</a>
+    <a href="sell.html" class="mx-3 hover:text-yellow-600">Sell Product</a>
+    <a href="buyt.html" class="mx-3 text-yellow-600 underline">Buy Product</a>
+    <a href="contact.html" class="mx-3 hover:text-yellow-600">Contact</a>
+  </nav>
+
+  <!-- Block Filter Section -->
+  <section class="px-4 py-6">
+    <div class="text-center mb-6">
+      <label for="blockFilter" class="text-lg font-semibold text-yellow-700">Filter by Block</label>
+      <select id="blockFilter" class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-yellow-400 mt-3">
+        <option value="">All Blocks</option>
+        <option value="Block 1">Block 1</option>
+        <option value="Block 2">Block 2</option>
+        <option value="Block 3">Block 3</option>
+        <option value="Block 4">Block 4</option>
+        <option value="Block 5">Block 5</option>
+        <option value="Block 6">Block 6</option>
+        <option value="Girls Block 1">Girls Block 1</option>
+        <option value="Girls Block 2">Girls Block 2</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <main class="flex-grow px-4 py-10">
+    <h2 class="text-3xl font-semibold text-yellow-700 mb-6 text-center">Available Products</h2>
+    
+    <!-- Loading Spinner -->
+    <div id="loadingIndicator" class="text-center">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-yellow-700">Loading products...</p>
+    </div>
+
+    <div id="products" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
+    <p id="emptyMessage" class="text-center text-gray-500 mt-10 hidden">No fresh products available. Check back later!</p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-yellow-700 text-white text-center py-4">
+    &copy; 2025 CampusMarket | Made for VIT Students 🛒
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPi_FnHtuIQ9IphI7k5upFTskAyiky3SA",
+      authDomain: "cycle-f9a48.firebaseapp.com",
+      databaseURL: "https://cycle-f9a48-default-rtdb.firebaseio.com",
+      projectId: "cycle-f9a48",
+      storageBucket: "cycle-f9a48.appspot.com",
+      messagingSenderId: "729181379760",
+      appId: "1:729181379760:web:a310aaa58cbec8f8796f75",
+      measurementId: "G-5TL3K304XB"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const productsDiv = document.getElementById('products');
+    const emptyMessage = document.getElementById('emptyMessage');
+    const blockFilter = document.getElementById('blockFilter');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    let selectedBlock = blockFilter.value;
+
+    blockFilter.addEventListener('change', (e) => {
+      selectedBlock = e.target.value;
+      loadProducts();
+    });
+
+    function loadProducts() {
+      // Show loading indicator
+      loadingIndicator.classList.remove("hidden");
+      productsDiv.classList.add("hidden");
+      emptyMessage.classList.add("hidden");
+
+      productsDiv.innerHTML = "";
+      let hasRecent = false;
+      const now = Date.now();
+      const filterBlock = selectedBlock;
+
+      db.ref("products").on("value", snapshot => {
+        snapshot.forEach(childSnapshot => {
+          const data = childSnapshot.val();
+          const key = childSnapshot.key;
+          const ageInMs = now - (data.timestamp || 0);
+          const ageInHours = ageInMs / (1000 * 60 * 60);
+
+          if (ageInHours <= 24 && (!filterBlock || data.block === filterBlock)) {
+            hasRecent = true;
+            const card = document.createElement("div");
+            card.className = "product-card bg-white rounded-xl shadow-lg p-4";
+            card.innerHTML = `
+              <img src="${data.image}" alt="${data.title}" class="w-full h-48 object-cover rounded-lg mb-3">
+              <h3 class="text-xl font-semibold text-yellow-700">${data.title}</h3>
+              <p class="text-gray-600 text-sm mt-1">${data.description}</p>
+              <p class="mt-2 font-bold text-green-700">₹${data.price}</p>
+              <p class="text-sm text-gray-500 mt-1">📍 ${data.block}</p>
+              <p class="text-sm mt-1">📞 <a href="tel:+91${data.phone}" class="text-blue-500 underline">+91 ${data.phone}</a></p>
+              <p class="text-xs text-gray-400 mt-2" id="countdown-${key}">Posted: Loading...</p>
+            `;
+            productsDiv.appendChild(card);
+
+            // Countdown timer function
+            function formatTime(ms) {
+              const hours = Math.floor(ms / (1000 * 60 * 60));
+              const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+              const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+              return `${hours}h ${minutes}m ${seconds}s`;
+            }
+
+            const countdownElement = document.getElementById(`countdown-${key}`);
+            if (countdownElement) {
+              const interval = setInterval(() => {
+                const timeRemaining = now - (data.timestamp || 0);
+                const timeRemainingFormatted = formatTime(timeRemaining);
+                countdownElement.textContent = `Posted: ${timeRemainingFormatted}`;
+
+                // Stop the countdown after 24 hours
+                if (timeRemaining > 24 * 60 * 60 * 1000) {
+                  clearInterval(interval);
+                }
+              }, 1000); // Update every second
+            }
+          } else if (ageInHours > 24) {
+            // Optional: Remove expired items from Firebase automatically
+            db.ref("products/" + key).remove();
+          }
+        });
+
+        if (!hasRecent) emptyMessage.classList.remove("hidden");
+        else emptyMessage.classList.add("hidden");
+
+        // Hide loading indicator and show products
+        loadingIndicator.classList.add("hidden");
+        productsDiv.classList.remove("hidden");
+      });
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>
