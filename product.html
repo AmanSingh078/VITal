@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🌟 Lifestyle Tools</title>
+  <title>🔥 Productivity Tools</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -57,44 +57,37 @@
     }
   </style>
 </head>
-<body class="text-gray-800">
+<body class="gradient-bg text-gray-800">
   <div class="max-w-7xl mx-auto px-6 py-20">
-    <h2 class="text-6xl font-extrabold text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text mb-16 tracking-tight">🌟 Top Lifestyle Tools</h2>
+    <h2 class="text-6xl font-extrabold text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text mb-16 tracking-tight">🚀 Top Productivity Tools</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10" id="toolContainer"></div>
   </div>
 
   <script>
     const tools = [
-      { title: 'Astrology Birth Chart GPT', icon: 'fa-star', desc: 'Generate your personalized astrology birth chart.', visit: 'https://chatgpt.com/g/g-WxckXARTP-astrology-birth-chart-gpt', badge: '🔥 Popular' },
-      { title: 'Fitness, Workout & Diet', icon: 'fa-dumbbell', desc: 'Personalized fitness and diet plans.', visit: 'https://chatgpt.com/g/g-ipOIcM229-fitness-workout-diet-phd-coach', badge: '✨ New' },
-      { title: 'Expedia', icon: 'fa-plane', desc: 'Book your next adventure with ease.', visit: 'https://chatgpt.com/g/g-rmdbtMF7a-expedia', badge: '🔧 Tool' },
-      { title: 'Travel Guide', icon: 'fa-map', desc: 'Explore new destinations with expert guidance.', visit: 'https://chatgpt.com/g/g-E7eSRUHy6-travel-guide', badge: '🔥 Pro' },
-      { title: 'Deepgame', icon: 'fa-gamepad', desc: 'Engage in immersive gaming experiences.', visit: 'https://chatgpt.com/g/g-TzI2BlJPT-deepgame', badge: '💼 Premium' },
-      { title: 'Song Maker', icon: 'fa-music', desc: 'Create your own music tracks effortlessly.', visit: 'https://chatgpt.com/g/g-txEiClD5G-song-maker', badge: '📝 Music Tool' },
-      { title: 'Rizz GPT', icon: 'fa-heart', desc: 'Get tips on charm and charisma.', visit: 'https://chatgpt.com/g/g-CsdwU23wt-rizz-gpt', badge: '✨ New' },
-      { title: 'Logo', icon: 'fa-paint-brush', desc: 'Design stunning logos for your brand.', visit: 'https://chatgpt.com/g/g-9i7ARxKhj-logo', badge: '🔧 Tool' },
-      { title: 'Books', icon: 'fa-book', desc: 'Discover and read your favorite books.', visit: 'https://chatgpt.com/g/g-z77yDe7Vu-books', badge: '📚 Reading' },
-      { title: 'Find My Celebrity Look Alike', icon: 'fa-user', desc: 'Discover which celebrity you resemble.', visit: 'https://chatgpt.com/g/g-BGVU2wjKi-find-my-celebrity-look-alike', badge: '🔥 Fun' },
+      { title: 'Video AI', icon: 'fa-video', desc: 'Create videos using AI technology.', visit: 'https://chatgpt.com/g/g-h8l4uLHFQ-video-ai', badge: '🔥 Popular' },
+      { title: 'Image Generator Pro', icon: 'fa-image', desc: 'Generate stunning images with AI.', visit: 'https://chatgpt.com/g/g-8m2CPAfeF-image-generator-pro', badge: '✨ New' },
+      { title: 'Resume', icon: 'fa-file-alt', desc: 'Craft professional resumes effortlessly.', visit: 'https://chatgpt.com/g/g-MrgKnTZbc-resume', badge: '🔧 Tool' },
+      { title: 'Presentation & Diagram Generator', icon: 'fa-chalkboard-teacher', desc: 'Create presentations and diagrams easily.', visit: '#', badge: '🔥 Pro' },
+      { title: 'AI PDF Drive', icon: 'fa-file-pdf', desc: 'Chat, create, and organize PDFs.', visit: 'https://chatgpt.com/g/g-5QhhdsfDj-presentation-diagram-generator-by-showme', badge: '💼 Premium' },
+      { title: 'Whimsical Diagrams', icon : 'fa-pencil-alt', desc: 'Design whimsical diagrams with ease.', visit: 'https://chatgpt.com/g/g-vI2kaiM9N-whimsical-diagrams', badge: '📝 Diagram Tool' },
+      { title: 'Slide Maker', icon: 'fa-slideshare', desc: 'Make PowerPoint presentations quickly.', visit: 'https://chatgpt.com/g/g-Vklr0BddT-slide-maker-powerpoints-presentations', badge: '📊 Presentation' },
+      { title: 'Prompt Maker', icon: 'fa-lightbulb', desc: 'Generate creative prompts for writing.', visit: 'https://chatgpt.com/g/g-hhh4w3eov-prompt-maker', badge: '✨ New' },
+      { title: 'WebPilot', icon: 'fa-globe', desc: 'Navigate the web with AI assistance.', visit: 'https://chatgpt.com/g/g-pNWGgUYqS-webpilot', badge: '🔧 Tool' },
+      { title: 'Photo Realistic Image GPT', icon: 'fa-camera', desc: 'Create photo-realistic images using AI.', visit: 'https://chatgpt.com/g/g-q9wdIq7OQ-photo-realistic-image-gpt', badge: '🔥 Pro' },
     ];
 
     function createToolCard(tool) {
       const card = document.createElement("div");
       card.className = "card";
-
       card.innerHTML = `
         <div class="badge">${tool.badge}</div>
         <h3 class="text-2xl font-semibold text-blue-600 mb-2 flex items-center">
           <i class="fas ${tool.icon} mr-2 text-indigo-500 card-icon" style="font-size: 1.5rem;"></i> ${tool.title}
         </h3>
         <p class="text-gray-700 mb-4">${tool.desc}</p>
-        <button class="button mt-2 visit-btn">Visit Tool</button>
+        <a href="${tool.visit}" target="_blank" class="button mt-2">Visit Tool</a>
       `;
-
-      const visitBtn = card.querySelector(".visit-btn");
-      visitBtn.addEventListener("click", () => {
-        window.open(tool.visit, "_blank");
-      });
-
       return card;
     }
 

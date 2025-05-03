@@ -55,22 +55,9 @@
     .button:hover {
       background: linear-gradient(to right, #3b82f6, #4f46e5);
     }
-    .token-badge {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      background: #10b981;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      z-index: 50;
-      box-shadow: 0 0 10px rgba(0,0,0,0.15);
-    }
   </style>
 </head>
 <body class="gradient-bg text-gray-800">
-  <div class="token-badge" id="tokenDisplay">💰 Tokens: <span id="tokens">100</span></div>
 
   <div class="max-w-7xl mx-auto px-6 py-20">
     <h2 class="text-6xl font-extrabold text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text mb-16 tracking-tight">💻 Top Programming Tools</h2>
@@ -91,15 +78,7 @@
       { title: 'Website AI Designer', icon: 'fa-desktop', desc: 'Design websites with AI assistance.', visit: 'https://chatgpt.com/g/g-rLwPjHrHR-website-ai-designer', badge: '📊 Design Tool' },
     ];
 
-    let tokens = 100;
-    const tokenDisplay = document.getElementById("tokens");
-
-    function updateTokens(amount) {
-      tokens += amount;
-      tokenDisplay.textContent = tokens;
-    }
-
-    function createToolCard(tool, index) {
+    function createToolCard(tool) {
       const card = document.createElement("div");
       card.className = "card";
 
@@ -110,22 +89,11 @@
         </h3>
         <p class="text-gray-700 mb-4">${tool.desc}</p>
         <button class="button mt-2 visit-btn">Visit Tool</button>
-        <a href="subscribe.html" class="button mt-4 hidden subscribe-btn">Subscribe</a>
       `;
 
       const visitBtn = card.querySelector(".visit-btn");
-      const subscribeBtn = card.querySelector(".subscribe-btn");
-
       visitBtn.addEventListener("click", () => {
-        if (tokens >= 5) {
-          updateTokens(-5);
-          window.open(tool.visit, "_blank");
-        } else {
-          subscribeBtn.classList.remove("hidden");
-          visitBtn.disabled = true;
-          visitBtn.classList.add("opacity-50", "cursor-not-allowed");
-          visitBtn.textContent = "Not enough tokens";
-        }
+        window.location.href = tool.visit;
       });
 
       return card;
@@ -133,8 +101,8 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       const container = document.getElementById("toolContainer");
-      tools.forEach((tool, i) => {
-        container.appendChild(createToolCard(tool, i));
+      tools.forEach(tool => {
+        container.appendChild(createToolCard(tool));
       });
     });
   </script>
