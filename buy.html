@@ -10,12 +10,14 @@
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(to right, #f1f8e9, #fff3e0);
+      scroll-behavior: smooth;
     }
     .product-card {
-      transition: transform 0.3s ease-in-out;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
     }
     .product-card:hover {
-      transform: scale(1.02);
+      transform: scale(1.05);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
     .loading-spinner {
       border: 4px solid transparent;
@@ -30,6 +32,44 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+      .navbar-menu.open {
+        display: block;
+      }
+      .hamburger {
+        display: block;
+      }
+    }
+    .hamburger {
+      display: none;
+      cursor: pointer;
+    }
+
+    .block-select {
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      border: 2px solid #005438;
+      background-color: white;
+      color: #000000;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .block-select:hover {
+      background-color: #fffefb;
+      color: rgb(9, 0, 0);
+      cursor: pointer;
+    }
+
+    .block-select:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255, 180, 0, 0.5);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -42,47 +82,64 @@
 
   <!-- Navigation -->
   <nav class="bg-white shadow-md py-3 px-4 text-center text-yellow-800 font-semibold">
-    <a href="index.html" class="mx-3 hover:text-yellow-600">Home</a>
-    <a href="sell.html" class="mx-3 hover:text-yellow-600">Sell Product</a>
-    <a href="buyt.html" class="mx-3 text-yellow-600 underline">Buy Product</a>
-    <a href="contact.html" class="mx-3 hover:text-yellow-600">Contact</a>
+    <div class="hamburger md:hidden flex justify-end">
+      <button id="hamburger" class="text-2xl">☰</button>
+    </div>
+    <div class="navbar-menu hidden md:flex justify-center">
+      <a href="index.html" class="mx-3 hover:text-yellow-600">Home</a>
+      <a href="sell.html" class="mx-3 hover:text-yellow-600">Sell Product</a>
+      <a href="buyt.html" class="mx-3 text-yellow-600 underline">Buy Product</a>
+      <a href="contact.html" class="mx-3 hover:text-yellow-600">Contact</a>
+    </div>
   </nav>
 
   <!-- Block Filter Section -->
   <section class="px-4 py-6">
     <div class="text-center mb-6">
       <label for="blockFilter" class="text-lg font-semibold text-yellow-700">Filter by Block</label>
-      <select id="blockFilter" class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-yellow-400 mt-3">
+      <select id="blockFilter" class="block-select mt-3">
         <option value="">All Blocks</option>
-        <option value="Block 1">Block 1</option>
-        <option value="Block 2">Block 2</option>
-        <option value="Block 3">Block 3</option>
-        <option value="Block 4">Block 4</option>
-        <option value="Block 5">Block 5</option>
-        <option value="Block 6">Block 6</option>
+        <option value="Block 1">Boys Block 1</option>
+        <option value="Block 2">Boys Block 2</option>
+        <option value="Block 3">Boys Block 3</option>
+        <option value="Block 4">Boys Block 4</option>
+        <option value="Block 5">Boys Block 5</option>
+        <option value="Block 6">Boys Block 6</option>
         <option value="Girls Block 1">Girls Block 1</option>
         <option value="Girls Block 2">Girls Block 2</option>
       </select>
     </div>
   </section>
+  <div class="text-center max-w-3xl mx-auto mb-8 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 px-6 py-5 rounded-xl shadow-sm sm:text-base text-sm">
+    <h3 class="text-2xl font-bold mb-2 sm:text-2xl text-xl">🍲 Grab Fresh Campus Deals Now!</h3>
+    <p>
+      Explore tasty  food, snacks, and daily essentials shared by students in your own block. Fast, affordable, and just around the corner. ⏳
+      <span class="font-semibold">Act fast — items are refreshed every 24 hours!</span>
+    </p>
+  </div>
 
   <!-- Products Section -->
   <main class="flex-grow px-4 py-10">
-    <h2 class="text-3xl font-semibold text-yellow-700 mb-6 text-center">Available Products</h2>
-    
+    <h2 class="text-3xl font-semibold text-yellow-700 mb-4 text-center">Available Products</h2>
+
+    <!-- Attention-Grabbing Section -->
+   
+
     <!-- Loading Spinner -->
     <div id="loadingIndicator" class="text-center">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-yellow-700">Loading products...</p>
     </div>
 
-    <div id="products" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 hidden"></div>
+    <div id="products" class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 hidden"></div>
     <p id="emptyMessage" class="text-center text-gray-500 mt-10 hidden">No fresh products available. Check back later!</p>
   </main>
 
   <!-- Footer -->
   <footer class="bg-yellow-700 text-white text-center py-4">
     &copy; 2025 CampusMarket | Made for VIT Students 🛒
+    <br>
+    Contact- 91+ 8957232039
   </footer>
 
   <!-- Firebase SDK -->
@@ -114,7 +171,6 @@
     });
 
     function loadProducts() {
-      // Show loading indicator
       loadingIndicator.classList.remove("hidden");
       productsDiv.classList.add("hidden");
       emptyMessage.classList.add("hidden");
@@ -125,6 +181,7 @@
       const filterBlock = selectedBlock;
 
       db.ref("products").on("value", snapshot => {
+        productsDiv.innerHTML = "";
         snapshot.forEach(childSnapshot => {
           const data = childSnapshot.val();
           const key = childSnapshot.key;
@@ -134,7 +191,7 @@
           if (ageInHours <= 24 && (!filterBlock || data.block === filterBlock)) {
             hasRecent = true;
             const card = document.createElement("div");
-            card.className = "product-card bg-white rounded-xl shadow-lg p-4";
+            card.className = "product-card bg-white rounded-xl shadow-lg p-4 hover:shadow-xl transition duration-300 ease-in-out";
             card.innerHTML = `
               <img src="${data.image}" alt="${data.title}" class="w-full h-48 object-cover rounded-lg mb-3">
               <h3 class="text-xl font-semibold text-yellow-700">${data.title}</h3>
@@ -146,43 +203,40 @@
             `;
             productsDiv.appendChild(card);
 
-            // Countdown timer function
-            function formatTime(ms) {
-              const hours = Math.floor(ms / (1000 * 60 * 60));
-              const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-              const seconds = Math.floor((ms % (1000 * 60)) / 1000);
-              return `${hours}h ${minutes}m ${seconds}s`;
-            }
-
             const countdownElement = document.getElementById(`countdown-${key}`);
             if (countdownElement) {
               const interval = setInterval(() => {
-                const timeRemaining = now - (data.timestamp || 0);
-                const timeRemainingFormatted = formatTime(timeRemaining);
-                countdownElement.textContent = `Posted: ${timeRemainingFormatted}`;
+                const timePassed = Date.now() - (data.timestamp || 0);
+                const hours = Math.floor(timePassed / (1000 * 60 * 60));
+                const minutes = Math.floor((timePassed % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timePassed % (1000 * 60)) / 1000);
+                countdownElement.textContent = `Posted: ${hours}h ${minutes}m ${seconds}s ago`;
 
-                // Stop the countdown after 24 hours
-                if (timeRemaining > 24 * 60 * 60 * 1000) {
+                if (timePassed > 24 * 60 * 60 * 1000) {
                   clearInterval(interval);
                 }
-              }, 1000); // Update every second
+              }, 1000);
             }
-          } else if (ageInHours > 24) {
-            // Optional: Remove expired items from Firebase automatically
-            db.ref("products/" + key).remove();
           }
         });
 
-        if (!hasRecent) emptyMessage.classList.remove("hidden");
-        else emptyMessage.classList.add("hidden");
+        if (!hasRecent) {
+          emptyMessage.classList.remove("hidden");
+        }
 
-        // Hide loading indicator and show products
         loadingIndicator.classList.add("hidden");
         productsDiv.classList.remove("hidden");
       });
     }
 
     loadProducts();
+
+    const hamburger = document.getElementById('hamburger');
+    const navbarMenu = document.querySelector('.navbar-menu');
+
+    hamburger.addEventListener('click', () => {
+      navbarMenu.classList.toggle('open');
+    });
   </script>
 </body>
 </html>
