@@ -1,106 +1,283 @@
 <!-- listcycle.html -->
+<!-- listcycle.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
   <title>List Your Cycle | CampusCycle</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #2e7d32;
+      --primary-light: #4caf50;
+      --secondary: #2196f3;
+      --accent: #ff9800;
+    }
+    
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #e8f5e9, #e3f2fd);
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+      min-height: 100vh;
     }
-
+    
     .gradient-header {
-      background: linear-gradient(to right, #2e7d32, #43a047);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
-
-    .cycle-card:hover {
+    
+    .nav-item {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary-light);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-item:hover:after {
+      width: 100%;
+    }
+    
+    .form-card {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .form-card:hover {
       transform: translateY(-5px);
-      transition: transform 0.2s ease-in-out;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+    
+    .input-field {
+      transition: all 0.3s ease;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .input-field:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+    }
+    
+    .preview-container {
+      transition: all 0.3s ease;
+      border: 2px dashed #e0e0e0;
+    }
+    
+    .preview-container:hover {
+      border-color: var(--primary-light);
+    }
+    
+    @media (max-width: 640px) {
+      .form-card {
+        padding: 1.5rem;
+        margin: 0.5rem;
+      }
+      
+      .header-text {
+        font-size: 1.5rem;
+      }
+      
+      .subheader-text {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
-
   <!-- Header -->
-  <header class="gradient-header text-white text-center py-6 shadow-md">
-    <h1 class="text-4xl font-bold">CampusCycle</h1>
-    <p class="text-lg mt-1">List your cycle for sale or rent in minutes!</p>
+  <header class="gradient-header text-white text-center py-8">
+    <div class="container mx-auto px-4">
+      <h1 class="header-text text-3xl md:text-4xl font-bold animate__animated animate__fadeInDown">CampusCycle</h1>
+      <p class="subheader-text text-lg md:text-xl mt-2 animate__animated animate__fadeIn animate__delay-1s">
+        <i class="fas fa-bicycle mr-2"></i>List your cycle in minutes!
+      </p>
+    </div>
   </header>
 
   <!-- Navigation -->
-  <nav class="bg-white shadow-md py-3 px-4 text-center text-green-800 font-semibold">
-    <a href="index.html" class="mx-3 hover:text-green-600">Home</a>
-    <a href="listcycle.html" class="mx-3 text-green-600 underline">List Your Cycle</a>
-    <a href="findcycle.html" class="mx-3 hover:text-green-600">Find a Cycle</a>
-    <a href="contact.html" class="mx-3 hover:text-green-600">Contact</a>
+  <nav class="bg-white shadow-sm py-4 px-4 sticky top-0 z-10">
+    <div class="container mx-auto flex flex-wrap justify-center">
+      <a href="index.html" class="nav-item mx-3 text-gray-700 hover:text-green-600 text-sm md:text-base">
+        <i class="fas fa-home mr-1"></i> Home
+      </a>
+      <a href="listcycle.html" class="nav-item mx-3 text-green-600 font-medium text-sm md:text-base">
+        <i class="fas fa-plus-circle mr-1"></i> List Cycle
+      </a>
+      <a href="findcycle.html" class="nav-item mx-3 text-gray-700 hover:text-green-600 text-sm md:text-base">
+        <i class="fas fa-search mr-1"></i> Find Cycle
+      </a>
+      <a href="contact.html" class="nav-item mx-3 text-gray-700 hover:text-green-600 text-sm md:text-base">
+        <i class="fas fa-envelope mr-1"></i> Contact
+      </a>
+    </div>
   </nav>
 
   <!-- Form Section -->
-  <main class="flex-grow px-4 py-10 flex justify-center">
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl p-8">
-      <h2 class="text-3xl font-semibold text-center text-green-700 mb-6">List Your Cycle</h2>
+  <main class="flex-grow px-4 py-8 md:py-12 flex justify-center">
+    <div class="form-card bg-white w-full max-w-2xl p-6 md:p-8">
+      <h2 class="text-2xl md:text-3xl font-semibold text-center text-gray-800 mb-2">
+        <i class="fas fa-bicycle text-green-600 mr-2"></i>List Your Cycle
+      </h2>
+      <p class="text-center text-gray-500 mb-6">Fill in the details to get started</p>
 
-      <form id="cycleForm" class="space-y-6">
-
-        <input type="text" id="title" placeholder="Cycle Title" required class="w-full p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"/>
-
-        <textarea id="description" placeholder="Description" required rows="3" class="w-full p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"></textarea>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <select id="condition" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400">
-            <option value="" disabled selected>Select Condition</option>
-            <option value="New">New</option>
-            <option value="Used">Used</option>
-          </select>
-
-          <select id="action" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400">
-            <option value="" disabled selected>Sell or Rent</option>
-            <option value="Sell">Sell</option>
-            <option value="Rent">Rent</option>
-          </select>
+      <form id="cycleForm" class="space-y-5">
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            <i class="fas fa-heading text-green-600 mr-1"></i> Cycle Title
+          </label>
+          <input type="text" id="title" placeholder="e.g., Hero Sprint Pro 2023" required 
+                 class="input-field w-full p-3 rounded-lg focus:outline-none"/>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input type="number" id="price" placeholder="Price (₹)" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"/>
-          <input type="tel" id="phone" placeholder="Phone Number" required class="p-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-green-400"/>
+        <div class="space-y-1">
+          <label class="block text-sm font-medium text-gray-700">
+            <i class="fas fa-align-left text-green-600 mr-1"></i> Description
+          </label>
+          <textarea id="description" placeholder="Include details like features, age, accessories..." required rows="3" 
+                    class="input-field w-full p-3 rounded-lg focus:outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-heart text-green-600 mr-1"></i> Condition
+            </label>
+            <select id="condition" required 
+                    class="input-field w-full p-3 rounded-lg focus:outline-none">
+              <option value="" disabled selected>Select Condition</option>
+              <option value="New">New (Never Used)</option>
+              <option value="Like New">Like New (Minimal Use)</option>
+              <option value="Good">Good (Normal Wear)</option>
+              <option value="Fair">Fair (Needs Some Repair)</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-tag text-green-600 mr-1"></i> Action
+            </label>
+            <select id="action" required 
+                    class="input-field w-full p-3 rounded-lg focus:outline-none">
+              <option value="" disabled selected>Sell or Rent</option>
+              <option value="Sell">Sell</option>
+              <option value="Rent">Rent (Hourly/Daily)</option>
+              <option value="Rent-to-Own">Rent-to-Own</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-rupee-sign text-green-600 mr-1"></i> Price (₹)
+            </label>
+            <input type="number" id="price" placeholder="e.g., 2500" min="0" required 
+                   class="input-field w-full p-3 rounded-lg focus:outline-none"/>
+          </div>
+          <div class="space-y-1">
+            <label class="block text-sm font-medium text-gray-700">
+              <i class="fas fa-phone text-green-600 mr-1"></i> WhatsApp Number
+            </label>
+            <input type="tel" id="phone" placeholder="e.g., 919876543210" 
+                   pattern="[0-9]{10,12}" required 
+                   class="input-field w-full p-3 rounded-lg focus:outline-none"/>
+            <p class="text-xs text-gray-500 mt-1">Include country code (e.g., 91 for India)</p>
+          </div>
         </div>
 
         <div class="space-y-2">
-          <label class="block text-sm text-gray-600">Upload Image</label>
-          <input type="file" id="imageFile" accept="image/*" required class="w-full p-2 border-2 border-gray-300 rounded-lg"/>
-          <img id="preview" src="" alt="Preview" class="mt-3 rounded-xl hidden w-full h-48 object-cover shadow-md"/>
+          <label class="block text-sm font-medium text-gray-700">
+            <i class="fas fa-camera text-green-600 mr-1"></i> Upload Images
+          </label>
+          <div class="preview-container rounded-lg p-4 text-center cursor-pointer">
+            <input type="file" id="imageFile" accept="image/*" required 
+                   class="hidden"/>
+            <label for="imageFile" class="cursor-pointer">
+              <div id="uploadArea" class="py-4">
+                <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                <p class="text-sm text-gray-500">Click to upload or drag & drop</p>
+                <p class="text-xs text-gray-400 mt-1">JPEG or PNG (Max 2MB)</p>
+              </div>
+            </label>
+            <div id="imagePreview" class="hidden mt-3">
+              <img id="preview" src="" alt="Preview" class="rounded-lg w-full h-48 object-cover shadow-sm"/>
+              <button type="button" id="changeImage" class="mt-2 text-sm text-green-600 hover:text-green-800">
+                <i class="fas fa-sync-alt mr-1"></i>Change Image
+              </button>
+            </div>
+          </div>
         </div>
 
-        <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-blue-500 text-white p-3 rounded-lg font-semibold hover:from-green-600 hover:to-blue-600 transition-all">Submit Listing</button>
+        <button type="submit" 
+                class="btn-primary w-full text-white p-3 rounded-lg font-semibold mt-6">
+          <i class="fas fa-paper-plane mr-2"></i>Submit Listing
+        </button>
 
-        <div id="loading" class="hidden text-center mt-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mx-auto animate-spin text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity=".25" stroke-width="4"></circle>
-            <path d="M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path>
-          </svg>
-          <p class="mt-2 text-green-600">Submitting your listing...</p>
+        <div id="loading" class="hidden text-center mt-4 py-4">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto"></div>
+          <p class="mt-3 text-green-600 font-medium">Processing your listing...</p>
         </div>
 
-        <p id="message" class="hidden text-center mt-4 text-green-600 font-semibold">Cycle listed successfully!</p>
+        <div id="message" class="hidden text-center mt-4 p-4 rounded-lg bg-green-50 border border-green-100">
+          <i class="fas fa-check-circle text-green-500 text-2xl mb-2"></i>
+          <h3 class="text-lg font-semibold text-green-700">Listing Submitted Successfully!</h3>
+          <p class="text-sm text-green-600 mt-1">Your cycle is now visible to potential buyers.</p>
+          <a href="findcycle.html" class="inline-block mt-3 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium hover:bg-green-200">
+            <i class="fas fa-eye mr-1"></i>View All Listings
+          </a>
+        </div>
+        
+        <div id="error" class="hidden text-center mt-4 p-4 rounded-lg bg-red-50 border border-red-100">
+          <i class="fas fa-exclamation-circle text-red-500 text-2xl mb-2"></i>
+          <h3 class="text-lg font-semibold text-red-700" id="error-title">Submission Error</h3>
+          <p class="text-sm text-red-600 mt-1" id="error-message">Please check your details and try again.</p>
+          <button type="button" onclick="hideError()" class="inline-block mt-3 px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200">
+            <i class="fas fa-times mr-1"></i>Dismiss
+          </button>
+        </div>
       </form>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-green-700 text-white text-center py-4">
-    &copy; 2025 CampusCycle | Built for VIT Students 🚴
-    <br>
-    Contact:91+ 8957232039
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="container mx-auto px-4 text-center">
+      <div class="flex justify-center space-x-4 mb-3">
+        
+      </div>
+      <p class="text-sm">&copy; 2025 CampusCycle | Built for VIT Students <i class="fas fa-bicycle ml-1"></i></p>
+      <p class="text-xs text-gray-400 mt-1">Contact: +91 89572 32039 | support@campuscycle.com</p>
+    </div>
   </footer>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
   <script>
+    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBPi_FnHtuIQ9IphI7k5upFTskAyiky3SA",
       authDomain: "cycle-f9a48.firebaseapp.com",
@@ -111,56 +288,188 @@
       appId: "1:729181379760:web:a310aaa58cbec8f8796f75",
       measurementId: "G-5TL3K304XB"
     };
+    
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // DOM Elements
     const form = document.getElementById('cycleForm');
     const preview = document.getElementById('preview');
     const imageFileInput = document.getElementById('imageFile');
+    const uploadArea = document.getElementById('uploadArea');
+    const imagePreview = document.getElementById('imagePreview');
+    const changeImageBtn = document.getElementById('changeImage');
     const message = document.getElementById('message');
     const loading = document.getElementById('loading');
+    const errorElement = document.getElementById('error');
     let imageData = '';
 
-    imageFileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
+    // Image Upload Handling
+    imageFileInput.addEventListener('change', handleImageUpload);
+    changeImageBtn.addEventListener('click', () => {
+      imageFileInput.value = '';
+      imagePreview.classList.add('hidden');
+      uploadArea.classList.remove('hidden');
+      imageData = '';
+    });
+
+    // Drag and Drop Functionality
+    const previewContainer = document.querySelector('.preview-container');
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      previewContainer.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      previewContainer.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      previewContainer.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+      previewContainer.classList.add('border-green-400', 'bg-green-50');
+    }
+
+    function unhighlight() {
+      previewContainer.classList.remove('border-green-400', 'bg-green-50');
+    }
+
+    previewContainer.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      imageFileInput.files = files;
+      handleImageUpload();
+    }
+
+    function handleImageUpload() {
+      const file = imageFileInput.files[0];
       if (!file) return;
+      
+      // Validate file type
+      if (!file.type.match('image.*')) {
+        showError('Invalid file type', 'Please upload an image file (JPEG or PNG)');
+        return;
+      }
+      
+      // Validate file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        showError('File too large', 'Image size should be less than 2MB');
+        return;
+      }
+      
       const reader = new FileReader();
       reader.onload = function(event) {
         imageData = event.target.result;
         preview.src = imageData;
-        preview.classList.remove("hidden");
+        uploadArea.classList.add('hidden');
+        imagePreview.classList.remove('hidden');
+      };
+      reader.onerror = function() {
+        showError('Upload error', 'Failed to read image file. Please try another image.');
       };
       reader.readAsDataURL(file);
-    });
+    }
 
-    form.addEventListener('submit', (e) => {
+    // Form Submission
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!imageData) return alert("Please upload an image.");
+      
+      // Hide previous messages
+      message.classList.add('hidden');
+      errorElement.classList.add('hidden');
+      
+      // Validate form
+      if (!imageData) {
+        showError('Image required', 'Please upload an image of your cycle');
+        return;
+      }
+      
+      const phone = document.getElementById('phone').value.trim();
+      if (!/^[0-9]{10,12}$/.test(phone)) {
+        showError('Invalid number', 'Please enter a valid WhatsApp number (10-12 digits)');
+        return;
+      }
+
+      const price = document.getElementById('price').value;
+      if (!price || isNaN(price) || price < 0) {
+        showError('Invalid price', 'Please enter a valid price amount');
+        return;
+      }
+
+      const title = document.getElementById('title').value.trim();
+      if (title.length < 2) {
+        showError('Title too short', 'Please enter a descriptive title (at least 5 characters)');
+        return;
+      }
+
+      const description = document.getElementById('description').value.trim();
+      if (description.length < 2) {
+        showError('Description too short', 'Please provide a detailed description (at least 20 characters)');
+        return;
+      }
 
       const cycleData = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
+        title: title,
+        description: description,
         condition: document.getElementById('condition').value,
         action: document.getElementById('action').value,
-        price: document.getElementById('price').value,
-        phone: document.getElementById('phone').value,
-        image: imageData
+        price: price,
+        phone: phone,
+        image: imageData,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
       };
 
-      loading.classList.remove("hidden");
+      // Show loading state
+      loading.classList.remove('hidden');
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
-      db.ref("cycles").push(cycleData, (error) => {
-        loading.classList.add("hidden");
-        if (error) {
-          alert("Failed to submit. Try again.");
+      try {
+        // Submit to Firebase
+        const newCycleRef = db.ref('cycles').push();
+        await newCycleRef.set(cycleData);
+        
+        // Success
+        message.classList.remove('hidden');
+        form.reset();
+        imagePreview.classList.add('hidden');
+        uploadArea.classList.remove('hidden');
+        imageData = '';
+        
+        // Scroll to message
+        message.scrollIntoView({ behavior: 'smooth' });
+      } catch (error) {
+        console.error('Submission error:', error);
+        
+        if (error.code === 'PERMISSION_DENIED') {
+          showError('Permission denied', 'Please check your database rules or contact support.');
         } else {
-          message.classList.remove("hidden");
-          form.reset();
-          preview.src = "";
-          preview.classList.add("hidden");
+          showError('Submission failed', error.message || 'Please check your connection and try again');
         }
-      });
+      } finally {
+        loading.classList.add('hidden');
+      }
     });
+
+    // Helper functions
+    function showError(title, message) {
+      document.getElementById('error-title').textContent = title;
+      document.getElementById('error-message').textContent = message;
+      errorElement.classList.remove('hidden');
+      errorElement.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideError() {
+      errorElement.classList.add('hidden');
+    }
   </script>
 </body>
 </html>

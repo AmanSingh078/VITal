@@ -2,146 +2,506 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Advanced Eisenhower Matrix</title>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #5e35b1;
+      --primary-light: #9575cd;
+      --secondary: #0288d1;
+      --secondary-light: #4fc3f7;
+      --text-light: #f5f5f5;
+      --text-dark: #212121;
+      --bg-light: linear-gradient(135deg, #e0f7fa, #f3e5f5);
+      --bg-dark: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+      --box-light: rgba(255, 255, 255, 0.9);
+      --box-dark: rgba(30, 30, 30, 0.9);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right top, #d1c4e9, #bbdefb);
+      background: var(--bg-light);
       margin: 0;
-      padding: 20px;
-      color: #1a237e;
-      transition: background 0.4s;
+      padding: 15px;
+      color: var(--text-dark);
+      transition: var(--transition);
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
     }
+    
     body.dark-mode {
-      background: #121212;
-      color: #f0f0f0;
+      background: var(--bg-dark);
+      color: var(--text-light);
     }
+
     h1 {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 2.8rem;
-      color: #1a237e;
-      text-shadow: 1px 1px 2px #c5cae9;
+      margin: 15px 0 25px;
+      font-size: 1.8rem;
+      color: var(--primary);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: inline-block;
+      width: 100%;
     }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--primary-light);
+      border-radius: 2px;
+    }
+    
     body.dark-mode h1 {
-      color: #f0f0f0;
-      text-shadow: 1px 1px 2px #333;
+      color: var(--primary-light);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
+
     .matrix {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      max-width: 100%;
       margin: auto;
     }
+
     .box {
-      border-radius: 16px;
-      padding: 20px;
-      background: white;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      background: var(--box-light);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      border-top: 3px solid;
+      position: relative;
+      overflow: hidden;
     }
+    
     body.dark-mode .box {
-      background: #1f1f1f;
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+      background: var(--box-dark);
+      box-shadow: var(--shadow-dark);
     }
+
+    .box h3 {
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    #urgent-important {
+      border-color: #e53935;
+    }
+    
+    #not-urgent-important {
+      border-color: #43a047;
+    }
+    
+    #urgent-not-important {
+      border-color: #fb8c00;
+    }
+    
+    #not-urgent-not-important {
+      border-color: #7986cb;
+    }
+
     .task {
-      background-color: #e8eaf6;
+      background-color: rgba(233, 235, 245, 0.7);
       margin: 10px 0;
-      padding: 12px 16px;
+      padding: 12px 15px;
       border-radius: 10px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 8px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
     }
+    
+    .task::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--primary);
+    }
+    
     body.dark-mode .task {
-      background-color: #2a2a2a;
+      background-color: rgba(42, 42, 42, 0.7);
     }
+
+    .task-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .task-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      width: 100%;
+      font-size: 0.85rem;
+    }
+
+    .task-info span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .remove-btn, .complete-checkbox, .deadline, .priority {
       font-size: 0.8rem;
     }
+
     .remove-btn {
       background: #ef5350;
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 4px 10px;
+      border-radius: 6px;
+      padding: 5px 10px;
       cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+      align-self: flex-end;
     }
+    
+    .remove-btn:hover {
+      background: #d32f2f;
+    }
+
     .complete-checkbox {
-      margin-right: 8px;
+      margin-right: 6px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: var(--primary);
+      flex-shrink: 0;
     }
-    .priority-high { color: red; font-weight: bold; }
-    .priority-medium { color: orange; }
-    .priority-low { color: green; }
-    .overdue { background-color: #ffcdd2 !important; color: #b71c1c; }
+
+    .priority-high { color: #e53935; font-weight: bold; }
+    .priority-medium { color: #fb8c00; }
+    .priority-low { color: #43a047; }
+
+    .overdue { 
+      background-color: #ffebee !important; 
+      border-left: 3px solid #e53935 !important;
+    }
+    
+    body.dark-mode .overdue {
+      background-color: #3d1c1c !important;
+    }
+
     form {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 10px;
-      justify-content: center;
-      margin-bottom: 40px;
-      background: white;
-      padding: 20px;
+      margin: 0 auto 30px;
+      background: var(--box-light);
+      padding: 15px;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      box-shadow: var(--shadow);
+      max-width: 100%;
+      transition: var(--transition);
     }
+    
     body.dark-mode form {
-      background: #1e1e1e;
+      background: var(--box-dark);
     }
+
     input, select, button {
-      padding: 10px;
+      padding: 10px 12px;
       border-radius: 8px;
-      font-size: 1rem;
+      font-size: 0.9rem;
+      border: 1px solid #ddd;
+      transition: var(--transition);
+      width: 100%;
     }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(94, 53, 177, 0.2);
+    }
+    
+    body.dark-mode input, 
+    body.dark-mode select {
+      background: #333;
+      border-color: #444;
+      color: var(--text-light);
+    }
+
     #toggleDarkMode {
-      position: absolute;
-      top: 20px;
-      right: 20px;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+      z-index: 100;
     }
+    
+    #toggleDarkMode:hover {
+      background: var(--primary-light);
+    }
+
     .countdown {
       font-size: 0.75rem;
-      color: #555;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    body.dark-mode .countdown {
+      color: #aaa;
+    }
+
+    button[type="submit"] {
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+    
+    button[type="submit"]:hover {
+      background: var(--primary-light);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 15px;
+      color: #666;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+    
+    body.dark-mode .empty-state {
+      color: #aaa;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-card {
+      background: var(--box-light);
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+    
+    body.dark-mode .stat-card {
+      background: var(--box-dark);
+    }
+    
+    .stat-card i {
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+    
+    .stat-value {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+    }
+    
+    /* Animation for new tasks */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .task {
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    /* Priority indicators */
+    .priority-high {
+      position: relative;
+    }
+    
+    .priority-high::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      background: #e53935;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    /* Responsive adjustments */
+    @media (min-width: 500px) {
+      .stats {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+        margin: 20px 0 35px;
+      }
+      
+      .matrix {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      
+      form {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 20px;
+      }
+      
+      #task {
+        flex: 1;
+        min-width: 200px;
+      }
+      
+      #deadline {
+        min-width: 200px;
+      }
+      
+      select {
+        min-width: 150px;
+      }
+      
+      button[type="submit"] {
+        width: auto;
+      }
+      
+      .task {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      
+      .task-info {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      
+      .remove-btn {
+        margin-top: 0;
+      }
+    }
+    
+    @media (min-width: 992px) {
+      .matrix {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+      
+      body {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <button id="toggleDarkMode">Toggle Dark Mode</button>
-  <h1>✨ Advanced Eisenhower Matrix</h1>
+  <button id="toggleDarkMode" title="Toggle Dark Mode" aria-label="Toggle dark mode">
+    <i class="fas fa-moon"></i>
+  </button>
+  
+  <h1>✨ Eisenhower Matrix</h1>
+  
+  <div class="stats" id="stats">
+    <!-- Stats will be populated by JavaScript -->
+  </div>
+  
   <form id="taskForm">
-    <input type="text" id="task" placeholder="Enter your task" required />
-    <input type="datetime-local" id="deadline" />
-    <select id="priority">
-      <option value="high">High Priority</option>
-      <option value="medium">Medium Priority</option>
-      <option value="low">Low Priority</option>
+    <input type="text" id="task" placeholder="✏️ Enter your task" required aria-label="Task description"/>
+    <input type="datetime-local" id="deadline" aria-label="Task deadline"/>
+    <select id="priority" aria-label="Task priority">
+      <option value="high">🚨 High</option>
+      <option value="medium" selected>⚠️ Medium</option>
+      <option value="low">✅ Low</option>
     </select>
-    <select id="category">
+    <select id="category" aria-label="Task category">
       <option value="urgent-important">🔥 Urgent & Important</option>
-      <option value="not-urgent-important">🌱 Not Urgent but Important</option>
-      <option value="urgent-not-important">⚡ Urgent but Not Important</option>
-      <option value="not-urgent-not-important">🌀 Not Urgent & Not Important</option>
+      <option value="not-urgent-important">🌱 Not Urgent/Important</option>
+      <option value="urgent-not-important">⚡ Urgent/Not Important</option>
+      <option value="not-urgent-not-important">🌀 Not Urgent/Important</option>
     </select>
-    <button type="submit">Add Task</button>
+    <button type="submit">
+      <i class="fas fa-plus"></i> Add Task
+    </button>
   </form>
+  
   <div class="matrix">
     <div class="box" id="urgent-important">
-      <h3>🔥 Urgent & Important</h3>
+      <h3><i class="fas fa-fire"></i> Urgent & Important</h3>
+      <div class="empty-state">No tasks yet</div>
     </div>
     <div class="box" id="not-urgent-important">
-      <h3>🌱 Not Urgent but Important</h3>
+      <h3><i class="fas fa-seedling"></i> Not Urgent/Important</h3>
+      <div class="empty-state">No tasks yet</div>
     </div>
     <div class="box" id="urgent-not-important">
-      <h3>⚡ Urgent but Not Important</h3>
+      <h3><i class="fas fa-bolt"></i> Urgent/Not Important</h3>
+      <div class="empty-state">No tasks yet</div>
     </div>
     <div class="box" id="not-urgent-not-important">
-      <h3>🌀 Not Urgent & Not Important</h3>
+      <h3><i class="fas fa-wind"></i> Not Urgent/Important</h3>
+      <div class="empty-state">No tasks yet</div>
     </div>
   </div>
+
   <script>
     const categories = [
       'urgent-important',
@@ -160,33 +520,71 @@
       if (!text) return;
 
       const taskElement = createTaskElement({text, deadline, priority, completed: false});
-      document.getElementById(category).appendChild(taskElement);
+      const box = document.getElementById(category);
+      
+      // Remove empty state if it exists
+      const emptyState = box.querySelector('.empty-state');
+      if (emptyState) emptyState.remove();
+      
+      box.appendChild(taskElement);
       sortTasksByDeadline(category);
       this.reset();
       saveTasks();
+      updateStats();
+      
+      // Scroll to the added task
+      taskElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
 
     function updateCountdown(deadline, element, taskElement) {
       if (!deadline) return;
+      
+      // Update immediately first
+      updateCountdownText(deadline, element, taskElement);
+      
+      // Then set interval for updates
       const interval = setInterval(() => {
-        const now = new Date();
-        const end = new Date(deadline);
-        const diff = end - now;
-        if (diff <= 0) {
-          element.innerText = '⏰ Overdue!';
-          taskElement.classList.add('overdue');
-          clearInterval(interval);
-        } else {
-          const hours = Math.floor(diff / 3600000);
-          const minutes = Math.floor((diff % 3600000) / 60000);
-          element.innerText = `⏳ ${hours}h ${minutes}m left`;
-        }
+        updateCountdownText(deadline, element, taskElement);
       }, 60000);
+      
+      // Store interval ID on element for cleanup
+      taskElement.dataset.countdownInterval = interval;
+    }
+    
+    function updateCountdownText(deadline, element, taskElement) {
+      const now = new Date();
+      const end = new Date(deadline);
+      const diff = end - now;
+      
+      if (diff <= 0) {
+        element.innerText = '⏰ Overdue!';
+        taskElement.classList.add('overdue');
+        
+        // Clear the interval if overdue
+        if (taskElement.dataset.countdownInterval) {
+          clearInterval(parseInt(taskElement.dataset.countdownInterval));
+        }
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        
+        let text = '⏳ ';
+        if (days > 0) text += `${days}d `;
+        if (hours > 0 || days > 0) text += `${hours}h `;
+        text += `${minutes}m`;
+        
+        element.innerText = text;
+      }
     }
 
     function createTaskElement({text, deadline, priority, completed}) {
       const taskElement = document.createElement('div');
       taskElement.className = 'task';
+      
+      const taskContent = document.createElement('div');
+      taskContent.className = 'task-content';
+      
       const label = document.createElement('label');
 
       const checkbox = document.createElement('input');
@@ -200,7 +598,11 @@
       checkbox.addEventListener('change', () => {
         span.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
         saveTasks();
+        updateStats();
       });
+
+      const taskInfo = document.createElement('div');
+      taskInfo.className = 'task-info';
 
       const deadlineSpan = document.createElement('span');
       deadlineSpan.className = 'deadline';
@@ -209,7 +611,7 @@
 
       if (deadline) {
         const deadlineDate = new Date(deadline);
-        deadlineSpan.innerText = `⏰ ${deadlineDate.toLocaleString()}`;
+        deadlineSpan.innerHTML = `<i class="far fa-clock"></i> ${deadlineDate.toLocaleDateString()} ${deadlineDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
         updateCountdown(deadline, countdownSpan, taskElement);
         if (new Date() > deadlineDate) {
           taskElement.classList.add('overdue');
@@ -218,38 +620,79 @@
 
       const prioritySpan = document.createElement('span');
       prioritySpan.className = `priority priority-${priority}`;
-      prioritySpan.innerText = priority.charAt(0).toUpperCase() + priority.slice(1);
+      
+      // Add icon based on priority
+      let priorityIcon = '';
+      switch(priority) {
+        case 'high': priorityIcon = '🚨'; break;
+        case 'medium': priorityIcon = '⚠️'; break;
+        case 'low': priorityIcon = '✅'; break;
+      }
+      
+      prioritySpan.innerHTML = `${priorityIcon} ${priority.charAt(0).toUpperCase() + priority.slice(1)}`;
 
       const btn = document.createElement('button');
-      btn.textContent = 'Remove';
+      btn.innerHTML = '<i class="fas fa-trash"></i> Remove';
       btn.className = 'remove-btn';
       btn.onclick = () => {
+        // Clear countdown interval if it exists
+        if (taskElement.dataset.countdownInterval) {
+          clearInterval(parseInt(taskElement.dataset.countdownInterval));
+        }
+        
         taskElement.remove();
+        checkEmptyStates();
         saveTasks();
+        updateStats();
       };
 
       label.appendChild(checkbox);
       label.appendChild(span);
-      taskElement.appendChild(label);
-      taskElement.appendChild(deadlineSpan);
-      taskElement.appendChild(countdownSpan);
-      taskElement.appendChild(prioritySpan);
+      taskContent.appendChild(label);
+      taskElement.appendChild(taskContent);
+      
+      if (deadline || priority) {
+        if (deadline) {
+          taskInfo.appendChild(deadlineSpan);
+          taskInfo.appendChild(countdownSpan);
+        }
+        taskInfo.appendChild(prioritySpan);
+        taskElement.appendChild(taskInfo);
+      }
+      
       taskElement.appendChild(btn);
+      
+      // Add visual indicator for high priority tasks
+      if (priority === 'high') {
+        prioritySpan.classList.add('priority-high');
+      }
+      
       return taskElement;
     }
 
     function sortTasksByDeadline(categoryId) {
       const box = document.getElementById(categoryId);
       const tasks = Array.from(box.querySelectorAll('.task'));
-      tasks.sort((a, b) => {
-        const aTime = new Date(a.querySelector('.deadline').innerText.replace('⏰ ', ''));
-        const bTime = new Date(b.querySelector('.deadline').innerText.replace('⏰ ', ''));
-        return aTime - bTime;
+      const tasksWithDeadline = tasks.filter(task => task.querySelector('.deadline'));
+      const tasksWithoutDeadline = tasks.filter(task => !task.querySelector('.deadline'));
+      
+      tasksWithDeadline.sort((a, b) => {
+        const aDeadline = a.querySelector('.deadline').textContent.replace(/\D/g, '');
+        const bDeadline = b.querySelector('.deadline').textContent.replace(/\D/g, '');
+        return new Date(aDeadline) - new Date(bDeadline);
       });
+      
       const heading = box.querySelector('h3');
       box.innerHTML = '';
       box.appendChild(heading);
-      tasks.forEach(task => box.appendChild(task));
+      
+      // Add tasks with deadlines first
+      tasksWithDeadline.forEach(task => box.appendChild(task));
+      
+      // Then tasks without deadlines
+      tasksWithoutDeadline.forEach(task => box.appendChild(task));
+      
+      checkEmptyStates();
     }
 
     function saveTasks() {
@@ -260,9 +703,14 @@
           const text = task.querySelector('label span').innerHTML;
           const checkbox = task.querySelector('input[type="checkbox"]').checked;
           const deadlineElement = task.querySelector('.deadline');
-          const deadlineText = deadlineElement ? deadlineElement.innerText.replace('⏰ ', '') : '';
-          const deadline = deadlineText ? new Date(deadlineText).toISOString() : '';
-          const priority = task.querySelector('.priority').innerText.toLowerCase();
+          let deadline = '';
+          if (deadlineElement) {
+            const dateText = deadlineElement.textContent.replace(/[^\d/: ]/g, '').trim();
+            if (dateText) {
+              deadline = new Date(dateText).toISOString();
+            }
+          }
+          const priority = task.querySelector('.priority').textContent.toLowerCase().replace('🚨 ', '').replace('⚠️ ', '').replace('✅ ', '').split(' ')[0];
           return {
             text,
             deadline,
@@ -286,30 +734,137 @@
           box.appendChild(el);
         });
         sortTasksByDeadline(id);
+        checkEmptyStates();
+      });
+      updateStats();
+    }
+    
+    function checkEmptyStates() {
+      categories.forEach(id => {
+        const box = document.getElementById(id);
+        const tasks = box.querySelectorAll('.task');
+        const emptyState = box.querySelector('.empty-state');
+        
+        if (tasks.length === 0 && !emptyState) {
+          const emptyDiv = document.createElement('div');
+          emptyDiv.className = 'empty-state';
+          emptyDiv.textContent = 'No tasks yet';
+          box.appendChild(emptyDiv);
+        } else if (tasks.length > 0 && emptyState) {
+          emptyState.remove();
+        }
       });
     }
+    
+    function updateStats() {
+      let totalTasks = 0;
+      let completedTasks = 0;
+      let overdueTasks = 0;
+      let highPriorityTasks = 0;
+      
+      categories.forEach(id => {
+        const tasks = document.getElementById(id).querySelectorAll('.task');
+        totalTasks += tasks.length;
+        
+        tasks.forEach(task => {
+          if (task.querySelector('.complete-checkbox').checked) {
+            completedTasks++;
+          }
+          
+          if (task.classList.contains('overdue')) {
+            overdueTasks++;
+          }
+          
+          const priority = task.querySelector('.priority').textContent;
+          if (priority.includes('High')) {
+            highPriorityTasks++;
+          }
+        });
+      });
+      
+      const statsHTML = `
+        <div class="stat-card">
+          <i class="fas fa-tasks"></i>
+          <div>
+            <div class="stat-value">${totalTasks}</div>
+            <div class="stat-label">Total</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-check-circle"></i>
+          <div>
+            <div class="stat-value">${completedTasks}</div>
+            <div class="stat-label">Done</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div>
+            <div class="stat-value">${overdueTasks}</div>
+            <div class="stat-label">Overdue</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-arrow-up"></i>
+          <div>
+            <div class="stat-value">${highPriorityTasks}</div>
+            <div class="stat-label">High</div>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('stats').innerHTML = statsHTML;
+    }
 
+    // Initialize Sortable with touch support
     categories.forEach(id => {
       new Sortable(document.getElementById(id), {
         group: 'shared',
-        animation: 200,
-        onEnd: saveTasks
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        touchStartThreshold: 5,
+        onEnd: function() {
+          saveTasks();
+          checkEmptyStates();
+          updateStats();
+        }
       });
     });
 
     document.getElementById('toggleDarkMode').addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+      
+      // Update icon
+      const icon = document.querySelector('#toggleDarkMode i');
+      if (document.body.classList.contains('dark-mode')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
     });
 
     window.addEventListener('load', () => {
       loadTasks();
       if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
+        const icon = document.querySelector('#toggleDarkMode i');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
       }
     });
+
+    // Better touch support for checkboxes
+    document.addEventListener('touchstart', function(e) {
+      if (e.target.type === 'checkbox') {
+        e.preventDefault(); // Prevent double-tap zoom
+        e.target.checked = !e.target.checked;
+        const changeEvent = new Event('change');
+        e.target.dispatchEvent(changeEvent);
+      }
+    }, { passive: false });
   </script>
 </body>
 </html>
-
-

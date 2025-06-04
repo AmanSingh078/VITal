@@ -13,6 +13,10 @@
     gtag("config", "G-XXXXXXXXXX");
 
     function trackClick(name, url) {
+      if (url === '#') {
+        alert("More student discounts coming soon! Check back later.");
+        return;
+      }
       gtag("event", "click", {
         event_category: "StudentPerk",
         event_label: name,
@@ -46,6 +50,7 @@
       visibility: hidden;
       opacity: 0;
       width: max-content;
+      max-width: 120px;
       background-color: #333;
       color: #fff;
       text-align: center;
@@ -58,94 +63,224 @@
       transform: translateX(-50%);
       transition: opacity 0.3s;
       font-size: 0.75rem;
+      pointer-events: none;
     }
     .tooltip-container:hover .tooltip {
       visibility: visible;
       opacity: 1;
     }
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   </style>
 </head>
 
 <body class="bg-gradient-to-br from-gray-900 to-black text-white min-h-screen flex items-center justify-center px-4 py-10">
-  <div class="text-center">
-    <h1 class="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent mb-10 animate-pulse">
-      🎓 Unlock Student Perks!
+  <div class="text-center max-w-5xl mx-auto">
+    <h1 class="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent mb-6 animate-pulse">
+      🎓 Ultimate Student Discounts
     </h1>
+    <p class="text-gray-400 mb-8 text-sm sm:text-base">Verified discounts for college students worldwide</p>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
-      <!-- Circle Card Component -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      <!-- Tech & Software -->
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">GitHub Student</div>
+        <button onclick="trackClick('GitHub','https://education.github.com/pack')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">JetBrains IDE</div>
+        <button onclick="trackClick('JetBrains','https://www.jetbrains.com/student/')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/JetBrains_Logo_2016.svg" alt="JetBrains" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Figma Edu</div>
+        <button onclick="trackClick('Figma','https://www.figma.com/education/')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg" alt="Figma" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Adobe CC</div>
+        <button onclick="trackClick('Adobe Creative Cloud','https://www.adobe.com/creativecloud/buy/students.html')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Adobe_Creative_Cloud_rainbow_icon.svg" alt="Adobe Creative Cloud" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Microsoft 365</div>
+        <button onclick="trackClick('Microsoft Office','https://www.microsoft.com/en-us/education/products/office')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Microsoft_Office_logo_%282019%E2%80%93present%29.svg" alt="Microsoft Office" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <!-- Shopping & Lifestyle -->
       <div class="flex flex-col items-center tooltip-container relative">
         <div class="tooltip">UniDays</div>
-        <button onclick="trackClick('UniDays','https://www.myunidays.com/IN/en-IN/home?rd=true')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/UNiDAYS_logo.png" alt="UniDays" class="w-12 h-12 object-contain"/>
+        <button onclick="trackClick('UniDays','https://www.myunidays.com')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/UNiDAYS_logo.png" alt="UniDays" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">JetBrains</div>
-        <button onclick="trackClick('JetBrains','https://www.jetbrains.com/community/education/#students')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_square.svg" alt="JetBrains" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">Student Beans</div>
+        <button onclick="trackClick('Student Beans','https://www.studentbeans.com')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/StudentBeans_logo.png" alt="Student Beans" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">AutoDesk</div>
-        <button onclick="trackClick('AutoDesk','https://www.autodesk.com/education/home')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Autodesk_Logo.png" alt="AutoDesk" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">Amazon Prime</div>
+        <button onclick="trackClick('Amazon Prime','https://www.amazon.com/amazonprime/student')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Prime" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">GitHub</div>
-        <button onclick="trackClick('GitHub','https://education.github.com/discount_requests/application?type=student')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">Apple Education</div>
+        <button onclick="trackClick('Apple Education','https://www.apple.com/us-edu/store')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Education" class="w-8 h-10 sm:w-10 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">Notion</div>
-        <button onclick="trackClick('Notion','https://www.notion.com/pricing')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png" alt="Notion" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">SHEIN Student</div>
+        <button onclick="trackClick('SHEIN','https://www.shein.com/student-discount')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Shein_logo.png" alt="SHEIN" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <!-- Entertainment -->
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Spotify Student</div>
+        <button onclick="trackClick('Spotify','https://www.spotify.com/us/student/')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="Spotify" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">Canva</div>
-        <button onclick="trackClick('Canva','https://www.canva.com/en_in/education/students/')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg" alt="Canva" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">Apple Music</div>
+        <button onclick="trackClick('Apple Music','https://www.apple.com/apple-music/')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Apple_Music_Icon.svg" alt="Apple Music" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">Spotify</div>
-        <button onclick="trackClick('Spotify','https://www.spotify.com/us/premium/')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="Spotify" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">YouTube Premium</div>
+        <button onclick="trackClick('YouTube Premium','https://www.youtube.com/premium/student')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube Premium" class="w-12 h-8 sm:w-14 sm:h-10 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">YouTube</div>
-        <button onclick="trackClick('YouTube','https://www.youtube.com/premium?ybp=OgIIEEoNCAYSCXVubGltaXRlZA%253D%253D')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">HBO Max Student</div>
+        <button onclick="trackClick('HBO Max','https://www.hbomax.com/student-discount')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg" alt="HBO Max" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">Grammarly</div>
-        <button onclick="trackClick('Grammarly','https://www.grammarly.com/plans')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Grammarly_Logo.png" alt="Grammarly" class="w-12 h-12 object-contain"/>
+        <div class="tooltip">AMC Theatres</div>
+        <button onclick="trackClick('AMC Theatres','https://www.amctheatres.com/amcstubs/student')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/AMC_Theatres_logo.svg" alt="AMC Theatres" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <!-- Productivity & Learning -->
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Notion Pro</div>
+        <button onclick="trackClick('Notion','https://www.notion.so/product/notion-for-education')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png" alt="Notion" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
         </button>
       </div>
 
       <div class="flex flex-col items-center tooltip-container relative">
-        <div class="tooltip">More</div>
-        <button onclick="trackClick('More','#')" class="circle-card w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/plus-math.png" alt="More" class="w-10 h-10"/>
+        <div class="tooltip">Canva Edu</div>
+        <button onclick="trackClick('Canva','https://www.canva.com/education/')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg" alt="Canva" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Grammarly Edu</div>
+        <button onclick="trackClick('Grammarly','https://www.grammarly.com/education')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Grammarly_Logo.png" alt="Grammarly" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Chegg Study</div>
+        <button onclick="trackClick('Chegg','https://www.chegg.com/students')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Chegg_Logo.svg" alt="Chegg" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Course Hero</div>
+        <button onclick="trackClick('Course Hero','https://www.coursehero.com/scholarships/')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Course_Hero_Logo.png" alt="Course Hero" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <!-- Travel & Services -->
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">StudentUniverse</div>
+        <button onclick="trackClick('StudentUniverse','https://www.studentuniverse.com')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/StudentUniverse_logo.png" alt="StudentUniverse" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">STA Travel</div>
+        <button onclick="trackClick('STA Travel','https://www.statravel.com')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/STA_Travel_Logo.png" alt="STA Travel" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">Greyhound</div>
+        <button onclick="trackClick('Greyhound','https://www.greyhound.com/student-discount')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Greyhound_Lines_logo.svg" alt="Greyhound" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">NordVPN</div>
+        <button onclick="trackClick('NordVPN','https://nordvpn.com/offer/students/')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/NordVPN_logo.png" alt="NordVPN" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">LastPass</div>
+        <button onclick="trackClick('LastPass','https://www.lastpass.com/solutions/students')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/LastPass_Logo.png" alt="LastPass" class="w-10 h-10 sm:w-12 sm:h-12 object-contain"/>
+        </button>
+      </div>
+
+      <!-- More Coming Soon -->
+      <div class="flex flex-col items-center tooltip-container relative">
+        <div class="tooltip">More Coming Soon</div>
+        <button onclick="trackClick('More','#')" class="circle-card w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110">
+          <img src="https://img.icons8.com/ios-filled/50/ffffff/plus-math.png" alt="More" class="w-8 h-8 sm:w-10 sm:h-10"/>
         </button>
       </div>
     </div>
 
-    <p class="text-gray-400 mt-10 text-sm">Hover over icons to see names • Click to explore!</p>
+    <p class="text-gray-400 mt-10 text-sm">Hover over icons to see names • Click to explore discounts!</p>
+    <p class="text-gray-500 mt-2 text-xs">Note: Availability may vary by country and institution</p>
   </div>
 </body>
 </html>
