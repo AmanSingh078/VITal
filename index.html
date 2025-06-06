@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome To VITLife</title>
+  <meta name="description" content="VITLife - Your comprehensive campus companion for academic and student life at VIT">
+  <title>Welcome To VITLife | Campus Companion</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -13,17 +14,20 @@
       --primary: #76d695;
       --secondary: #ffeb3b;
       --dark: #0b2434;
+      --light: #e5e5e5;
     }
     body {
       font-family: 'Outfit', sans-serif;
       scroll-behavior: smooth;
       background: linear-gradient(to right top, #1f3a61, #2c5364, #203c61, #122e4a, var(--dark));
-      color: #e5e5e5;
+      color: var(--light);
       min-height: 100vh;
+      margin: 0;
+      padding: 0;
     }
     .header {
       position: relative;
-      background: url('image/10-websites-all-college-students-should-bookmark_a5yh.2496.webp') no-repeat center center/cover;
+      background: url('assets/images/header-bg.webp') no-repeat center center/cover;
       height: 60vh;
       max-height: 800px;
       min-height: 500px;
@@ -33,6 +37,7 @@
       text-align: center;
       padding: 0 1rem;
       overflow: hidden;
+      transition: background-image 0.5s ease;
     }
     .header::after {
       content: '';
@@ -49,6 +54,8 @@
       color: #fff;
       padding: 0 1rem;
       width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .header h1 {
       font-size: 2.5rem;
@@ -80,14 +87,16 @@
       border: none;
       cursor: pointer;
       display: inline-block;
+      text-decoration: none;
     }
     .cta-btn:hover {
       background-color: #c7e67b;
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
-    .cta-btn:active {
+    .cta-btn:active, .cta-btn:focus {
       transform: translateY(0);
+      outline: none;
     }
     @keyframes fadeIn {
       0% { opacity: 0; transform: translateY(20px); }
@@ -117,6 +126,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
       height: 100%;
+      text-decoration: none;
     }
     .glass-card:hover {
       box-shadow: 0 0 15px rgba(118, 214, 149, 0.6);
@@ -152,7 +162,7 @@
     }
     footer {
       background-color: #1f3a61;
-      color: #e5e5e5;
+      color: var(--light);
       text-align: center;
       padding: 2rem 1rem;
       margin-top: 3rem;
@@ -164,6 +174,7 @@
       transition: color 0.3s ease;
       display: inline-block;
       padding: 0.5rem;
+      text-decoration: none;
     }
     footer a:hover {
       color: var(--secondary);
@@ -173,6 +184,8 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
       padding: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
     }
     .footer-links {
       display: flex;
@@ -198,6 +211,10 @@
       font-size: 2rem;
       color: white;
       opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+    .scroll-down:hover i {
+      opacity: 1;
     }
     /* Mobile menu toggle */
     .mobile-menu-btn {
@@ -216,31 +233,56 @@
       cursor: pointer;
       backdrop-filter: blur(5px);
       -webkit-backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
     }
-    @media (max-width: 768px) {
-      .header h1 {
-        font-size: 2rem;
-      }
-      .header p {
-        font-size: 1rem;
-      }
-      .mobile-menu-btn {
-        display: block;
-      }
-      .grid-container {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-      }
-      .glass-card {
-        margin-bottom: 1rem;
-      }
-      footer .footer-links {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      footer a {
-        margin: 0.25rem 0;
-      }
+    .mobile-menu-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 1001;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-menu.active {
+      display: flex;
+      opacity: 1;
+    }
+    .mobile-menu a {
+      color: white;
+      font-size: 1.5rem;
+      padding: 1rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+    }
+    .mobile-menu a:hover {
+      color: var(--primary);
+      background: rgba(255,255,255,0.1);
+    }
+    .close-menu-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 2rem;
+      color: white;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .close-menu-btn:hover {
+      color: var(--primary);
     }
     /* Loading animation */
     .loader {
@@ -271,6 +313,53 @@
     @keyframes spin {
       100% { transform: rotate(360deg); }
     }
+    /* Accessibility focus styles */
+    a:focus, button:focus {
+      outline: 2px solid var(--secondary);
+      outline-offset: 3px;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      .header p {
+        font-size: 1rem;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+      .grid-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+      .glass-card {
+        margin-bottom: 1rem;
+      }
+      footer .footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      footer a {
+        margin: 0.25rem 0;
+      }
+    }
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      .header p {
+        font-size: 0.9rem;
+      }
+      .cta-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      .mobile-menu a {
+        font-size: 1.2rem;
+        padding: 0.8rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -284,20 +373,18 @@
   </div>
 
   <!-- Mobile Menu Button -->
-  <button class="mobile-menu-btn" id="menuBtn">
+  <button class="mobile-menu-btn" id="menuBtn" aria-label="Open menu">
     <i class="fas fa-bars"></i>
   </button>
 
   <!-- Mobile Menu -->
-  <div class="fixed inset-0 bg-black bg-opacity-90 z-900 hidden" id="mobileMenu">
-    <div class="flex flex-col items-center justify-center h-full">
-      <button class="absolute top-5 right-5 text-white text-2xl" id="closeMenuBtn">
-        <i class="fas fa-times"></i>
-      </button>
-      <a href="#main" class="text-2xl text-white py-3">Explore</a>
-      <a href="about.html" class="text-2xl text-white py-3">About</a>
-      <a href="contact.html" class="text-2xl text-white py-3">Contact</a>
-    </div>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <button class="close-menu-btn" id="closeMenuBtn" aria-label="Close menu">
+      <i class="fas fa-times"></i>
+    </button>
+    <a href="#main" class="mobile-menu-link">Explore</a>
+    <a href="about.html" class="mobile-menu-link">About</a>
+    <a href="contact.html" class="mobile-menu-link">Contact</a>
   </div>
 
   <header class="header">
@@ -307,12 +394,12 @@
       <a href="#main" class="cta-btn">Explore More</a>
     </div>
     <div class="scroll-down">
-      <a href="#main"><i class="fas fa-chevron-down"></i></a>
+      <a href="#main" aria-label="Scroll down"><i class="fas fa-chevron-down"></i></a>
     </div>
   </header>
 
   <main id="main" class="max-w-7xl mx-auto grid-container">
-    <a href="use.html" class="glass-card" data-aos="fade-up">
+    <a href="ai-tools.html" class="glass-card" data-aos="fade-up">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-robot"></i>
@@ -322,7 +409,7 @@
       </section>
     </a>
     
-    <a href="study.html" class="glass-card" data-aos="fade-up" data-aos-delay="50">
+    <a href="study-materials.html" class="glass-card" data-aos="fade-up" data-aos-delay="50">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-book-open"></i>
@@ -332,7 +419,7 @@
       </section>
     </a>
 
-    <a href="market.html" class="glass-card" data-aos="fade-up" data-aos-delay="100">
+    <a href="campus-market.html" class="glass-card" data-aos="fade-up" data-aos-delay="100">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-store"></i>
@@ -342,7 +429,7 @@
       </section>
     </a>
 
-    <a href="discount.html" class="glass-card" data-aos="fade-up" data-aos-delay="150">
+    <a href="student-offers.html" class="glass-card" data-aos="fade-up" data-aos-delay="150">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-tags"></i>
@@ -352,7 +439,7 @@
       </section>
     </a>
     
-    <a href="cycle.html" class="glass-card" data-aos="fade-up" data-aos-delay="200">
+    <a href="campus-cycle.html" class="glass-card" data-aos="fade-up" data-aos-delay="200">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-bicycle"></i>
@@ -362,7 +449,7 @@
       </section>
     </a>
 
-    <a href="https://support.vitbhopal.dev/" class="glass-card" data-aos="fade-up" data-aos-delay="250">
+    <a href="hostel-complaints.html" class="glass-card" data-aos="fade-up" data-aos-delay="250">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-tools"></i>
@@ -372,7 +459,7 @@
       </section>
     </a>
 
-    <a href="task.html" class="glass-card" data-aos="fade-up" data-aos-delay="300">
+    <a href="time-management.html" class="glass-card" data-aos="fade-up" data-aos-delay="300">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-project-diagram"></i>
@@ -382,7 +469,7 @@
       </section>
     </a>
 
-    <a href="https://messvitb.vercel.app/" class="glass-card" data-aos="fade-up" data-aos-delay="350">
+    <a href="mess-menu.html" class="glass-card" data-aos="fade-up" data-aos-delay="350">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-utensils"></i>
@@ -392,7 +479,7 @@
       </section>
     </a>
 
-    <a href="https://assist-vit.github.io/" class="glass-card" data-aos="fade-up" data-aos-delay="400">
+    <a href="academic-tools.html" class="glass-card" data-aos="fade-up" data-aos-delay="400">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-graduation-cap"></i>
@@ -402,7 +489,7 @@
       </section>
     </a>
     
-    <a href="cabin.html" class="glass-card" data-aos="fade-up" data-aos-delay="450">
+    <a href="faculty-info.html" class="glass-card" data-aos="fade-up" data-aos-delay="450">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-chalkboard-teacher"></i>
@@ -412,7 +499,7 @@
       </section>
     </a>
 
-    <a href="event.html" class="glass-card" data-aos="fade-up" data-aos-delay="500">
+    <a href="campus-events.html" class="glass-card" data-aos="fade-up" data-aos-delay="500">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-users"></i>
@@ -422,7 +509,7 @@
       </section>
     </a>
 
-    <a href="https://chat.whatsapp.com/KWlyj6cA5Z07q779GF4tcn" class="glass-card" data-aos="fade-up" data-aos-delay="550">
+    <a href="student-community.html" class="glass-card" data-aos="fade-up" data-aos-delay="550">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-users-cog"></i>
@@ -432,7 +519,7 @@
       </section>
     </a>
 
-    <a href="Job.html" class="glass-card" data-aos="fade-up" data-aos-delay="600">
+    <a href="career-opportunities.html" class="glass-card" data-aos="fade-up" data-aos-delay="600">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-award"></i>
@@ -442,7 +529,7 @@
       </section>
     </a>
 
-    <a href="chatroom.html" class="glass-card" data-aos="fade-up" data-aos-delay="650">
+    <a href="student-connect.html" class="glass-card" data-aos="fade-up" data-aos-delay="650">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-video"></i>
@@ -452,7 +539,7 @@
       </section>
     </a>
 
-    <a href="contact.html" class="glass-card" data-aos="fade-up" data-aos-delay="700">
+    <a href="feedback.html" class="glass-card" data-aos="fade-up" data-aos-delay="700">
       <section class="glass">
         <div class="card-content">
           <i class="fas fa-comments"></i>
@@ -465,22 +552,31 @@
 
   <footer>
     <div class="mb-4">&copy; 2025 VITLife | For VIT Students</div>
-    <div class="mb-4">Contact: +91 8957232039</div>
+    <div class="mb-4">Contact: <a href="tel:+918957232039">+91 8957232039</a></div>
     <div class="footer-links">
       <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
       <a href="terms.html"><i class="fas fa-file-contract"></i> Terms</a>
-      <a href="description.html"><i class="fas fa-align-left"></i> Description</a>
+      <a href="privacy.html"><i class="fas fa-shield-alt"></i> Privacy</a>
       <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+    </div>
+    <div class="mt-4">
+      <a href="https://facebook.com/vitlife" aria-label="Facebook" class="mx-2"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://twitter.com/vitlife" aria-label="Twitter" class="mx-2"><i class="fab fa-twitter"></i></a>
+      <a href="https://instagram.com/vitlife" aria-label="Instagram" class="mx-2"><i class="fab fa-instagram"></i></a>
+      <a href="https://linkedin.com/company/vitlife" aria-label="LinkedIn" class="mx-2"><i class="fab fa-linkedin-in"></i></a>
     </div>
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Initialize AOS
-    AOS.init({
-      duration: 800,
-      easing: 'ease-in-out',
-      once: true
+    // Initialize AOS animation library
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 120
+      });
     });
 
     // Loading screen
@@ -493,28 +589,54 @@
       }, 1000);
     });
 
-    // Mobile menu toggle
+    // Mobile menu functionality
     const menuBtn = document.getElementById('menuBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
+    const menuLinks = document.querySelectorAll('.mobile-menu-link');
+
+    function toggleMenu(show) {
+      if (show) {
+        mobileMenu.classList.add('active');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        menuBtn.setAttribute('aria-expanded', 'true');
+      } else {
+        mobileMenu.classList.remove('active');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        menuBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
 
     menuBtn.addEventListener('click', function() {
-      mobileMenu.classList.remove('hidden');
-      document.body.style.overflow = 'hidden';
+      toggleMenu(true);
     });
 
     closeMenuBtn.addEventListener('click', function() {
-      mobileMenu.classList.add('hidden');
-      document.body.style.overflow = '';
+      toggleMenu(false);
+    });
+
+    menuLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        toggleMenu(false);
+      });
+    });
+
+    // Close menu when pressing Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        toggleMenu(false);
+      }
     });
 
     // Background image slideshow
     const images = [
-      'image/10-websites-all-college-students-should-bookmark_a5yh.2496.webp',
-      'image/file_2025-04-05_18.50.50[1].png',
-      'image/gettyimages-1920428247-2048x2048.jpg',
-      'image/pngtree-school-season-welcome-new-students-blackboard-hand-painted-picture-image_923676.jpg',
-      'image/student-web-portal-features.png'
+      'assets/images/header-bg.webp',
+      'assets/images/campus-1.jpg',
+      'assets/images/campus-2.jpg',
+      'assets/images/campus-3.jpg',
+      'assets/images/campus-4.jpg'
     ];
 
     let currentIndex = 0;
@@ -523,26 +645,71 @@
     function changeBackgroundImage() {
       header.style.opacity = '0';
       setTimeout(function() {
-        header.style.backgroundImage = `url('${images[currentIndex]}')`;
-        header.style.opacity = '1';
-        currentIndex = (currentIndex + 1) % images.length;
+        const img = new Image();
+        img.src = images[currentIndex];
+        img.onload = function() {
+          header.style.backgroundImage = `url('${images[currentIndex]}')`;
+          header.style.opacity = '1';
+          currentIndex = (currentIndex + 1) % images.length;
+        };
+        img.onerror = function() {
+          console.error('Failed to load image:', images[currentIndex]);
+          currentIndex = (currentIndex + 1) % images.length;
+          header.style.opacity = '1';
+        };
       }, 500);
     }
 
-    // Start slideshow after page loads
+    // Start slideshow after page loads if there are multiple images
     setTimeout(function() {
-      changeBackgroundImage();
-      setInterval(changeBackgroundImage, 5000);
+      if (images.length > 1) {
+        changeBackgroundImage();
+        setInterval(changeBackgroundImage, 5000);
+      }
     }, 1500);
 
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+      anchor.addEventListener('click', function(e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
-        });
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Update URL without page jump
+          if (targetId !== '#') {
+            history.pushState(null, null, targetId);
+          }
+        }
       });
+    });
+
+    // Add intersection observer for cards
+    const cards = document.querySelectorAll('.glass-card');
+    const observerOptions = {
+      threshold: 0.1
+    };
+
+    const cardObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          cardObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    cards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      cardObserver.observe(card);
     });
   </script>
 </body>
