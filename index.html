@@ -5,28 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome To VITLife</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Outfit', sans-serif;
-      scroll-behavior: smooth;
-      background: linear-gradient(to right top, #1f3a61, #2c5364, #203c61, #122e4a, #0b2434);
-      color: #e5e5e5;
+    :root {
+      --primary: #4ade80;
+      --primary-dark: #22c55e;
+      --secondary: #facc15;
+      --accent: #60a5fa;
+      --dark: #0f172a;
+      --light: #f8fafc;
     }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* Header/Hero Section */
     .header {
       position: relative;
-      background: url('image/10-websites-all-college-students-should-bookmark_a5yh.2496.webp') no-repeat center center fixed;
-      background-size: cover;
-      height: 60vh;
+      background: url('image/10-websites-all-college-students-should-bookmark_a5yh.2496.webp') no-repeat center center/cover;
+      height: 100vh;
+      max-height: 900px;
+      min-height: 500px;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 0 2rem;
+      padding: 0 1rem;
       overflow: hidden;
     }
+    
     .header::after {
       content: '';
       position: absolute;
@@ -34,274 +49,784 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: linear-gradient(to bottom, rgba(15,23,42,0.2) 0%, rgba(15,23,42,0.9) 90%);
     }
+    
     .header-content {
       position: relative;
       z-index: 10;
       color: #fff;
+      padding: 0 1rem;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
     }
+    
     .header h1 {
-      font-size: 4rem;
+      font-size: clamp(2.5rem, 5vw, 4rem);
       font-weight: 800;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-      animation: fadeIn 3s ease-in-out;
-    }
-    .header p {
-      font-size: 1.5rem;
-      opacity: 0.8;
+      line-height: 1.2;
       margin-bottom: 1.5rem;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+      background: linear-gradient(to right, #fff 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeInUp 1s ease-out;
     }
+    
+    .header p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeInUp 1s ease-out 0.2s forwards;
+      opacity: 0;
+    }
+    
+    /* Buttons */
     .cta-btn {
-      padding: 15px 25px;
-      background-color: #ffeb3b;
+      padding: 0.8rem 2rem;
+      background: linear-gradient(45deg, var(--secondary), var(--primary));
       color: #000;
-      font-weight: bold;
-      text-transform: uppercase;
-      border-radius: 30px;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-      font-size: 1.2rem;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-weight: 600;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(250, 204, 21, 0.3);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      animation: fadeInUp 1s ease-out 0.4s forwards;
+      opacity: 0;
     }
+    
     .cta-btn:hover {
-      background-color: #c7e67b;
-      transform: scale(1.05);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
     }
+    
     .cta-btn:active {
-      transform: scale(1);
+      transform: translateY(0);
     }
-    @keyframes fadeIn {
-      0% {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Glass Cards */
     .glass {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
     }
+    
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(30deg);
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      opacity: 0;
+    }
+    
     .glass:hover {
-      transform: scale(1.03);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.2);
     }
-    .neon-text {
-      text-shadow: 0 0 15px #ffffff, 0 0 30px #7f82b3, 0 0 45px #7f82b3;
+    
+    .glass:hover::before {
+      animation: shine 1.5s;
+      opacity: 1;
     }
+    
+    @keyframes shine {
+      0% { transform: rotate(30deg) translate(-10%, -10%); }
+      100% { transform: rotate(30deg) translate(10%, 10%); }
+    }
+    
     .glass-card {
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      height: 100%;
     }
-    .glass-card:hover {
-      box-shadow: 0 0 20px rgba(111, 216, 233, 0.8), 0 0 30px rgba(255, 235, 59, 0.6), 0 0 40px rgba(255, 235, 59, 0.4);
-      transform: translateY(-5px);
-    }
-    .fade-up-delay {
-      animation-delay: 0.2s;
-    }
-    .hover\:scale-110:hover {
-      transform: scale(1.1);
-    }
+    
     .card-content {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       text-align: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 2;
     }
+    
     .card-content h2 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 0.75rem;
+      color: white;
     }
+    
     .card-content p {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #d1d5db;
+      margin-bottom: 0;
     }
-    .card-content .fa {
+    
+    .card-icon {
       font-size: 2.5rem;
-      color: #76d695;
-      margin-bottom: 10px;
-      transition: transform 0.3s ease, color 0.3s ease;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
     }
-    .card-content .fa:hover {
-      transform: scale(1.2);
-      color: #77c3a2;
+    
+    .glass:hover .card-icon {
+      transform: scale(1.1) rotate(5deg);
     }
+    
+    /* Footer */
     footer {
-      background-color: #1f3a61;
+      background: rgba(15, 23, 42, 0.8);
       color: #e5e5e5;
       text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      border-top: 1px solid #444;
+      padding: 3rem 1rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+    
+    footer a {
+      color: var(--primary);
+      margin: 0 0.5rem;
+      transition: all 0.3s ease;
+      display: inline-block;
+      padding: 0.5rem;
+      font-weight: 500;
+    }
+    
+    footer a:hover {
+      color: var(--secondary);
+      transform: translateY(-2px);
+    }
+    
+    /* Grid Layout */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    /* Scroll Down Indicator */
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+    
+    .scroll-down-arrow {
+      width: 30px;
+      height: 50px;
+      border: 2px solid rgba(255,255,255,0.7);
+      border-radius: 50px;
+      display: flex;
+      justify-content: center;
+      padding-top: 10px;
+      animation: bounce 2s infinite;
+    }
+    
+    .scroll-down-arrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      animation: scrollDown 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-20px);}
+      60% {transform: translateY(-10px);}
+    }
+    
+    @keyframes scrollDown {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+    
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      z-index: 1000;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 12px;
+      width: 60px;
+      height: 60px;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .mobile-menu-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .mobile-menu.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .mobile-menu a {
+      color: white;
+      font-size: 1.5rem;
+      margin: 1rem 0;
+      padding: 0.5rem 2rem;
+      text-decoration: none;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .mobile-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: all 0.3s ease;
+    }
+    
+    .mobile-menu a:hover::after {
+      width: 100%;
+      left: 0;
+    }
+    
+    .mobile-menu a:hover {
+      color: var(--primary);
+    }
+    
+    .close-menu-btn {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    
+    /* Loading Animation */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    
+    .loader-content {
+      text-align: center;
+    }
+    
+    .loader-logo {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .loader-spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    
+    .loader-text {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.8);
+      margin-top: 1rem;
+    }
+    
+    .progress-bar {
+      width: 200px;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin: 1rem auto 0;
+      overflow: hidden;
+    }
+    
+    .progress {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+    
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Floating Particles */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .particle {
+      position: absolute;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      animation: floatParticle linear infinite;
+    }
+    
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+      }
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 1024px) {
+      .grid-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .header p {
+        font-size: 1rem;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .grid-container {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+      }
+      
+      .glass-card {
+        margin-bottom: 1rem;
+      }
+      
+      footer .footer-links {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      footer a {
+        margin: 0.25rem 0;
+      }
+      
+      .cta-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .header {
+        min-height: 400px;
+      }
+      
+      .mobile-menu-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        top: 15px;
+        right: 15px;
+      }
+      
+      .grid-container {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div class="loader">
+    <div class="loader-content">
+      <div class="loader-logo">🎓</div>
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Loading VITLife...</div>
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn" id="menuBtn">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="close-menu-btn" id="closeMenuBtn">
+      <i class="fas fa-times"></i>
+    </button>
+    <a href="#main">Explore</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://chat.whatsapp.com/KWlyj6cA5Z07q779GF4tcn">Community</a>
+  </div>
 
   <header class="header">
     <div class="header-content" data-aos="fade-up">
-      <h1 class="text-6xl md:text-8xl font-extrabold neon-text mb-4">🎓 Welcome To VITLife</h1>
-      <p class="text-xl md:text-2xl opacity-90 mb-6">Empowering you to thrive academically, socially, and mentally</p>
-      <a href="#main" class="cta-btn">Explore More</a>
+      <h1>Welcome To VITLife</h1>
+      <p>Your all-in-one platform to thrive academically, socially, and mentally at VIT</p>
+      <a href="#main" class="cta-btn">
+        <span>Explore Features</span>
+        <i class="fas fa-arrow-down"></i>
+      </a>
+    </div>
+    <div class="scroll-down">
+      <div class="scroll-down-arrow"></div>
     </div>
   </header>
 
-  <main id="main" class="max-w-7xl mx-auto p-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-    <a href="use.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-robot"></i>
-        <h2>AI-enabled Systems</h2>
-        <p>Access intelligent systems that boost learning and wellbeing.</p>
-      </div>
-    </section></a>
-    
-    <a href="study.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-book-open"></i>
-        <h2>Notes & PYQs</h2>
-        <p>Study smarter with curated notes and past year papers.</p>
-      </div>
-    </section></a>
-
-    <a href="market.html"
-      <section class="glass glass-card p-6" data-aos="fade-up">
+  <main id="main" class="grid-container">
+    <a href="use.html" class="glass-card" data-aos="fade-up">
+      <section class="glass">
         <div class="card-content">
-          <i class="fas fa-store"></i>
+          <i class="fas fa-robot card-icon"></i>
+          <h2>AI-enabled Systems</h2>
+          <p>Smart tools to enhance your learning and wellbeing</p>
+        </div>
+      </section>
+    </a>
+    
+    <a href="study.html" class="glass-card" data-aos="fade-up" data-aos-delay="50">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-book-open card-icon"></i>
+          <h2>Notes & PYQs</h2>
+          <p>Comprehensive study materials and past year papers</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="market.html" class="glass-card" data-aos="fade-up" data-aos-delay="100">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-store card-icon"></i>
           <h2>Campus Market</h2>
-          <p>Buy and sell products with other students on campus.</p>
+          <p>Buy and sell with fellow students</p>
         </div>
       </section>
     </a>
 
-    <a href="discount.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-tags"></i>
-        <h2>Student Offers</h2>
-        <p>Get the app free & unlock exclusive discounts using your Student ID.</p>
-      </div>
-    </section></a>
-    
-    <a href="cycle.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-bicycle"></i>
-        <h2>CampusCycle</h2>
-        <p>Smart bicycle rental service for quick, eco-friendly campus travel.</p>
-      </div>
-    </section></a>
-
-    <a href="https://support.vitbhopal.dev/"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-tools"></i>
-        <h2>Hostel Complaints</h2>
-        <p>Report issues like lights, plumbing, or repairs to the hostel office easily.</p>
-      </div>
-    </section></a>
-
-    <a href="task.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-project-diagram"></i>
-        <h2>Eisenhower Matrix</h2>
-        <p>Master time management with powerful prioritization tools.</p>
-      </div>
-    </section></a>
-
-    <a href="https://messvitb.vercel.app/"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-utensils"></i>
-        <h2>Mess Food Menu</h2>
-        <p>Daily menu updates and feedback on mess food quality.</p>
-      </div>
-    </section></a>
-
-    <a href="https://assist-vit.github.io/"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-graduation-cap"></i>
-        <h2>FFCS & GPA Tools</h2>
-        <p>Get smart FFCS advice and calculate your GPA with ease.</p>
-      </div>
-    </section></a>
-    
-
-    <a href="cabin.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-chalkboard-teacher"></i>
-        <h2>Faculty Cabin Details</h2>
-        <p>Know faculty availability and connect without confusion.</p>
-      </div>
-    </section></a>
-
-    <a href="event.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-users"></i>
-        <h2>Clubs & Events</h2>
-        <p>Join the fun with student-run clubs and upcoming events.</p>
-      </div>
-    </section></a>
-
-
-    <a href="https://chat.whatsapp.com/KWlyj6cA5Z07q779GF4tcn"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-users-cog"></i>
-        <h2>Student Community</h2>
-        <p>Build connections with students across batches and branches.</p>
-      </div>
-    </section></a>
-
-    <a href="Job.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-award"></i>
-        <h2>Internship & Jobs</h2>
-        <p>Opportunities tailored for your growth and savings.</p>
-      </div>
-    </section></a>
-
-    <a href="chatroom.html">
-      <section class="glass glass-card p-6" data-aos="fade-up">
+    <a href="discount.html" class="glass-card" data-aos="fade-up" data-aos-delay="150">
+      <section class="glass">
         <div class="card-content">
-          <i class="fas fa-video"></i>
-          <h2>Chat & Video Call</h2>
-          <p>Connect with other students anonymously through text or video calls.</p>
+          <i class="fas fa-tags card-icon"></i>
+          <h2>Student Offers</h2>
+          <p>Exclusive discounts with your Student ID</p>
+        </div>
+      </section>
+    </a>
+    
+    <a href="cycle.html" class="glass-card" data-aos="fade-up" data-aos-delay="200">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-bicycle card-icon"></i>
+          <h2>CampusCycle</h2>
+          <p>Eco-friendly bicycle rentals across campus</p>
         </div>
       </section>
     </a>
 
-    <a href="contact.html"><section class="glass glass-card p-6" data-aos="fade-up">
-      <div class="card-content">
-        <i class="fas fa-comments"></i>
-        <h2>Feedback & Suggestions</h2>
-        <p>Your voice matters—help us grow by sharing your ideas.</p>
-      </div>
-    </section></a>
+    <a href="https://support.vitbhopal.dev/" class="glass-card" data-aos="fade-up" data-aos-delay="250">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-tools card-icon"></i>
+          <h2>Hostel Complaints</h2>
+          <p>Quickly report maintenance issues</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="task.html" class="glass-card" data-aos="fade-up" data-aos-delay="300">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-project-diagram card-icon"></i>
+          <h2>Eisenhower Matrix</h2>
+          <p>Master your time management</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="https://messvitb.vercel.app/" class="glass-card" data-aos="fade-up" data-aos-delay="350">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-utensils card-icon"></i>
+          <h2>Mess Food Menu</h2>
+          <p>Daily updates on mess food</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="https://assist-vit.github.io/" class="glass-card" data-aos="fade-up" data-aos-delay="400">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-graduation-cap card-icon"></i>
+          <h2>FFCS & GPA Tools</h2>
+          <p>Smart course selection and GPA calculator</p>
+        </div>
+      </section>
+    </a>
+    
+    <a href="cabin.html" class="glass-card" data-aos="fade-up" data-aos-delay="450">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-chalkboard-teacher card-icon"></i>
+          <h2>Faculty Cabin Details</h2>
+          <p>Find faculty availability easily</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="event.html" class="glass-card" data-aos="fade-up" data-aos-delay="500">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-users card-icon"></i>
+          <h2>Clubs & Events</h2>
+          <p>Discover student activities</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="https://chat.whatsapp.com/KWlyj6cA5Z07q779GF4tcn" class="glass-card" data-aos="fade-up" data-aos-delay="550">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-users-cog card-icon"></i>
+          <h2>Student Community</h2>
+          <p>Connect across batches</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="Job.html" class="glass-card" data-aos="fade-up" data-aos-delay="600">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-award card-icon"></i>
+          <h2>Internship & Jobs</h2>
+          <p>Career opportunities for you</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="chatroom.html" class="glass-card" data-aos="fade-up" data-aos-delay="650">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-video card-icon"></i>
+          <h2>Chat & Video Call</h2>
+          <p>Connect with peers anonymously</p>
+        </div>
+      </section>
+    </a>
+
+    <a href="contact.html" class="glass-card" data-aos="fade-up" data-aos-delay="700">
+      <section class="glass">
+        <div class="card-content">
+          <i class="fas fa-comments card-icon"></i>
+          <h2>Feedback</h2>
+          <p>Help us improve VITLife</p>
+        </div>
+      </section>
+    </a>
   </main>
 
   <footer>
-    <div class="mb-2">&copy; 2025 VITLife | For VIT Students</div>
-    <div class="mb-1">Contact: +91 8957232039</div>
-    <div class="mt-2">
+    <div class="mb-4 text-lg font-medium">VITLife - Your Campus Companion</div>
+    <div class="mb-4">Contact: +91 8957232039 | vitlife@vit.edu</div>
+    <div class="footer-links">
       <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
-
-      <a href="terms.html"><i class="fas fa-file-contract"></i> Terms & Conditions</a>
-      
-      <a href="description.html"><i class="fas fa-align-left"></i> Description</a>
-
+      <a href="terms.html"><i class="fas fa-file-contract"></i> Terms</a>
+      <a href="privacy.html"><i class="fas fa-lock"></i> Privacy</a>
       <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
     </div>
+    <div class="mt-6 flex justify-center gap-4">
+      <a href="#" class="text-xl"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="text-xl"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="text-xl"><i class="fab fa-linkedin"></i></a>
+      <a href="#" class="text-xl"><i class="fab fa-github"></i></a>
+    </div>
+    <div class="mt-6 text-sm opacity-70">&copy; 2025 VITLife. All rights reserved.</div>
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
-
   <script>
- const images = [
+    // Initialize AOS with custom settings
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-quart',
+      once: true,
+      offset: 50
+    });
+
+    // Loading screen with progress simulation
+    window.addEventListener('load', function() {
+      const progressBar = document.getElementById('progressBar');
+      let progress = 0;
+      const interval = setInterval(function() {
+        progress += Math.random() * 10;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          setTimeout(function() {
+            document.querySelector('.loader').style.opacity = '0';
+            setTimeout(function() {
+              document.querySelector('.loader').style.display = 'none';
+            }, 500);
+          }, 300);
+        }
+        progressBar.style.width = progress + '%';
+      }, 100);
+    });
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuBtn.addEventListener('click', function() {
+      mobileMenu.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeMenuBtn.addEventListener('click', function() {
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    // Close menu when clicking on links
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', function() {
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Background image slideshow with smooth transitions
+    const images = [
       'image/10-websites-all-college-students-should-bookmark_a5yh.2496.webp',
       'image/file_2025-04-05_18.50.50[1].png',
       'image/gettyimages-1920428247-2048x2048.jpg',
@@ -310,15 +835,68 @@
     ];
 
     let currentIndex = 0;
+    const header = document.querySelector('.header');
 
     function changeBackgroundImage() {
-      const header = document.querySelector('.header');
-      header.style.backgroundImage = `url('${images[currentIndex]}')`;
-      currentIndex = (currentIndex + 1) % images.length;
+      header.style.opacity = '0.7';
+      setTimeout(function() {
+        header.style.backgroundImage = `url('${images[currentIndex]}')`;
+        header.style.opacity = '1';
+        currentIndex = (currentIndex + 1) % images.length;
+      }, 500);
     }
 
-    changeBackgroundImage(); // Show first image immediately
-    setInterval(changeBackgroundImage, 5000); // Change every 5 seconds
+    // Start slideshow after page loads
+    setTimeout(function() {
+      changeBackgroundImage();
+      setInterval(changeBackgroundImage, 5000);
+    }, 1500);
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 20,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = window.innerWidth < 768 ? 20 : 40;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 2px and 6px
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        
+        // Random animation duration between 10s and 20s
+        const duration = Math.random() * 10 + 10;
+        particle.style.animationDuration = `${duration}s`;
+        
+        // Random delay
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Initialize particles after page loads
+    window.addEventListener('load', createParticles);
   </script>
 </body>
 </html>
